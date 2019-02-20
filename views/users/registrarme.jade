@@ -1,0 +1,78 @@
+extends ../layout
+
+block content
+  +generarMenu(menu)
+  
+  p.p-1.text-center Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel orci viverra, varius mauris a, tincidunt lectus. 
+  p.p-1.text-center Nulla ultricies erat sed nunc ultricies suscipit. Mauris quis lacus nec magna ullamcorper condimentum. Etiam id erat nisi. Ut orci elit, pretium in pellentesque eget.
+  
+  form#formRegistrarme(name="registrarme", method="post")
+    .d-flex
+      .p-3.flex-fill.align-self-start
+        .card.card-iniciar-sesion
+          .card-header.bg-primary.text-white
+            h6 Datos Personales
+          .card-body
+            .row.p-2
+              .col
+                label(for='cedula') Cedula
+                input#cedula.form-control(name="cedula", type='text', placeholder='Ingrese su cedula')
+            .row.p-2
+              .col
+                  label(for='nombres') Nombres
+                  input#nombres.form-control(name="nombres", type='text', placeholder='Ingrese sus nombres')
+              .col
+                  label(for='apellidos') Apellidos
+                  input#apellidos.form-control(name="apellidos", type='text', placeholder='Ingrese sus apellidos') 
+            .row.p-2
+              .col
+                  label(for='lugarDeNacimiento') Lugar de Nacimiento
+                  input#lugarDeNacimiento.form-control(name="lugarDeNacimiento", type='text', placeholder='Ingrese su lugar de nacimiento')   
+              .col
+                    label(for='nacionalidad') Nacionalidad
+                    select#nacionalidad.form-control(name="nacionalidad")
+                      option(value='', selected) Seleccione su nacionalidad
+                      option(value='e') Extranjero
+                      option(value='v') Venezolano
+            .row.p-2
+              .col
+                  label(for='fechaDeNacimiento') Fecha de nacimiento
+                  input#fechaDeNacimiento.form-control(name="fechaDeNacimiento", type='date', placeholder='Ingrese su fecha de nacimiento')  
+              .col
+                  label(for='sexo') Sexo
+                  select#sexo.form-control(name="sexo")
+                    option(value='', selected) Seleccione su sexo
+                    option(value='f') Femenino
+                    option(value='m') Masculino
+            .row.p-2
+              .col
+                  label(for='Contrasena') Contrasena
+                  input#contrasena.form-control(name="contrasena", type='password', placeholder='Ingrese su contrasena')
+              .col
+                  label(for='reContrasena') Confirmar contrasena
+                  input#reContrasena.form-control(name="reContrasena", type='password', placeholder='Ingrese su contrasena')
+            
+      .p-3.flex-fill.align-self-end.align-self-stretch
+        .card.card-iniciar-sesion
+          .card-header.bg-primary.text-white
+            h6 Datos contacto
+          .card-body
+            .row.p-2
+              .col
+                label(for='correo') Correo electronico
+                input#correo.form-control(name="correo", type='email', placeholder='Enter email')
+            .row.p-2
+              .col
+                label(for='telefono') Telefono
+                input#telefono.form-control(name="telefono", type='text', placeholder='Ingrese su telefono') 
+            .row.p-2
+                .col
+                  label(for='direccion') Direccion
+                  textarea#direccion.form-control(name='direccion', rows='4', placeholder='Ingrese su direccion')
+        .d-flex.p-2.float-right
+          //- .col
+          button.btn.btn-primary(type='submit') Submit
+          
+    p#mensaje(data-toggle='modal', data-target='#modalMensaje', hidden = 'true') #{mensaje}
+    
+    +generarModal(mensaje, 1)

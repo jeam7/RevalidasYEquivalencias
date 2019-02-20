@@ -1,0 +1,129 @@
+extends ../layout
+
+block content
+  +generarMenu(menu)
+  div.d-flex
+    div.bg-white.caja-datos-personales(style='flex: 1.5;')    
+      +generarInfoPersonal(tipoUsuario, usuario.nombre, usuario.apellido, usuario.cedula)
+    div.bg-white.p-2(style='flex: 8;')
+      form#formRegistrarSolicitud(name="registrarSolicitud", method="post")
+        .d-flex(style='flex: 10;')
+          .p-3.flex-fill.align-self-start
+            .card.card-iniciar-sesion
+              .card-header.bg-primary.text-white
+                h6 Datos personales
+              .card-body
+                .row.p-2
+                  .col
+                    label(for='cedula') Cedula
+                    input#cedula.form-control(name="cedula", type='text', placeholder='Ingrese su cedula' value="#{usuario.cedula}", disabled)
+                .row.p-2
+                  .col
+                      label(for='nombres') Nombres
+                      input#nombres.form-control(name="nombres", type='text', placeholder='Ingrese sus nombres', value="#{usuario.nombre}", disabled)
+                  .col
+                      label(for='apellidos') Apellidos
+                      input#apellidos.form-control(name="apellidos", type='text', placeholder='Ingrese sus apellidos', value="#{usuario.apellido}", disabled) 
+                .row.p-2
+                  .col
+                      label(for='lugarDeNacimiento') Lugar de Nacimiento
+                      input#lugarDeNacimiento.form-control(name="lugarDeNacimiento", type='text', placeholder='Ingrese su lugar de nacimiento', value="#{usuario.lugarDeNacimiento}", disabled)   
+                  .col
+                    label(for='nacionalidad') Nacionalidad
+                    select#nacionalidad.form-control(name="nacionalidad", disabled)
+                      if(usuario.nacionalidad == 'Extranjero' || usuario.nacionalidad == 'e')
+                        option(value='e', selected) Extranjero
+                      else
+                        option(value='e') Extranjero
+                      if(usuario.nacionalidad == 'Venezolano' || usuario.nacionalidad == 'v' )
+                        option(value='v', selected) Venezolano
+                      else
+                        option(value='v') Venezolano
+                .row.p-2
+                  .col
+                      label(for='fechaDeNacimiento') Fecha de nacimiento
+                      input#fechaDeNacimiento.form-control(name="fechaDeNacimiento", type='date', placeholder='Ingrese su fecha de nacimiento', value="#{usuario.fechaDeNacimiento}", disabled)  
+                  .col
+                    label(for='sexo') Sexo
+                    select#sexo.form-control(name="sexo", disabled)
+                      if(usuario.sexo == 'Femenino' || usuario.sexo == 'f')
+                        option(value='f', selected) Femenino
+                      else
+                        option(value='f') Femenino
+                      if(usuario.sexo == 'Masculino' || usuario.sexo == 'm')
+                        option(value='m', selected) Masculino
+                      else
+                        option(value='m') Masculino
+                .row.p-2
+                  .col
+                    label(for='correo') Correo electronico
+                    input#correo.form-control(name="correo", type='email', placeholder='Enter email', value="#{usuario.correo}", disabled)
+                  .col
+                    label(for='telefono') Telefono
+                    input#telefono.form-control(name="telefono", type='text', placeholder='Ingrese su telefono', value="#{usuario.telefono}", disabled) 
+                .row.p-2
+                    .col
+                      label(for='direccion') Direccion
+                      textarea#direccion.form-control(name='direccion', rows='4', placeholder='Ingrese su direccion', disabled) #{usuario.direccion}
+          .d-flex(style='flex: 10;')    
+            .p-3.flex-fill.align-self-end.align-self-stretch
+              .card.card-iniciar-sesion
+                .card-header.bg-primary.text-white
+                  h6 Datos solicitud
+                .card-body
+                  .row.p-2
+                    .col
+                      label(for='universidadInstitutoProcedencia') Universidad / instituto procedencia
+                      select#universidadInstitutoProcedencia.form-control(name="universidadInstitutoProcedencia", disabled)
+                          option(value='1') UCV
+                          option(value='2') USB
+                          option(value='3') UCAB
+                  .row.p-2
+                    .col
+                      label(for='FacultadProcedencia') Facultad procedencia
+                      select#FacultadProcedencia.form-control(name="FacultadProcedencia", disabled)
+                          option(value='1') Facultad 1
+                          option(value='2') Facultad 2
+                          option(value='3') Facultad 2
+                    .col
+                      label(for='escuelaProcedencia') Escuela procedencia
+                      select#escuelaProcedencia.form-control(name="escuelaProcedencia", disabled)
+                          option(value='1') Escuela 1
+                          option(value='2') Escuela 2
+                          option(value='3') Escuela 2
+                    .col
+                      label(for='carreraProcedencia') Escuela procedencia
+                      select#carreraProcedencia.form-control(name="carreraProcedencia", disabled)
+                          option(value='1') Carrera 1
+                          option(value='2') Carrera 2
+                          option(value='3') Carrera 2
+                  .row.p-2
+                    .col
+                      label(for='universidadInstitutoProcedencia') Universidad / instituto procedencia
+                      select#universidadInstitutoProcedencia.form-control(name="universidadInstitutoProcedencia", disabled)
+                          option(value='1') UCV
+                          option(value='2') USB
+                          option(value='3') UCAB
+                  .row.p-2
+                    .col
+                      label(for='facultadDestino') Facultad destino
+                      select#facultadDestino.form-control(name="facultadDestino", disabled)
+                          option(value='1') Facultad 3
+                          option(value='2') Facultad 4
+                          option(value='3') Facultad 5
+                    .col
+                      label(for='escuelaDestino') Escuela Destino
+                      select#escuelaDestino.form-control(name="escuelaDestino", disabled)
+                          option(value='1') Escuela 3
+                          option(value='2') Escuela 4
+                          option(value='3') Escuela 5
+                    .col
+                      label(for='carreraDestino') Escuela Destino
+                      select#carreraDestino.form-control(name="carreraDestino", disabled)
+                          option(value='1') Carrera 3
+                          option(value='2') Carrera 4
+                          option(value='3') Carrera 5
+                  .row.p-2
+                    .col
+                      label(for='statusSolicitud') Status
+                      input#statusSolicitud.form-control(name="statusSolicitud", type='text', value="status", disabled)

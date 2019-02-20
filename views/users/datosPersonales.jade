@@ -1,0 +1,81 @@
+extends ../layout
+
+block content
+  +generarMenu(menu)
+  div.d-flex
+    div.bg-white.caja-datos-personales(style='flex: 1.5;')    
+      +generarInfoPersonal(tipoUsuario, usuario.nombre, usuario.apellido, usuario.cedula)
+    div.bg-white.p-2(style='flex: 8;')
+      form#formDatosPersonales(name="datosPersonales", method="post")
+        .d-flex
+          .p-3.flex-fill.align-self-start
+            .card.card-iniciar-sesion
+              .card-header.bg-primary.text-white
+                h6 Datos Personales
+              .card-body
+                .row.p-2
+                  .col
+                    label(for='cedula') Cedula
+                    input#cedula.form-control(name="cedula", type='text', placeholder='Ingrese su cedula', disabled, value="#{usuario.cedula}")
+                .row.p-2
+                  .col
+                      label(for='nombres') Nombres
+                      input#nombres.form-control(name="nombres", type='text', placeholder='Ingrese sus nombres', value="#{usuario.nombre}")
+                  .col
+                      label(for='apellidos') Apellidos
+                      input#apellidos.form-control(name="apellidos", type='text', placeholder='Ingrese sus apellidos', value="#{usuario.apellido}") 
+                .row.p-2
+                  .col
+                      label(for='lugarDeNacimiento') Lugar de Nacimiento
+                      input#lugarDeNacimiento.form-control(name="lugarDeNacimiento", type='text', placeholder='Ingrese su lugar de nacimiento', value="#{usuario.lugarDeNacimiento}")   
+                  .col
+                        label(for='nacionalidad') Nacionalidad
+                        select#nacionalidad.form-control(name="nacionalidad")
+                          if(usuario.nacionalidad == 'Extranjero' || usuario.nacionalidad == 'e')
+                            option(value='e', selected) Extranjero
+                          else
+                            option(value='e') Extranjero
+                          if(usuario.nacionalidad == 'Venezolano' || usuario.nacionalidad == 'v' )
+                            option(value='v', selected) Venezolano
+                          else
+                            option(value='v') Venezolano
+                .row.p-2
+                  .col
+                      label(for='fechaDeNacimiento') Fecha de nacimiento
+                      input#fechaDeNacimiento.form-control(name="fechaDeNacimiento", type='date', placeholder='Ingrese su fecha de nacimiento', value="#{usuario.fechaDeNacimiento}")  
+                  .col
+                      label(for='sexo') Sexo
+                      select#sexo.form-control(name="sexo")
+                        if(usuario.sexo == 'Femenino' || usuario.sexo == 'f')
+                          option(value='f', selected) Femenino
+                        else
+                          option(value='f') Femenino
+                        if(usuario.sexo == 'Masculino' || usuario.sexo == 'm')
+                          option(value='m', selected) Masculino
+                        else
+                          option(value='m') Masculino
+                
+          .p-3.flex-fill.align-self-end.align-self-stretch
+            .card.card-iniciar-sesion
+              .card-header.bg-primary.text-white
+                h6 Datos contacto
+              .card-body
+                .row.p-2
+                  .col
+                    label(for='correo') Correo electronico
+                    input#correo.form-control(name="correo", type='email', placeholder='Enter email', value="#{usuario.correo}")
+                .row.p-2
+                  .col
+                    label(for='telefono') Telefono
+                    input#telefono.form-control(name="telefono", type='text', placeholder='Ingrese su telefono', value="#{usuario.telefono}") 
+                .row.p-2
+                    .col
+                      label(for='direccion') Direccion
+                      textarea#direccion.form-control(name='direccion', rows='4', placeholder='Ingrese su direccion') #{usuario.direccion}
+                        
+            .d-flex.p-2.float-right
+              //- .col
+              button.btn.btn-primary(type='submit') Guardar
+        p#mensaje(data-toggle='modal', data-target='#modalMensaje', hidden = 'true') #{mensaje}
+        
+        +generarModal(mensaje,1)
