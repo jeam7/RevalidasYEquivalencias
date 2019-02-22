@@ -6,7 +6,7 @@ use Alert;
 use Auth;
 use Backpack\Base\app\Http\Controllers\Controller;
 use App\Http\Requests\AccountInfoRequest;
-use Backpack\Base\app\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\ChangePasswordRequest;
 use Illuminate\Support\Facades\Hash;
 
 class MyAccountController extends Controller

@@ -26,7 +26,8 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|min:2|max:50'
+            'first_name' => 'required|min:2|max:50',
+            'last_name' => 'required|min:2|max:50'
         ];
     }
 
@@ -52,7 +53,10 @@ class UserRequest extends FormRequest
         return [
             'first_name.required' => 'Por favor, ingrese su nombre',
             'first_name.min' => 'Su nombre debe tener minimo 2 caracteres',
-            'first_name.max' => 'Su nombre debe tener maximo 50 caracteres'
+            'first_name.max' => 'Su nombre debe tener maximo 50 caracteres',
+            'last_name.required' => 'Por favor, ingrese su apellido',
+            'last_name.min' => 'Su apellido debe tener minimo 2 caracteres',
+            'last_name.max' => 'Su apellido debe tener maximo 50 caracteres'
         ];
     }
 }

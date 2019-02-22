@@ -136,7 +136,7 @@
                             $label = 'Direccion';
                             $field = 'address';
                         @endphp
-                        <label>{{ $label }}</label>
+                        <label class="required">{{ $label }}</label>
                         <textarea class="form-control" name="{{ $field }}" rows="3">{{ old($field) ? old($field) : $user->$field }}</textarea>
                     </div>
 
