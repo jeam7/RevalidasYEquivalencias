@@ -11,6 +11,9 @@ class BackpackUser extends User
     use HasParentModel;
 
     protected $table = 'users';
+    protected $fillable = [
+        'ci', 'first_name', 'last_name', 'place_birth', 'nacionality', 'birthdate', 'gender', 'address', 'phone', 'email', 'password',
+    ];
 
     /**
      * Send the password reset notification.
