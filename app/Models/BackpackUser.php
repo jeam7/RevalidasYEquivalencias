@@ -12,7 +12,7 @@ class BackpackUser extends User
 
     protected $table = 'users';
     protected $fillable = [
-        'ci', 'first_name', 'last_name', 'place_birth', 'nacionality', 'birthdate', 'gender', 'address', 'phone', 'email', 'password',
+        'ci', 'first_name', 'last_name', 'place_birth', 'nacionality', 'birthdate', 'gender', 'address', 'phone', 'email', 'password', 'type_user'
     ];
 
     /**
