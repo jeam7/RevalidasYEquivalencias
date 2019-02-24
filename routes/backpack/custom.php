@@ -18,4 +18,7 @@ Route::group([
         Route::get('change-password', 'MyAccountController@getChangePasswordForm')->name('backpack.account.password');
         Route::post('change-password', 'MyAccountController@postChangePasswordForm');
     }
+    CRUD::resource('college', 'CollegeCrudController');
+    CRUD::resource('faculty', 'FacultyCrudController');
+    CRUD::resource('school', 'SchoolCrudController');
 }); // this should be the absolute last line of this file

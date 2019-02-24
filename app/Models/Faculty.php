@@ -6,22 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Model
+class Faculty extends Model
 {
     use CrudTrait;
     use SoftDeletes;
+
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'users';
+    protected $table = 'faculties';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['ci', 'first_name', 'last_name', 'place_birth', 'nacionality', 'birthdate', 'gender', 'address', 'phone', 'type_user', 'faculty_id', 'email', 'password'];
-    protected $hidden = ['password'];
+    protected $fillable = ['name', 'college_id'];
+    // protected $hidden = [];
     // protected $dates = [];
 
     /*
@@ -35,9 +36,16 @@ class User extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function user(){
+        return $this->hasMany('App\Models\User');
+    }
 
-    public function faculty(){
-        return $this->belongsTo('App\Models\Faculty');
+    public function college(){
+        return $this->belongsTo('App\Models\College');
+    }
+
+    public function school(){
+        return $this->hasMany('App\Models\School');
     }
     /*
     |--------------------------------------------------------------------------
@@ -50,7 +58,10 @@ class User extends Model
     | ACCESORS
     |--------------------------------------------------------------------------
     */
-
+    public function getFacultyCollegeAttribute($value) {
+      $foreignValue = ($this->college->foreign == 1 ) ? 'Nacional' : 'Extranjera' ;
+       return $this->name.' - '.$this->college->name.' - '.$foreignValue;
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

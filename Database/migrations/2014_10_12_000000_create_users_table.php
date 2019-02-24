@@ -28,6 +28,7 @@ class CreateUsersTable extends Migration
             $table->string('address')->nullable();
             $table->string('phone');
             $table->enum('type_user',[1,2,3,4]);
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -36,7 +37,7 @@ class CreateUsersTable extends Migration
             array(
               'email' => 'superadmin@gmail.com',
               'password' => '$2a$10$XgHENPJMF8Ni5YGnTQrWFukPxqq8tOJUqfK5eGADuyzdDQXejlLvO',
-              'ci' => 111111111,
+              'ci' => 1111111,
               'first_name' => 'Nombre Super Admin',
               'last_name' => 'Apellido Super Admin',
               'place_birth' => 'Caracas',

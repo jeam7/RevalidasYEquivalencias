@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-class User extends Model
+class School extends Model
 {
     use CrudTrait;
     use SoftDeletes;
@@ -16,12 +15,12 @@ class User extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'users';
+    protected $table = 'schools';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['ci', 'first_name', 'last_name', 'place_birth', 'nacionality', 'birthdate', 'gender', 'address', 'phone', 'type_user', 'faculty_id', 'email', 'password'];
-    protected $hidden = ['password'];
+    protected $fillable = ['name', 'faculty_id'];
+    // protected $hidden = [];
     // protected $dates = [];
 
     /*
@@ -35,7 +34,6 @@ class User extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
     public function faculty(){
         return $this->belongsTo('App\Models\Faculty');
     }

@@ -6,22 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Model
+class College extends Model
 {
     use CrudTrait;
     use SoftDeletes;
+
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'users';
+    protected $table = 'colleges';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['ci', 'first_name', 'last_name', 'place_birth', 'nacionality', 'birthdate', 'gender', 'address', 'phone', 'type_user', 'faculty_id', 'email', 'password'];
-    protected $hidden = ['password'];
+    protected $fillable = ['name', 'foreign', 'address', 'abbreviation'];
+    // protected $hidden = [];
     // protected $dates = [];
 
     /*
@@ -35,9 +36,8 @@ class User extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
     public function faculty(){
-        return $this->belongsTo('App\Models\Faculty');
+        return $this->hasMany('App\Models\Faculty');
     }
     /*
     |--------------------------------------------------------------------------
@@ -50,7 +50,10 @@ class User extends Model
     | ACCESORS
     |--------------------------------------------------------------------------
     */
-
+    public function getNameForeignAttribute($value) {
+      $foreignValue = ($this->foreign == 1) ? 'Nacional' : 'Extranjera' ;
+       return $this->name.' - '.$foreignValue;
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
