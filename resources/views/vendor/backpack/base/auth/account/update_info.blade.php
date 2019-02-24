@@ -133,6 +133,26 @@
 
                     <div class="form-group">
                         @php
+                            $label = 'Genero';
+                            $field = 'gender';
+                        @endphp
+                        <label class="required">{{ $label }}</label>
+                        <select required class="form-control" name="{{ $field }}">
+                          @php
+                              $currentValue = old($field) ? old($field) : $user->$field;
+                              if ($currentValue == 'f') {
+                                echo '<option value="f" selected> Femenino </option>';
+                                echo '<option value="m"> Masculino </option>';
+                              }else {
+                                echo '<option value="f"> Femenino </option>';
+                                echo '<option value="m" selected> Masculino </option>';
+                              }
+                          @endphp
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        @php
                             $label = 'Direccion';
                             $field = 'address';
                         @endphp

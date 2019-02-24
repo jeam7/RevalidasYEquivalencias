@@ -34,7 +34,8 @@ class AccountInfoRequest extends FormRequest
             'birthdate' => 'required|date',
             'address' => 'required',
             'phone' => 'required|numeric',
-            'email' => ['required', 'email', Rule::unique('users')->ignore(backpack_user()->id)]
+            'email' => ['required', 'email', Rule::unique('users')->ignore(backpack_user()->id)],
+            'gender' => 'required'
         ];
     }
 
@@ -72,7 +73,8 @@ class AccountInfoRequest extends FormRequest
           'phone.numeric' => 'Su telefono debe contener solo caracteres numericos',
           'email.required' => 'Por favor, ingrese su email',
           'email.email' => 'Por favor, ingrese un email valido',
-          'email.unique' => 'El email ingresado ya se encuentra en uso'
+          'email.unique' => 'El email ingresado ya se encuentra en uso',
+          'gender.require' => 'Por favor, ingrese su genero'
         ];
     }
 }
