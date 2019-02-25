@@ -47,6 +47,10 @@ class Faculty extends Model
     public function school(){
         return $this->hasMany('App\Models\School');
     }
+
+    public function academic_period(){
+        return $this->hasMany('App\Models\Academic_period');
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

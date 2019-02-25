@@ -21,6 +21,14 @@ class CreateFacultiesTable extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+        $dataFaculty = array(
+            array(
+              'id' => 1,
+              'name' => 'Facultad de Ciencias',
+              'college_id' => 1
+            )
+        );
+      DB::table('faculties')->insert($dataFaculty);
     }
 
     /**

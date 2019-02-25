@@ -24,6 +24,7 @@ class CreateCollegesTable extends Migration
         });
         $dataCollege = array(
             array(
+              'id' => 1,
               'name' => 'Universidad Central de Venezuela',
               'foreign' => 1,
               'address' => 'Ciudad Universitaria de Caracas',

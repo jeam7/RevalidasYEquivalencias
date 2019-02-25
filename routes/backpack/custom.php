@@ -21,4 +21,8 @@ Route::group([
     CRUD::resource('college', 'CollegeCrudController');
     CRUD::resource('faculty', 'FacultyCrudController');
     CRUD::resource('school', 'SchoolCrudController');
+    CRUD::resource('career', 'CareerCrudController');
+    CRUD::resource('subject', 'SubjectCrudController');
+    CRUD::resource('academic_period', 'Academic_periodCrudController');
+    CRUD::resource('request', 'RequestCrudController');
 }); // this should be the absolute last line of this file

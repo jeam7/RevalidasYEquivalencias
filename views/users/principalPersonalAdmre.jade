@@ -1,9 +1,0 @@
-extends ../layout
-
-block content
-  +generarMenu(menu)
-  div.d-flex
-    div.bg-white.caja-datos-personales(style='flex: 1.5;')    
-      +generarInfoPersonal(tipoUsuario, usuario.nombre, usuario.apellido, usuario.cedula)
-    div.bg-white.p-2(style='flex: 8;')
-      p Seccion general

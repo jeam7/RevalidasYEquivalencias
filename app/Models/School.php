@@ -37,6 +37,10 @@ class School extends Model
     public function faculty(){
         return $this->belongsTo('App\Models\Faculty');
     }
+
+    public function career(){
+        return $this->hasMany('App\Models\Career');
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -48,7 +52,10 @@ class School extends Model
     | ACCESORS
     |--------------------------------------------------------------------------
     */
-
+    public function getSchoolFacultyAttribute($value) {
+      $foreignValue = ($this->faculty->college->foreign == 1 ) ? 'Nacional' : 'Extranjera' ;
+       return $this->name.' - '.$this->faculty->name.' - '.$this->faculty->college->name.' - '.$foreignValue;
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

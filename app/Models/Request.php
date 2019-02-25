@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-class User extends Model
+class Request extends Model
 {
     use CrudTrait;
     use SoftDeletes;
@@ -16,12 +15,16 @@ class User extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'users';
+    protected $table = 'requests';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['ci', 'first_name', 'last_name', 'place_birth', 'nacionality', 'birthdate', 'gender', 'address', 'phone', 'type_user', 'faculty_id', 'email', 'password'];
-    protected $hidden = ['password'];
+    protected $fillable = [
+      'user_id','career_origin_id','career_destination_id', 'origin',
+      'others','info_others','pensum','notes','study_programs','title','copy_ci',
+      'ci_passport_copy','notes_legalized','study_program_legalized','cerification_category_college','certification_title_no_confered','translation'
+      ];
+    // protected $hidden = [];
     // protected $dates = [];
 
     /*
@@ -35,13 +38,16 @@ class User extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
-    public function faculty(){
-        return $this->belongsTo('App\Models\Faculty');
+    public function career_origin(){
+      return $this->belongsTo('App\Models\Career');
     }
 
-    public function request(){
-        return $this->hasMany('App\Models\Request');
+    public function career_destination(){
+      return $this->belongsTo('App\Models\Career');
+    }
+
+    public function user(){
+      return $this->belongsTo('App\Models\User');
     }
     /*
     |--------------------------------------------------------------------------
@@ -54,9 +60,7 @@ class User extends Model
     | ACCESORS
     |--------------------------------------------------------------------------
     */
-    public function getUserFullnameAttribute($value) {
-       return $this->ci.' - '.$this->first_name.' '.$this->last_name;
-    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

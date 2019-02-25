@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-class User extends Model
+class Academic_period extends Model
 {
     use CrudTrait;
     use SoftDeletes;
@@ -16,12 +15,14 @@ class User extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'users';
+    protected $table = 'academic_periods';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['ci', 'first_name', 'last_name', 'place_birth', 'nacionality', 'birthdate', 'gender', 'address', 'phone', 'type_user', 'faculty_id', 'email', 'password'];
-    protected $hidden = ['password'];
+    protected $fillable = [
+      'faculty_id', 'name', 'info', 'dean', 'rep_sub_equi_one', 'rep_sub_equi_two', 'rep_sub_equi_three', 'rep_comi_equi_one', 'rep_comi_equi_two', 'rep_comi_equi_three'
+    ];
+    // protected $hidden = [];
     // protected $dates = [];
 
     /*
@@ -35,13 +36,9 @@ class User extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
-    public function faculty(){
-        return $this->belongsTo('App\Models\Faculty');
-    }
-
-    public function request(){
-        return $this->hasMany('App\Models\Request');
+    public function faculty()
+    {
+      return $this->belongsTo('App\Models\Faculty');
     }
     /*
     |--------------------------------------------------------------------------
@@ -54,9 +51,7 @@ class User extends Model
     | ACCESORS
     |--------------------------------------------------------------------------
     */
-    public function getUserFullnameAttribute($value) {
-       return $this->ci.' - '.$this->first_name.' '.$this->last_name;
-    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

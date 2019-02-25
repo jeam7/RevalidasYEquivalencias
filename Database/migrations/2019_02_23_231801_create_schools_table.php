@@ -21,6 +21,15 @@ class CreateSchoolsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+
+        $dataSchool = array(
+            array('id' =>1, 'name' => 'Escuela de Biologia', 'faculty_id' => 1),
+            array('id' =>2, 'name' => 'Escuela de Computacion', 'faculty_id' => 1),
+            array('id' =>3, 'name' => 'Escuela de Fisica', 'faculty_id' => 1),
+            array('id' =>4, 'name' => 'Escuela de Matematica', 'faculty_id' => 1),
+            array('id' =>5, 'name' => 'Escuela de Quimica', 'faculty_id' => 1)
+        );
+      DB::table('schools')->insert($dataSchool);
     }
 
     /**
