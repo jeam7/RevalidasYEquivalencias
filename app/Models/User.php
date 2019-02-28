@@ -57,6 +57,10 @@ class User extends Model
     public function getUserFullnameAttribute($value) {
        return $this->ci.' - '.$this->first_name.' '.$this->last_name;
     }
+
+    public function getFullnameAttribute($value) {
+       return $this->first_name.' '.$this->last_name;
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

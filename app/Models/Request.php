@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 class Request extends Model
 {
     use CrudTrait;
@@ -49,6 +50,10 @@ class Request extends Model
     public function user(){
       return $this->belongsTo('App\Models\User');
     }
+
+    // public function request_status(){
+    //     return $this->belongsToMany('App\Models\RequestStatus','request_has_status')->withPivot('request_status_id','create_at');
+    // }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -60,7 +65,15 @@ class Request extends Model
     | ACCESORS
     |--------------------------------------------------------------------------
     */
-
+    public function getLastStatusAttribute($value)
+    {
+      $lastStatus = DB::select('SELECT rhs.request_status_id request_status_id, rs.name name
+                                FROM request_has_status rhs
+                                JOIN request_status rs ON (rs.id = rhs.request_status_id)
+                                WHERE request_id = ? ORDER BY rhs.id DESC LIMIT 1',
+                                [$this->id]);
+      return $lastStatus[0]->name;
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

@@ -47,6 +47,20 @@ class CreateUsersTable extends Migration
               'address' => 'Caracas Catia',
               'phone' => '04143723172',
               'type_user' => 1
+            ),
+            array(
+              'email' => 'jean@gmail.com',
+              'password' => '$2a$10$XgHENPJMF8Ni5YGnTQrWFukPxqq8tOJUqfK5eGADuyzdDQXejlLvO',
+              'ci' => 2222222,
+              'first_name' => 'Jean',
+              'last_name' => 'Akchar',
+              'place_birth' => 'Caracas',
+              'nacionality' => 'v',
+              'birthdate' => '1992-10-07',
+              'gender' => 'm',
+              'address' => 'Caracas Catia',
+              'phone' => '04143723172',
+              'type_user' => 4
             )
         );
       DB::table('users')->insert($dataAdmins);

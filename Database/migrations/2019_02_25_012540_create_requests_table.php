@@ -21,7 +21,7 @@ class CreateRequestsTable extends Migration
             $table->foreign('career_origin_id', 'fk_request_careerOrigin')->references('id')->on('careers');
             $table->integer('career_destination_id')->unsigned();
             $table->foreign('career_destination_id', 'fk_request_careerDestination')->references('id')->on('careers');
-            $table->enum('origin',[1,2])->default(1);
+            $table->enum('origin',[1,2]);
             $table->boolean('others')->nullable();
             $table->string('info_others')->nullable();
             $table->boolean('pensum')->nullable();
