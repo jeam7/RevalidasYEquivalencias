@@ -38,6 +38,10 @@ class Subject extends Model
     public function career(){
         return $this->belongsTo('App\Models\Career');
     }
+
+    public function equivalent_subject(){
+        return $this->hasMany('App\Models\Equivalent_subject');
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -49,7 +53,9 @@ class Subject extends Model
     | ACCESORS
     |--------------------------------------------------------------------------
     */
-
+    public function getSubjectFacultyAttribute($value) {
+       return $this->name . ' - ' . $this->career->name;
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

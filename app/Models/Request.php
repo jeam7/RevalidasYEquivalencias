@@ -51,6 +51,11 @@ class Request extends Model
       return $this->belongsTo('App\Models\User');
     }
 
+    public function voucher(){
+      return $this->belongsTo('App\Models\Voucher');
+    }
+
+
     // public function request_status(){
     //     return $this->belongsToMany('App\Models\RequestStatus','request_has_status')->withPivot('request_status_id','create_at');
     // }
@@ -73,6 +78,11 @@ class Request extends Model
                                 WHERE request_id = ? ORDER BY rhs.id DESC LIMIT 1',
                                 [$this->id]);
       return $lastStatus[0]->name;
+    }
+
+    public function getDataRequestAttribute($value)
+    {
+      return $this->id . ' - ' . $this->user->ci  . ' - ' . $this->user->first_name . ' ' . $this->user->last_name . ' - ' . $this->career_origin->name . ' - ' . $this->career_destination->name;
     }
     /*
     |--------------------------------------------------------------------------

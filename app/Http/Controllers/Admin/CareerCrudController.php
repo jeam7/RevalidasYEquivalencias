@@ -56,7 +56,12 @@ class CareerCrudController extends CrudController
             'model' => "App\Models\School",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
-            })
+            }),
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('school', function ($q) use ($column, $searchTerm) {
+                    $q->where('name', 'like', '%'.$searchTerm.'%');
+                });
+            }
           ],
         ]);
         // TODO: remove setFromDb() and manually define Fields and Columns

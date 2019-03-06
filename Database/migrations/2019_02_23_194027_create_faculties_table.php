@@ -24,7 +24,58 @@ class CreateFacultiesTable extends Migration
         $dataFaculty = array(
             array(
               'id' => 1,
+              'name' => 'Facultad de Agronomía',
+              'college_id' => 1
+            ),
+            array(
+              'id' => 2,
+              'name' => 'Facultad de Arquitectura y Urbanismo',
+              'college_id' => 1
+            ),
+            array(
+              'id' => 3,
               'name' => 'Facultad de Ciencias',
+              'college_id' => 1
+            ),
+            array(
+              'id' => 4,
+              'name' => 'Facultad de Ciencias Económicas y Sociales',
+              'college_id' => 1
+            ),
+            array(
+              'id' => 5,
+              'name' => 'Facultad de Farmacia',
+              'college_id' => 1
+            ),
+            array(
+              'id' => 6,
+              'name' => 'Facultad de Humanidades y Educación',
+              'college_id' => 1
+            ),
+            array(
+              'id' => 7,
+              'name' => 'Facultad de Ingeniería',
+              'college_id' => 1
+            ),
+            array(
+              'id' => 8,
+              'name' => 'Facultad de Ciencias Jurídicas y Políticas',
+              'college_id' => 1
+            ),
+
+            array(
+              'id' => 9,
+              'name' => 'Facultad de Medicina',
+              'college_id' => 1
+            ),
+            array(
+              'id' => 10,
+              'name' => 'Facultad de Odontología',
+              'college_id' => 1
+            ),
+            array(
+              'id' => 11,
+              'name' => 'Facultad de Veterinaria',
               'college_id' => 1
             )
         );

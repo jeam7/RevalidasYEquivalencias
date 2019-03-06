@@ -37,14 +37,16 @@ class RequestRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            $existRequest = DB::select('SELECT r.id as id
+            $existRequest = DB::select('SELECT rhs.request_status_id as id
                                         FROM users u
                                         JOIN requests r ON (r.user_id = u.id)
                                         JOIN request_has_status rhs ON (rhs.request_id = r.id)
-                                        WHERE rhs.request_status_id != ? AND r.career_origin_id = ? AND r.career_destination_id = ? AND u.id = ?',
-                                        [8, $this->input('career_origin_id'), $this->input('career_destination_id'),  $this->input('user_id')]);
+                                        WHERE r.career_origin_id = ? AND r.career_destination_id = ? AND u.id = ?
+                                        ORDER BY rhs.id DESC LIMIT 1',
+                                        [$this->input('career_origin_id'), $this->input('career_destination_id'),  $this->input('user_id')]);
             $existRequest = ($existRequest) ? $existRequest[0]->id : NULL ;
-            if ($existRequest != $this->input('id')) {
+
+            if ($existRequest != 8 && $existRequest) {
                 $validator->errors()->add('user_id', 'Ya se encuentra una solicitud en proceso con el solicitante y las carreras ingresadas');
             }
             if ($this->input('career_origin_id') === $this->input('career_destination_id')) {

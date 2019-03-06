@@ -29,6 +29,13 @@ class CreateCollegesTable extends Migration
               'foreign' => 1,
               'address' => 'Ciudad Universitaria de Caracas',
               'abbreviation' => 'UCV'
+            ),
+            array(
+              'id' => 2,
+              'name' => 'Universidad Simon Bolivar',
+              'foreign' => 1,
+              'address' => 'Sartaneja',
+              'abbreviation' => 'USB'
             )
         );
       DB::table('colleges')->insert($dataCollege);

@@ -35,6 +35,12 @@ class RequestCrudController extends CrudController
         | CrudPanel Configuration
         |--------------------------------------------------------------------------
         */
+
+        // if (backpack_user()->type_user == 4) {
+        //   $this->crud->addClause('where', 'user_id', '=', backpack_user()->id);
+        // }else if (backpack_user()->typeUser == 1) {
+        //   // $this->crud->addClause('where', 'user_id', '=', backpack_user()->ci);
+        // }
         $this->crud->addFields([
             ['name' => 'user_id', // the db column for the foreign key
               'label' => "Cedula solicitante",

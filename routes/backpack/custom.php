@@ -25,4 +25,13 @@ Route::group([
     CRUD::resource('subject', 'SubjectCrudController');
     CRUD::resource('academic_period', 'Academic_periodCrudController');
     CRUD::resource('request', 'RequestCrudController');
+    // CRUD::resource('request', 'MyRequestCrudController');
+    // CRUD::resource('voucher', 'VoucherCrudController');
+    CRUD::resource('voucher', 'VoucherCrudController')->with(function(){
+      Route::get('voucher/getSubjectsOrigin/{id}', 'VoucherCrudController@getSubjectsOrigin');
+      Route::get('voucher/getSubjectsDestination/{id}', 'VoucherCrudController@getSubjectsDestination');
+      Route::post('voucher/createEquivalentSubject', 'VoucherCrudController@createEquivalentSubject');
+      Route::get('voucher/getEquivalentSubject/{id}', 'VoucherCrudController@getEquivalentSubject');
+    });
+    // CRUD::resource('equivalent_subject', 'Equivalent_subjectCrudController');
 }); // this should be the absolute last line of this file
