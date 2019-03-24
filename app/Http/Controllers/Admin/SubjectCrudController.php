@@ -32,6 +32,14 @@ class SubjectCrudController extends CrudController
         | CrudPanel Configuration
         |--------------------------------------------------------------------------
         */
+
+        $this->crud->denyAccess(['create', 'update', 'delete', 'list']);
+        if(backpack_user()->type_user == 1 || backpack_user()->type_user == 2) {
+          $this->crud->allowAccess(['create', 'update', 'list']);
+        }elseif(backpack_user()->type_user == 3) {
+          $this->crud->allowAccess(['create', 'list']);
+        }
+
         $this->crud->addFields([
           ['name'=>'name', 'label'=>'Nombre', 'type'=>'text'],
           ['name'=>'info', 'label'=>'Descripcion', 'type'=>'textarea'],

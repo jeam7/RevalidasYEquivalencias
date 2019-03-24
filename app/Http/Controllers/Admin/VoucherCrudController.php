@@ -44,7 +44,15 @@ class VoucherCrudController extends CrudController
               'attribute' => 'data_request', // foreign key attribute that is shown to user
               'model' => "App\Models\Request",
               'options'   => (function ($query) {
-                return $query->orderBy('id', 'ASC')->get();
+                if (backpack_user()->type_user == 3) {
+                  return $query->join('careers', 'careers.id', '=', 'requests.career_destination_id')
+                                      ->join('schools', 'schools.id', '=', 'careers.school_id')
+                                      ->where('schools.faculty_id', '=', backpack_user()->faculty_id)
+                                      ->orderBy('requests.id', 'ASC')
+                                      ->get();
+                }else {
+                  return $query->orderBy('id', 'ASC')->get();
+                }
               })
             ]
         ], 'create');

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
-use App\Http\Requests\RequestRequest as StoreRequest;
+use App\Http\Requests\MyRequestRequest as StoreRequest;
 use App\Http\Requests\RequestRequestUpdate as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
 use Illuminate\Support\Facades\DB;
@@ -26,8 +26,8 @@ class MyRequestCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('App\Models\Request');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/requestt');
+        $this->crud->setModel('App\Models\MyRequest');
+        $this->crud->setRoute(config('backpack.base.route_prefix') . '/myrequest');
         $this->crud->setEntityNameStrings('Solicitudes', 'Mis Solicitudes');
 
         /*
@@ -36,7 +36,7 @@ class MyRequestCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
         $this->crud->addClause('where', 'user_id', '=', backpack_user()->id);
-
+        $this->crud->denyAccess(['update','delete']);
         $this->crud->addFields([
             // ['name' => 'user_id', // the db column for the foreign key
             //   'label' => "Cedula solicitante",
@@ -152,34 +152,35 @@ class MyRequestCrudController extends CrudController
         // ], 'update');
 
         $this->crud->setColumns([
-          ['name' => 'user_id', // the db column for the foreign key
-            'label' => "Cedula solicitante",
-            'type' => 'select',
-            'entity' => 'user', // the method that defines the relationship in your Model
-            'attribute' => 'ci', // foreign key attribute that is shown to user
-            'model' => "App\Models\User",
-            'options'   => (function ($query) {
-              return $query->orderBy('ci', 'ASC')->get();
-            }),
-            "key" => "ci"
-          ],
-          ['name' => 'user_id', // the db column for the foreign key
-            'label' => "Nombre completo solicitante",
-            'type' => 'select',
-            'entity' => 'user', // the method that defines the relationship in your Model
-            'attribute' => 'fullname', // foreign key attribute that is shown to user
-            'model' => "App\Models\User",
-            'options'   => (function ($query) {
-              return $query->orderBy('ci', 'ASC')->get();
-            }),
-            "key" => "fullname"
-          ],
+          // ['name' => 'user_id', // the db column for the foreign key
+          //   'label' => "Cedula solicitante",
+          //   'type' => 'select',
+          //   'entity' => 'user', // the method that defines the relationship in your Model
+          //   'attribute' => 'ci', // foreign key attribute that is shown to user
+          //   'model' => "App\Models\User",
+          //   'options'   => (function ($query) {
+          //     return $query->orderBy('ci', 'ASC')->get();
+          //   }),
+          //   "key" => "ci"
+          // ],
+          ['name'=>'id', 'type' => 'text', 'label' => 'Numero de solicitud'],
+          // ['name' => 'user_id', // the db column for the foreign key
+          //   'label' => "Nombre completo solicitante",
+          //   'type' => 'select',
+          //   'entity' => 'user', // the method that defines the relationship in your Model
+          //   'attribute' => 'fullname', // foreign key attribute that is shown to user
+          //   'model' => "App\Models\User",
+          //   'options'   => (function ($query) {
+          //     return $query->orderBy('ci', 'ASC')->get();
+          //   }),
+          //   "key" => "fullname"
+          // ],
           ['name' => 'created_at', 'label' => 'Fecha', 'type' => 'datetime'],
           ['name' => 'career_origin_id', // the db column for the foreign key
             'label' => "Universidad procedencia",
             'type' => 'select',
             'entity' => 'career_origin', // the method that defines the relationship in your Model
-            'attribute' => 'name', // foreign key attribute that is shown to user
+            'attribute' => 'college_faculty', // foreign key attribute that is shown to user
             'model' => "App\Models\Career",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
@@ -189,19 +190,20 @@ class MyRequestCrudController extends CrudController
             'label' => "Universidad destino",
             'type' => 'select',
             'entity' => 'career_destination', // the method that defines the relationship in your Model
-            'attribute' => 'name', // foreign key attribute that is shown to user
+            'attribute' => 'college_faculty', // foreign key attribute that is shown to user
             'model' => "App\Models\Career",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
             })
-          ]
+          ],
+          ['name'=>'last_status', 'type' => 'text_custom', 'label' => 'Estatus actual']
         ]);
         // TODO: remove setFromDb() and manually define Fields and Columns
         // $this->crud->setFromDb();
 
         // add asterisk for fields that are required in RequestRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
-        $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
+        // $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
     }
 
     public function store(StoreRequest $request)
@@ -211,6 +213,7 @@ class MyRequestCrudController extends CrudController
 
           $origin = Career::find($request->request->get('career_origin_id'));
           $request->request->set('origin', $origin->school->faculty->college->foreign);
+          $request->request->set('user_id', backpack_user()->id);
           // dd($request->request);
           $redirect_location = parent::storeCrud($request);
 

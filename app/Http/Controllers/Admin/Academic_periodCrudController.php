@@ -32,6 +32,16 @@ class Academic_periodCrudController extends CrudController
         | CrudPanel Configuration
         |--------------------------------------------------------------------------
         */
+
+        $this->crud->denyAccess(['create', 'update', 'delete', 'list', 'show']);
+        if(backpack_user()->type_user == 1 || backpack_user()->type_user == 2) {
+          $this->crud->allowAccess(['create', 'update', 'list', 'delete', 'show']);
+        }
+
+        if (backpack_user()->type_user == 2) {
+          $this->crud->addClause('where', 'faculty_id', '=', backpack_user()->faculty_id);
+        }
+
         $this->crud->addFields([
           [ 'name' => 'faculty_id', // the db column for the foreign key
             'label' => "Facultad",
@@ -43,7 +53,7 @@ class Academic_periodCrudController extends CrudController
               return $query->orderBy('id', 'ASC')->get();
             })
           ],
-          ['name'=>'name', 'label'=>'Nombre', 'type'=>'text'],
+          ['name'=>'name', 'label'=>'Nombre periodo academico', 'type'=>'text'],
           ['name'=>'info', 'label'=>'Descripcion', 'type'=>'textarea'],
           ['name'=>'dean', 'label'=>'Decano', 'type'=>'text'],
           ['name'=>'rep_sub_equi_one', 'label'=>'Primer representante de subcomision de equivalencias', 'type'=>'text'],
@@ -66,8 +76,16 @@ class Academic_periodCrudController extends CrudController
               return $query->orderBy('id', 'ASC')->get();
             })
           ],
-          ['name'=>'name', 'label'=>'Nombre', 'type'=>'text'],
-          ['name'=>'dean', 'label'=>'Decano', 'type'=>'text']
+          ['name'=>'name', 'label'=>'Nombre periodo academico', 'type'=>'text'],
+          ['name'=>'dean', 'label'=>'Decano', 'type'=>'text'],
+          ['name'=>'info', 'label'=>'Descripcion', 'type'=>'text', 'visibleInTable' => false],
+          ['name'=>'rep_sub_equi_one', 'label'=>'Primer representante de subcomision de equivalencias', 'type'=>'text', 'visibleInTable' => false],
+          ['name'=>'rep_sub_equi_two', 'label'=>'Segundo representante de subcomision de equivalencias', 'type'=>'text', 'visibleInTable' => false],
+          ['name'=>'rep_sub_equi_three', 'label'=>'Tercer representante de subcomision de equivalencias', 'type'=>'text', 'visibleInTable' => false],
+
+          ['name'=>'rep_comi_equi_one', 'label'=>'Primer representante de comision de equivalencias', 'type'=>'text', 'visibleInTable' => false],
+          ['name'=>'rep_comi_equi_two', 'label'=>'Segundo representante de comision de equivalencias', 'type'=>'text', 'visibleInTable' => false],
+          ['name'=>'rep_comi_equi_three', 'label'=>'Tercer representante de comision de equivalencias', 'type'=>'text', 'visibleInTable' => false]
         ]);
         // TODO: remove setFromDb() and manually define Fields and Columns
         // $this->crud->setFromDb();

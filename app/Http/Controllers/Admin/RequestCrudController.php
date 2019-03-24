@@ -36,11 +36,9 @@ class RequestCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
 
-        // if (backpack_user()->type_user == 4) {
-        //   $this->crud->addClause('where', 'user_id', '=', backpack_user()->id);
-        // }else if (backpack_user()->typeUser == 1) {
-        //   // $this->crud->addClause('where', 'user_id', '=', backpack_user()->ci);
-        // }
+        if (backpack_user()->type_user == 3) {
+          $this->crud->addClause('requestByFaculty', backpack_user()->faculty_id);
+        }
         $this->crud->addFields([
             ['name' => 'user_id', // the db column for the foreign key
               'label' => "Cedula solicitante",
@@ -56,7 +54,7 @@ class RequestCrudController extends CrudController
               'label' => "Carrera - Facultad - Universidad de procedencia",
               'type' => 'select2',
               'entity' => 'career_origin', // the method that defines the relationship in your Model
-              'attribute' => 'career_school', // foreign key attribute that is shown to user
+              'attribute' => 'name', // foreign key attribute that is shown to user
               'model' => "App\Models\Career",
               'options'   => (function ($query) {
                 return $query->orderBy('id', 'ASC')->get();
@@ -66,7 +64,7 @@ class RequestCrudController extends CrudController
               'label' => "Carrera - Facultad - Universidad donde desea cursar",
               'type' => 'select2',
               'entity' => 'career_destination', // the method that defines the relationship in your Model
-              'attribute' => 'career_school', // foreign key attribute that is shown to user
+              'attribute' => 'name', // foreign key attribute that is shown to user
               'model' => "App\Models\Career",
               'options'   => (function ($query) {
                 return $query->orderBy('id', 'ASC')->get();
@@ -183,7 +181,7 @@ class RequestCrudController extends CrudController
             'label' => "Universidad procedencia",
             'type' => 'select',
             'entity' => 'career_origin', // the method that defines the relationship in your Model
-            'attribute' => 'name', // foreign key attribute that is shown to user
+            'attribute' => 'college_faculty', // foreign key attribute that is shown to user
             'model' => "App\Models\Career",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
@@ -193,7 +191,7 @@ class RequestCrudController extends CrudController
             'label' => "Universidad destino",
             'type' => 'select',
             'entity' => 'career_destination', // the method that defines the relationship in your Model
-            'attribute' => 'name', // foreign key attribute that is shown to user
+            'attribute' => 'college_faculty', // foreign key attribute that is shown to user
             'model' => "App\Models\Career",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();

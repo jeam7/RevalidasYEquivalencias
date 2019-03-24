@@ -69,6 +69,10 @@ class Career extends Model
     public function getCollegeAttribute($value) {
        return $this->school->faculty->college->name;
     }
+
+    public function getCollegeFacultyAttribute($value) {
+       return $this->school->faculty->college->name .' - '. $this->name;
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

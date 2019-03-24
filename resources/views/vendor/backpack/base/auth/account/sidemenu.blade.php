@@ -1,7 +1,10 @@
 <div class="box">
     <div class="box-body box-profile">
-	    <img class="profile-user-img img-responsive img-circle" src="{{ backpack_avatar_url(backpack_auth()->user()) }}">
-	    <h3 class="profile-username text-center">{{ backpack_auth()->user()->name }}</h3>
+      @php
+        $placeholder = 'https://placehold.it/160x160/00a65a/ffffff/&text='.backpack_user()->first_name[0];
+      @endphp
+	    <img class="profile-user-img img-responsive img-circle" src="{{ $placeholder }}">
+	    <h3 class="profile-username text-center">{{ backpack_user()->first_name ." ". backpack_user()->last_name}}</h3>
 	</div>
 
 	<ul class="nav nav-pills nav-stacked">

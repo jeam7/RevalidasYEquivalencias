@@ -17,7 +17,9 @@ class AddFkUserFaculty extends Migration
           $table->integer('faculty_id')->unsigned()->nullable();
           $table->foreign('faculty_id', 'fk_user_faculty')->references('id')->on('faculties');
       });
+      DB::update("UPDATE users SET faculty_id = 3 WHERE id IN (2,3)");
     }
+
 
     /**
      * Reverse the migrations.

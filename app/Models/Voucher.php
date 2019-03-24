@@ -45,7 +45,12 @@ class Voucher extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
-
+    // public function scopeRequestFaculty($query, $typeUser) {
+    //     $query = $query->join('careers', 'careers.id', '=', 'requests.career_destination_id')
+    //                     ->join('schools', 'schools.id', '=', 'careers.school_id')
+    //                     ->where('schools.faculty_id', '=', $typeUser);
+    //     return $query;
+    // }
     /*
     |--------------------------------------------------------------------------
     | ACCESORS

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Support\Facades\DB;
 class User extends Model
 {
     use CrudTrait;
@@ -48,7 +48,17 @@ class User extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
-
+    public function scopeMyFaculty($query, $typeUser) {
+        // $query = $query->where('type_user', '=', 4)
+        //                 ->orWhere()
+        $query = $query->where(function($query){
+          $query->where('type_user', '=', 4);
+        })->orWhere(function($query){
+          $query->where('type_user', '=', 3)
+                ->where('faculty_id', '=', 3);
+        });
+        return $query;
+    }
     /*
     |--------------------------------------------------------------------------
     | ACCESORS

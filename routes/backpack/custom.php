@@ -25,7 +25,7 @@ Route::group([
     CRUD::resource('subject', 'SubjectCrudController');
     CRUD::resource('academic_period', 'Academic_periodCrudController');
     CRUD::resource('request', 'RequestCrudController');
-    // CRUD::resource('request', 'MyRequestCrudController');
+    CRUD::resource('myrequest', 'MyRequestCrudController');
     // CRUD::resource('voucher', 'VoucherCrudController');
     CRUD::resource('voucher', 'VoucherCrudController')->with(function(){
       Route::get('voucher/getSubjectsOrigin/{id}', 'VoucherCrudController@getSubjectsOrigin');
