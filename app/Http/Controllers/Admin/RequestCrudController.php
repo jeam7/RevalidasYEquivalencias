@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Request;
 use App\Models\Career;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade as PDF;
 /**
  * Class RequestCrudController
  * @package App\Http\Controllers\Admin
@@ -35,10 +36,16 @@ class RequestCrudController extends CrudController
         | CrudPanel Configuration
         |--------------------------------------------------------------------------
         */
+        $this->crud->addButtonFromView('line', '', 'botonGenerarPdfSolicitud', 'bottom');
+        $this->crud->denyAccess(['create', 'update', 'delete', 'list']);
+        if(backpack_user()->type_user == 1 || backpack_user()->type_user == 2 || backpack_user()->type_user == 3) {
+          $this->crud->allowAccess(['create', 'update', 'list']);
+        }
 
-        if (backpack_user()->type_user == 3) {
+        if (backpack_user()->type_user == 3 || backpack_user()->type_user == 2) {
           $this->crud->addClause('requestByFaculty', backpack_user()->faculty_id);
         }
+
         $this->crud->addFields([
             ['name' => 'user_id', // the db column for the foreign key
               'label' => "Cedula solicitante",
@@ -54,7 +61,7 @@ class RequestCrudController extends CrudController
               'label' => "Carrera - Facultad - Universidad de procedencia",
               'type' => 'select2',
               'entity' => 'career_origin', // the method that defines the relationship in your Model
-              'attribute' => 'name', // foreign key attribute that is shown to user
+              'attribute' => 'career_faculty_college', // foreign key attribute that is shown to user
               'model' => "App\Models\Career",
               'options'   => (function ($query) {
                 return $query->orderBy('id', 'ASC')->get();
@@ -64,10 +71,18 @@ class RequestCrudController extends CrudController
               'label' => "Carrera - Facultad - Universidad donde desea cursar",
               'type' => 'select2',
               'entity' => 'career_destination', // the method that defines the relationship in your Model
-              'attribute' => 'name', // foreign key attribute that is shown to user
+              'attribute' => 'career_faculty_college', // foreign key attribute that is shown to user
               'model' => "App\Models\Career",
               'options'   => (function ($query) {
-                return $query->orderBy('id', 'ASC')->get();
+                if (backpack_user()->type_user == 3 || backpack_user()->type_user == 2) {
+                  return $query->select('careers.*')
+                                ->join('schools', 'schools.id', '=', 'careers.school_id')
+                                ->where('schools.faculty_id', '=', backpack_user()->faculty_id)
+                                ->orderBy('id', 'ASC')->get();
+                }else{
+                  return $query->orderBy('id', 'ASC')->get();
+                }
+
               })
             ]
         ], 'create');
@@ -89,7 +104,7 @@ class RequestCrudController extends CrudController
             'label' => "Carrera - Facultad - Universidad de procedencia",
             'type' => 'select2',
             'entity' => 'career_origin', // the method that defines the relationship in your Model
-            'attribute' => 'career_school', // foreign key attribute that is shown to user
+            'attribute' => 'career_faculty_college', // foreign key attribute that is shown to user
             'model' => "App\Models\Career",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
@@ -100,7 +115,7 @@ class RequestCrudController extends CrudController
             'label' => "Carrera - Facultad - Universidad donde desea cursar",
             'type' => 'select2',
             'entity' => 'career_destination', // the method that defines the relationship in your Model
-            'attribute' => 'career_school', // foreign key attribute that is shown to user
+            'attribute' => 'career_faculty_college', // foreign key attribute that is shown to user
             'model' => "App\Models\Career",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
@@ -237,5 +252,25 @@ class RequestCrudController extends CrudController
         // your additional operations after save here
         // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
+    }
+
+    public function generarPdfSolicitud($id){
+      $currentRequest = Request::find($id);
+      $currentUser = $currentRequest->user;
+
+      $currentUserOriginC = $currentRequest->career_origin;
+      $currentUserOriginS = $currentRequest->career_origin->school;
+      $currentUserOriginF = $currentRequest->career_origin->school->faculty;
+      $currentUserOriginU = $currentRequest->career_origin->school->faculty->college;
+
+      $currentUserDestinationC = $currentRequest->career_destination;
+      $currentUserDestinationS = $currentRequest->career_destination->school;
+      $currentUserDestinationF = $currentRequest->career_destination->school->faculty;
+      $currentUserDestinationU = $currentRequest->career_destination->school->faculty->college;
+
+      $pdf = \PDF::loadView('backpack::crud.pdf.generarPdfSolicitud',
+            compact("currentRequest", "currentUser", "currentUserOriginC", "currentUserOriginS", "currentUserOriginF", "currentUserOriginU",
+                    "currentUserDestinationC", "currentUserDestinationS", "currentUserDestinationF", "currentUserDestinationU"));
+      return $pdf->stream();
     }
 }

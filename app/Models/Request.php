@@ -55,20 +55,16 @@ class Request extends Model
       return $this->belongsTo('App\Models\Voucher');
     }
 
-
-    // public function request_status(){
-    //     return $this->belongsToMany('App\Models\RequestStatus','request_has_status')->withPivot('request_status_id','create_at');
-    // }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
     |--------------------------------------------------------------------------
     */
     public function scopeRequestByFaculty($query, $typeUser) {
-        $query = $query->join('careers', 'careers.id', '=', 'requests.career_destination_id')
+      $query->select('requests.*')->join('careers', 'careers.id', '=', 'requests.career_destination_id')
                         ->join('schools', 'schools.id', '=', 'careers.school_id')
                         ->where('schools.faculty_id', '=', $typeUser);
-        return $query;
+      return $query;
     }
     /*
     |--------------------------------------------------------------------------

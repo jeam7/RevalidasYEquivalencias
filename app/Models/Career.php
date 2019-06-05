@@ -73,6 +73,11 @@ class Career extends Model
     public function getCollegeFacultyAttribute($value) {
        return $this->school->faculty->college->name .' - '. $this->name;
     }
+
+    public function getCareerFacultyCollegeAttribute($value) {
+      $foreignValue = ($this->school->faculty->college->foreign == 1 ) ? 'Nacional' : 'Extranjera' ;
+       return $this->name.' - '.$this->school->faculty->name.' - '.$this->school->faculty->college->name.' - '.$foreignValue;
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

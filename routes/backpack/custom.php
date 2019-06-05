@@ -24,7 +24,9 @@ Route::group([
     CRUD::resource('career', 'CareerCrudController');
     CRUD::resource('subject', 'SubjectCrudController');
     CRUD::resource('academic_period', 'Academic_periodCrudController');
-    CRUD::resource('request', 'RequestCrudController');
+    CRUD::resource('request', 'RequestCrudController')->with(function(){
+      Route::get('request/generarPdfSolicitud/{id}', 'RequestCrudController@generarPdfSolicitud');
+    });
     CRUD::resource('myrequest', 'MyRequestCrudController');
     // CRUD::resource('voucher', 'VoucherCrudController');
     CRUD::resource('voucher', 'VoucherCrudController')->with(function(){
