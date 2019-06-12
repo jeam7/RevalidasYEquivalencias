@@ -65,7 +65,7 @@
 		    </div><!-- /.box-footer-->
 		  </div><!-- /.box -->
 
-			<div class="col-md-5">
+			<div class="col-md-5" style="width:45%">
 			        <div id="root" data-voucher_id="{{$entry->getKey()}}">
 			</div>
 		  </form>

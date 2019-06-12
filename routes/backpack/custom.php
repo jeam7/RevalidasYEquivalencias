@@ -34,6 +34,7 @@ Route::group([
       Route::get('voucher/getSubjectsDestination/{id}', 'VoucherCrudController@getSubjectsDestination');
       Route::post('voucher/createEquivalentSubject', 'VoucherCrudController@createEquivalentSubject');
       Route::get('voucher/getEquivalentSubject/{id}', 'VoucherCrudController@getEquivalentSubject');
+      Route::post('voucher/deleteEquivalentSubject', 'VoucherCrudController@deleteEquivalentSubject');
     });
     // CRUD::resource('equivalent_subject', 'Equivalent_subjectCrudController');
 }); // this should be the absolute last line of this file

@@ -162,7 +162,8 @@ class VoucherCrudController extends CrudController
                                     JOIN requests r ON (r.id = v.id)
                                     JOIN careers co ON (co.id = r.career_destination_id)
                                     JOIN subjects s ON (s.career_id = co.id)
-                                    WHERE v.id = ?', [$id]);
+                                    WHERE v.id = ?
+                                      AND s.id NOT IN (SELECT subject_a_id from equivalent_subjects WHERE voucher_id = ?)', [$id, $id]);
       return $originSubjects;
     }
 
@@ -171,7 +172,7 @@ class VoucherCrudController extends CrudController
       $size = sizeof($request->values['equivalentsSubjects']);
       for ($i=0; $i < $size; $i++) {
         $insertEquivalentSubjects = DB::insert('INSERT INTO equivalent_subjects VALUES (?,?,?,?,NOW(),NOW())'
-                                    ,[NULL, (int)$request->voucher_id, (int)$request->values['approvedSubject'], $request->values['equivalentsSubjects'][$i]]);
+                                    ,[NULL, (int)$request->voucher_id, (int)$request->values['approvedSubject'], (int)$request->values['equivalentsSubjects'][$i]]);
       }
 
       return response()->json(['code_error' => 0 ]);
@@ -187,5 +188,15 @@ class VoucherCrudController extends CrudController
                                  WHERE es.voucher_id = ?
                                  GROUP BY es.subject_a_id', [$id]);
       return $equivalents;
+    }
+
+    public function deleteEquivalentSubject(Request $request){
+      $voucherId = (int)$request->record["voucherId"];
+      $equivalentId = (int)$request->record["subjectId"];
+
+      $deleted = DB::delete('DELETE
+                            FROM equivalent_subjects
+                            WHERE voucher_id = ? AND subject_a_id = ?', [$voucherId, $equivalentId]);
+      return $deleted;
     }
 }

@@ -1,7 +1,8 @@
 import "antd/dist/antd.css";
-import { Modal, Button, Form, Select, Table, Divider, Tag } from "antd";
+import { Modal, Button, Form, Select, Table, Divider, Tag, Spin } from "antd";
 const FormItem = Form.Item;
 const { Option } = Select;
+
 class Equivalencias extends React.Component {
   constructor(props) {
     super(props);
@@ -13,30 +14,13 @@ class Equivalencias extends React.Component {
     this.getSubjectsDestination = this.getSubjectsDestination.bind(this);
     this.createEquivalentSubject = this.createEquivalentSubject.bind(this);
     this.getEquivalentSubject = this.getEquivalentSubject.bind(this);
+    this.deleteEquivalentSubject = this.deleteEquivalentSubject.bind(this);
     this.state = {
       visible: false,
+      loading: true,
       subjectOrigin: [],
       subjectDestination: [],
-      // dataTable: [
-      //   {
-      //     key: "1",
-      //     approvedSubject: "John Brown",
-      //     equivalentsSubjects: ["nice", "developer"],
-      //     credits: 32
-      //   },
-      //   {
-      //     key: "2",
-      //     approvedSubject: "Jim Green",
-      //     equivalentsSubjects: ["loser"],
-      //     credits: 42
-      //   },
-      //   {
-      //     key: "3",
-      //     approvedSubject: "Joe Black",
-      //     equivalentsSubjects: ["cool", "teacher"],
-      //     credits: 32
-      //   }
-      // ],
+      dataTable: [],
       columns: [
         {
           title: "Asignatura Equivalente",
@@ -46,23 +30,9 @@ class Equivalencias extends React.Component {
         },
         {
           title: "Codigos de materias",
-          key: "equivalentsSubjects",
           dataIndex: "equivalentsSubjects",
-          render: tags => (
-            <span>
-              {tags.map(tag => {
-                let color = tag.length > 5 ? "geekblue" : "green";
-                if (tag === "loser") {
-                  color = "volcano";
-                }
-                return (
-                  <Tag color={color} key={tag}>
-                    {tag.toUpperCase()}
-                  </Tag>
-                );
-              })}
-            </span>
-          )
+          key: "equivalentsSubjects",
+          render: text => <span>{text}</span>
         },
         {
           title: "Unidades de credito",
@@ -74,7 +44,25 @@ class Equivalencias extends React.Component {
           key: "action",
           render: (text, record) => (
             <span>
-              <a href="javascript:;">Delete</a>
+              <a
+                href="javascript:;"
+                onClick={e => {
+                  e.stopPropagation();
+                  console.log(record);
+                  let confirm = window.confirm(
+                    "Esta seguro que desea eliminar la fila seleccionada?"
+                  );
+                  if (confirm) {
+                    console.log("si");
+                    this.deleteEquivalentSubject(record);
+                    this.setState({
+                      loading: true
+                    });
+                  }
+                }}
+              >
+                Eliminar
+              </a>
             </span>
           )
         }
@@ -83,12 +71,35 @@ class Equivalencias extends React.Component {
   }
 
   componentDidMount() {
-    //llamar a la funcion que trae los datos de la tabla
     this.getEquivalentSubject();
     this.getSubjectsOrigin();
     this.getSubjectsDestination();
   }
 
+  deleteEquivalentSubject(record) {
+    let { voucher_id } = this.props;
+    let _this = this;
+    console.log("++++++");
+    console.log(record);
+    fetch("/admin/voucher/deleteEquivalentSubject", {
+      method: "post",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+      },
+      body: JSON.stringify({
+        record
+      })
+    })
+      .then(function(response) {
+        _this.getEquivalentSubject();
+        _this.getSubjectsDestination();
+      })
+      .catch(function(e) {
+        console.log(e);
+      });
+  }
   getSubjectsOrigin() {
     let { voucher_id } = this.props;
     let _this = this;
@@ -100,7 +111,6 @@ class Equivalencias extends React.Component {
         return response.json();
       })
       .then(function(data) {
-        console.log("origen: " + data);
         _this.setState({ subjectOrigin: data });
       })
       .catch(function(e) {
@@ -119,8 +129,41 @@ class Equivalencias extends React.Component {
         return response.json();
       })
       .then(function(data) {
-        console.log("destino: " + data);
         _this.setState({ subjectDestination: data });
+      })
+      .catch(function(e) {
+        console.log(e);
+      });
+  }
+
+  getEquivalentSubject() {
+    let { voucher_id } = this.props;
+    let _this = this;
+    let acum = "";
+    fetch("/admin/voucher/getEquivalentSubject/" + voucher_id, {
+      method: "get",
+      credentials: "same-origin"
+    })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        data = data.map(aux => {
+          aux.key = aux.id;
+          aux.approvedSubject =
+            aux.subjectName + " (Cod - " + aux.subjectId + ")";
+          aux.equivalentId = aux.subjectEquivalentId.split(",");
+          aux.equivalentName = aux.subjectEquivalentName.split(",");
+          for (let i = 0; i < aux.equivalentId.length; i++) {
+            acum +=
+              aux.equivalentName[i] + " (Cod - " + aux.equivalentId[i] + ") ";
+          }
+          aux.equivalentsSubjects = acum;
+          acum = "";
+          aux.credits = aux.subjectsCredits;
+          return aux;
+        });
+        _this.setState({ dataTable: data, loading: false });
       })
       .catch(function(e) {
         console.log(e);
@@ -129,6 +172,7 @@ class Equivalencias extends React.Component {
 
   createEquivalentSubject(values) {
     let { voucher_id } = this.props;
+    let _this = this;
     fetch("/admin/voucher/createEquivalentSubject", {
       method: "post",
       headers: {
@@ -142,28 +186,8 @@ class Equivalencias extends React.Component {
       })
     })
       .then(function(response) {
-        console.log(response);
-      })
-      .catch(function(e) {
-        console.log("entre en el catch");
-        console.log(e);
-      });
-  }
-
-  getEquivalentSubject() {
-    let { voucher_id } = this.props;
-    let _this = this;
-    fetch("/admin/voucher/getEquivalentSubject/" + voucher_id, {
-      method: "get",
-      credentials: "same-origin"
-    })
-      .then(function(response) {
-        return response.json();
-      })
-      .then(function(data) {
-        let fullArray = JSON.stringify(data);
-        console.log(data);
-        // _this.setState({ dataTable: fullArray });
+        _this.getEquivalentSubject();
+        _this.getSubjectsDestination();
       })
       .catch(function(e) {
         console.log(e);
@@ -174,6 +198,7 @@ class Equivalencias extends React.Component {
     this.setState({
       visible: true
     });
+    this.props.form.resetFields();
   }
 
   handleOk(e) {
@@ -200,9 +225,19 @@ class Equivalencias extends React.Component {
       if (!err) {
         console.log(values);
         this.createEquivalentSubject(values);
+        // this.getEquivalentSubject();
+        // this.getSubjectsOrigin();
+        // this.getSubjectsDestination();
         this.setState({
-          visible: false
+          visible: false,
+          loading: true
         });
+        //   () => {
+        //     this.getEquivalentSubject();
+        //     this.getSubjectsOrigin();
+        //     this.getSubjectsDestination();
+        //   }
+        // );
       }
     });
   }
@@ -214,7 +249,7 @@ class Equivalencias extends React.Component {
     const { subjectDestination } = this.state;
 
     const { columns } = this.state;
-    const { dataTable } = this.state;
+    const { dataTable, loading } = this.state;
     const optionsSubjectOrigin = subjectOrigin.map(d => (
       <Option key={d.subjectId} value={d.subjectId}>
         {d.subjectName}
@@ -228,21 +263,26 @@ class Equivalencias extends React.Component {
     ));
     return (
       <div>
-        <Table
-          style={{ backgroundColor: "white", marginLeft: 50 }}
-          locale={{
-            emptyText: "No se han agregado asignaturas para este comprobante"
-          }}
-          columns={columns}
-          dataSource={dataTable}
-        />
+        <div id="divTable">
+          <Table
+            style={{ backgroundColor: "white", marginLeft: 10 }}
+            locale={{
+              emptyText: "No se han agregado asignaturas para este comprobante"
+            }}
+            loading={loading}
+            columns={columns}
+            dataSource={dataTable}
+          />
+        </div>
         <Button
           type="primary"
           onClick={this.showModal}
           style={{ marginTop: 10, float: "right" }}
+          loading={loading}
         >
           Agregar asignatura equivalente
         </Button>
+
         <Modal
           title="Por favor, seleccione las asignaturas equivalentes"
           visible={this.state.visible}
@@ -252,31 +292,6 @@ class Equivalencias extends React.Component {
           onCancel={this.handleCancel}
         >
           <Form onSubmit={this.handleSubmit}>
-            <FormItem label="Codigo de materias">
-              {getFieldDecorator("equivalentsSubjects", {
-                rules: [
-                  {
-                    required: true,
-                    message: "Este campo es requerido"
-                  }
-                ]
-              })(
-                <Select
-                  notFoundContent="No se encontraron resultados"
-                  showSearch
-                  filterOption={(input, option) =>
-                    option.props.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
-                  style={{ width: "100%" }}
-                  mode="multiple"
-                  placeholder="Seleccione"
-                >
-                  {optionsSubjectOrigin}
-                </Select>
-              )}
-            </FormItem>
             <FormItem label="Asignatura equivalente">
               {getFieldDecorator("approvedSubject", {
                 initialValue: "",
@@ -288,7 +303,7 @@ class Equivalencias extends React.Component {
                 ]
               })(
                 <Select
-                  notFoundContent="No se encontraron resultados"
+                  notFoundContent="No se encontraron materias para la carrera de destino"
                   showSearch
                   filterOption={(input, option) =>
                     option.props.children
@@ -297,8 +312,35 @@ class Equivalencias extends React.Component {
                   }
                   style={{ width: "100%" }}
                   placeholder="Seleccione"
+                  allowClear
                 >
                   {optionsSubjectDestination}
+                </Select>
+              )}
+            </FormItem>
+            <FormItem label="Codigo de materias">
+              {getFieldDecorator("equivalentsSubjects", {
+                rules: [
+                  {
+                    required: true,
+                    message: "Este campo es requerido"
+                  }
+                ]
+              })(
+                <Select
+                  notFoundContent="No se encontraron materias para la carrera de origen"
+                  showSearch
+                  filterOption={(input, option) =>
+                    option.props.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
+                  }
+                  style={{ width: "100%" }}
+                  mode="multiple"
+                  placeholder="Seleccione"
+                  allowClear
+                >
+                  {optionsSubjectOrigin}
                 </Select>
               )}
             </FormItem>
