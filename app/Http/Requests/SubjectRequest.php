@@ -28,11 +28,11 @@ class SubjectRequest extends FormRequest
     {
         return [
             'name' => ['required',
-                      'min:10',
+                      'min:5',
                       'max:50',
                       Rule::unique('subjects')->where(function ($query) {
                                 return $query->where('career_id', $this->input('career_id'));
-                              })
+                              })->ignore($this->input('id'))
                     ],
             'credits' => 'required|integer|min:1'
         ];

@@ -20,7 +20,6 @@
     }
 
     .borderPrincipal{
-      height: 970px;
     }
 
     .idSolicitud{

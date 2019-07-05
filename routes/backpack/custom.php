@@ -17,6 +17,9 @@ Route::group([
         Route::post('edit-account-info', 'MyAccountController@postAccountInfoForm');
         Route::get('change-password', 'MyAccountController@getChangePasswordForm')->name('backpack.account.password');
         Route::post('change-password', 'MyAccountController@postChangePasswordForm');
+
+        // Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('backpack.auth.register');
+        // Route::post('register', 'Auth\RegisterController@register');
     }
     CRUD::resource('college', 'CollegeCrudController');
     CRUD::resource('faculty', 'FacultyCrudController');
@@ -35,6 +38,7 @@ Route::group([
       Route::post('voucher/createEquivalentSubject', 'VoucherCrudController@createEquivalentSubject');
       Route::get('voucher/getEquivalentSubject/{id}', 'VoucherCrudController@getEquivalentSubject');
       Route::post('voucher/deleteEquivalentSubject', 'VoucherCrudController@deleteEquivalentSubject');
+      Route::get('voucher/generarPdfComprobante/{id}', 'VoucherCrudController@generarPdfComprobante');
     });
     // CRUD::resource('equivalent_subject', 'Equivalent_subjectCrudController');
 }); // this should be the absolute last line of this file

@@ -8,9 +8,8 @@
 	  function verPdf(button) {
         var button = $(button);
         var id = button.attr('id');
-
         $.ajax({
-            url: "{{ url($crud->route) }}/generarPdfSolicitud/"+id,
+            url: "{{ url($crud->route) }}/generarPdfComprobante/"+id,
             type: 'GET',
             xhrFields: {
               responseType: 'blob'
@@ -20,7 +19,7 @@
                 var blob = new Blob([result]);
                 var link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
-                link.download = "Solicitud"+id+".pdf";
+                link.download = "Comprobante"+id+".pdf";
                 // link.target = '_blank';
                 link.click();
             },

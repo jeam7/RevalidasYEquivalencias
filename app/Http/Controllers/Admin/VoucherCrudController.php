@@ -10,6 +10,8 @@ use App\Http\Requests\VoucherRequest as UpdateRequest;
 use Illuminate\Support\Facades\DB;
 use Backpack\CRUD\CrudPanel;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade as PDF;
+use App\Models\Voucher;
 
 /**
  * Class VoucherCrudController
@@ -35,7 +37,7 @@ class VoucherCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
         $this->crud->setEditView('editVoucher');
-
+        $this->crud->addButtonFromView('line', '', 'botonGenerarPdfComprobante', 'bottom');
         $this->crud->addFields([
             ['name' => 'request_id', // the db column for the foreign key
               'label' => "Numero de solicitud",
@@ -198,5 +200,28 @@ class VoucherCrudController extends CrudController
                             FROM equivalent_subjects
                             WHERE voucher_id = ? AND subject_a_id = ?', [$voucherId, $equivalentId]);
       return $deleted;
+    }
+
+    public function generarPdfComprobante($id){
+      // $skip = DB::select('SET SESSION sql_mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"');
+      set_time_limit(240);
+      $dataDuplicates = ['Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto', 'Sexto'];
+
+      $dataVoucher = Voucher::find($id);
+      $dataRequest = $dataVoucher->request->id;
+      $dataUser = $dataVoucher->request->user;
+      $dataCareerDestination = $dataVoucher->request->career_destination;
+      $dataCareerOrigin = $dataVoucher->request->career_origin;
+      $views = view('backpack::crud.pdf.generarPdfComprobante',
+          ["voucherId"=> $dataVoucher->id, "dataVoucher" => $dataVoucher, 
+          "dataUser" => $dataUser, "requestId" => $dataRequest, "duplicates"=> $dataDuplicates[0]])->render();
+      // for ($i=1; $i < sizeof($dataDuplicates) ; $i++) {
+      //   $views .= view('backpack::crud.pdf.generarPdfComprobante', ["duplicates"=> $dataDuplicates[$i]])->render();
+      // }
+      // $views = view('backpack::crud.pdf.generarPdfComprobante', ["test"=>2])->render();
+      // $views .= view('backpack::crud.pdf.generarPdfComprobante', ["test"=>1])->render();
+      $pdf = PDF::loadHTML($views)->setPaper('Letter-L', 'landscape');
+      // $pdf = \PDF::loadView('backpack::crud.pdf.generarPdfComprobante', [])->setPaper('Letter-L', 'landscape');
+      return $pdf->stream();
     }
 }
