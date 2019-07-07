@@ -16,7 +16,7 @@ class CreateSchoolsTable extends Migration
         Schema::create('schools', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->integer('faculty_id')->unsigned();
+            $table->integer('faculty_id')->unsigned()->nullable();
             $table->foreign('faculty_id', 'fk_school_faculty')->references('id')->on('faculties');
             $table->softDeletes();
             $table->timestamps();

@@ -16,7 +16,7 @@ class CreateFacultiesTable extends Migration
         Schema::create('faculties', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->integer('college_id')->unsigned();
+            $table->integer('college_id')->unsigned()->nullable();
             $table->foreign('college_id', 'fk_faculty_college')->references('id')->on('colleges');
             $table->softDeletes();
             $table->timestamps();

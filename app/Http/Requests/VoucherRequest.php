@@ -26,7 +26,7 @@ class VoucherRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            // 'request_id' => 'required'
         ];
     }
 
@@ -50,7 +50,7 @@ class VoucherRequest extends FormRequest
     public function messages()
     {
         return [
-            //
+            // 'request_id.required' => 'Por favor, ingrese la solicitud asociada al comprobante'
         ];
     }
 }

@@ -37,13 +37,22 @@ class RequestCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
         $this->crud->addButtonFromView('line', '', 'botonGenerarPdfSolicitud', 'bottom');
-        $this->crud->denyAccess(['create', 'update', 'delete', 'list']);
-        if(backpack_user()->type_user == 1 || backpack_user()->type_user == 2 || backpack_user()->type_user == 3) {
-          $this->crud->allowAccess(['create', 'update', 'list']);
-        }
 
-        if (backpack_user()->type_user == 3 || backpack_user()->type_user == 2) {
-          $this->crud->addClause('requestByFaculty', backpack_user()->faculty_id);
+        $this->crud->denyAccess(['create', 'update', 'delete', 'list', 'show']);
+        switch (backpack_user()->type_user) {
+          case 1:
+            $this->crud->allowAccess(['create', 'list', 'update', 'delete', 'show']);
+            break;
+          case 2:
+            $this->crud->allowAccess(['create', 'list', 'update', 'delete', 'show' ]);
+            $this->crud->addClause('requestByFaculty', backpack_user()->faculty_id);
+            break;
+          case 3:
+            $this->crud->allowAccess(['create', 'list', 'update', 'show']);
+            $this->crud->addClause('requestByFaculty', backpack_user()->faculty_id);
+            break;
+          default:
+            break;
         }
 
         $this->crud->addFields([
@@ -164,7 +173,7 @@ class RequestCrudController extends CrudController
               7 => 'Enviada al consejo universitario',
               8 => 'Procesada'
             ],
-            'default' => 2
+            'allows_null' => true
           ]
         ], 'update');
 
@@ -178,7 +187,12 @@ class RequestCrudController extends CrudController
             'options'   => (function ($query) {
               return $query->orderBy('ci', 'ASC')->get();
             }),
-            "key" => "ci"
+            "key" => "ci",
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('ci', 'like', '%'.$searchTerm.'%');
+                });
+            }
           ],
           ['name' => 'user_id', // the db column for the foreign key
             'label' => "Nombre completo solicitante",
@@ -189,30 +203,164 @@ class RequestCrudController extends CrudController
             'options'   => (function ($query) {
               return $query->orderBy('ci', 'ASC')->get();
             }),
-            "key" => "fullname"
+            "key" => "fullname",
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('last_name', 'like', '%'.$searchTerm.'%');
+                });
+                $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
+                    $q->where('first_name', 'like', '%'.$searchTerm.'%');
+                });
+            }
           ],
           ['name' => 'created_at', 'label' => 'Fecha', 'type' => 'datetime'],
           ['name' => 'career_origin_id', // the db column for the foreign key
-            'label' => "Universidad procedencia",
+            'label' => "Universidad - Carrera (Procedencia)",
             'type' => 'select',
             'entity' => 'career_origin', // the method that defines the relationship in your Model
             'attribute' => 'college_faculty', // foreign key attribute that is shown to user
             'model' => "App\Models\Career",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
-            })
+            }),
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('career_origin', function ($q) use ($column, $searchTerm) {
+                    $q->where('name', 'like', '%'.$searchTerm.'%');
+                });
+            }
           ],
           ['name' => 'career_destination_id', // the db column for the foreign key
-            'label' => "Universidad destino",
+            'label' => "Universidad - Carrera (Destino)",
             'type' => 'select',
             'entity' => 'career_destination', // the method that defines the relationship in your Model
             'attribute' => 'college_faculty', // foreign key attribute that is shown to user
             'model' => "App\Models\Career",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
-            })
-          ]
+            }),
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('career_destination', function ($q) use ($column, $searchTerm) {
+                    $q->where('name', 'like', '%'.$searchTerm.'%');
+                });
+            }
+          ],
+          ['name' => 'others', 'label' => 'Otros documentos entregados', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'info_others', 'label' => 'Descripcion de otros documentos entregados', 'type' => 'textarea', 'visibleInTable' => false],
+          ['name' => 'pensum', 'label' => 'Pensum', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'notes', 'label' => 'Certificacion de notas (original)', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'study_programs', 'label' => 'Programas de estudios (autenticados)', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'title', 'label' => 'Si es egresado universitario, copia del titulo', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'copy_ci', 'label' => 'Fotocopia de la cedula de identidad', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'ci_passport_copy', 'label' => 'Cedula de identidad o pasaporte (fotocopia)', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'notes_legalized', 'label' => 'Certificacion de notas, legalizadas por las autoridades competentes (original y copia)', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'study_program_legalized', 'label' => 'Programas de estudios (originales, legalizados)', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'cerification_category_college',
+            'label' => 'Certificacion de la categoria universitaria del instituto de procedencia (oficialmente reconocida por las autoridades del pais de origen)',
+            'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'certification_title_no_confered',
+            'label' => 'Certificacion en donde conste que no le ha sido conferido el titulo correspondiente (En caso de haber aprobado todos los anos de estudio sin obtener el titulo)',
+            'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'translation', 'label' => 'Traduccion al castellano por interprete publico autorizado, en caso de estar la documentacion en idioma extranjero (original y fotocopia)',
+            'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name'=>'last_status', 'type' => 'text_custom', 'label' => 'Estatus actual', 'visibleInTable' => false]
         ]);
+
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'ci',
+            'label'=> 'Cedula'
+          ],
+          false,
+          function($value) {
+            $this->crud->query = $this->crud->query->select('requests.*')
+                                                  ->join('users', 'users.id', '=', 'requests.user_id')
+                                                  ->where('users.ci', '=', $value);
+          }
+        );
+
+        $this->crud->addFilter([
+            'type' => 'select2',
+            'name' => 'career_origin',
+            'label'=> 'Carrera procedencia'
+          ],
+          function(){
+            return \App\Models\Career::all()->pluck('name', 'id')->toArray();
+          },
+          function($value) {
+            // $this->crud->query = $this->crud->query->select('requests.*')
+            //                                       ->join('careers', 'careers.id', '=', 'requests.career_origin_id')
+            //                                       ->where('careers.id', '=', $value);
+            $this->crud->addClause('where', 'career_origin_id', '=', $value);
+          }
+        );
+
+        switch (backpack_user()->type_user) {
+          case 1:
+            $this->crud->addFilter([
+                'type' => 'select2',
+                'name' => 'career_destination',
+                'label'=> 'Carrera destino'
+              ],
+              function(){
+                return \App\Models\Career::all()->pluck('name', 'id')->toArray();
+              },
+              function($value) {
+                // $this->crud->query = $this->crud->query->select('requests.*')
+                //                                       ->join('careers', 'careers.id', '=', 'requests.career_destination_id')
+                //                                       ->where('careers.id', '=', $value);
+                $this->crud->addClause('where', 'career_destination_id', '=', $value);
+              }
+            );
+            break;
+          case 2:
+            $this->crud->addFilter([
+                'type' => 'select2',
+                'name' => 'career_destination',
+                'label'=> 'Carrera destino'
+              ],
+              function(){
+                return \App\Models\Faculty::find(backpack_user()->faculty_id)->school()->pluck('name', 'id')->toArray();
+              },
+              function($value) {
+                // $this->crud->query = $this->crud->query->select('requests.*')
+                //                                       ->join('careers', 'careers.id', '=', 'requests.career_destination_id')
+                //                                       ->where('careers.id', '=', $value);
+                $this->crud->addClause('where', 'career_destination_id', '=', $value);
+              }
+            );
+            break;
+          case 3:
+            $this->crud->addFilter([
+                'type' => 'select2',
+                'name' => 'career_destination',
+                'label'=> 'Carrera destino'
+              ],
+              function(){
+                return \App\Models\Faculty::find(backpack_user()->faculty_id)->school()->pluck('name', 'id')->toArray();
+              },
+              function($value) {
+                // $this->crud->query = $this->crud->query->select('requests.*')
+                //                                       ->join('careers', 'careers.id', '=', 'requests.career_destination_id')
+                //                                       ->where('careers.id', '=', $value);
+                $this->crud->addClause('where', 'career_destination_id', '=', $value);
+              }
+            );
+            break;
+          default:
+            break;
+        }
+
+        // $this->crud->addFilter([
+        //     'type' => 'date',
+        //     'name' => 'date',
+        //     'label'=> 'Fecha'
+        //   ],
+        //   false,
+        //   function($value) {
+        //       $this->crud->addClause('where', 'created_at', '=', $value);
+        //   }
+        // );
+
         // TODO: remove setFromDb() and manually define Fields and Columns
         // $this->crud->setFromDb();
 

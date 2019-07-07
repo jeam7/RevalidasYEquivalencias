@@ -15,11 +15,11 @@ class CreateEquivalentSubjectsTable extends Migration
     {
         Schema::create('equivalent_subjects', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('voucher_id')->unsigned();
+            $table->integer('voucher_id')->unsigned()->nullable();
             $table->foreign('voucher_id', 'fk_equivalentSubjects_voucher')->references('id')->on('vouchers');
-            $table->integer('subject_a_id')->unsigned();
+            $table->integer('subject_a_id')->unsigned()->nullable();
             $table->foreign('subject_a_id', 'fk_equivalentSubjects_subjectA')->references('id')->on('subjects');
-            $table->integer('subject_e_id')->unsigned();
+            $table->integer('subject_e_id')->unsigned()->nullable();
             $table->foreign('subject_e_id', 'fk_equivalentSubjects_subjectE')->references('id')->on('subjects');
             $table->timestamps();
         });

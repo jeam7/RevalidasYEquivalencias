@@ -35,6 +35,7 @@ class MyRequestCrudController extends CrudController
         | CrudPanel Configuration
         |--------------------------------------------------------------------------
         */
+        
         $this->crud->addClause('where', 'user_id', '=', backpack_user()->id);
         $this->crud->denyAccess(['update','delete']);
         $this->crud->addFields([

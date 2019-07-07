@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Iatstuti\Database\Support\CascadeSoftDeletes;
 class School extends Model
 {
     use CrudTrait;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
@@ -21,7 +22,8 @@ class School extends Model
     // protected $guarded = ['id'];
     protected $fillable = ['name', 'faculty_id'];
     // protected $hidden = [];
-    // protected $dates = [];
+    protected $dates = ['deleted_at'];
+    protected $cascadeDeletes = ['career'];
 
     /*
     |--------------------------------------------------------------------------
@@ -46,7 +48,12 @@ class School extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
-
+    // public function scopeSchoolByFaculty($query, $typeUser) {
+    //   $query->select('')->join('careers', 'careers.id', '=', 'requests.career_destination_id')
+    //                     ->join('schools', 'schools.id', '=', 'careers.school_id')
+    //                     ->where('schools.faculty_id', '=', $typeUser);
+    //   return $query;
+    // }
     /*
     |--------------------------------------------------------------------------
     | ACCESORS

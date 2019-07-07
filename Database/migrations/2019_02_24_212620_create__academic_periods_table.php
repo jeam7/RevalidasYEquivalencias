@@ -15,7 +15,7 @@ class CreateAcademicPeriodsTable extends Migration
     {
         Schema::create('academic_periods', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('faculty_id')->unsigned();
+            $table->integer('faculty_id')->unsigned()->nullable();
             $table->foreign('faculty_id', 'fk_academidPeriod_faculty')->references('id')->on('faculties');
             // $table->integer('college_id')->unsigned();
             // $table->foreign('college_id', 'fk_academidPeriod_college')->references('id')->on('colleges');

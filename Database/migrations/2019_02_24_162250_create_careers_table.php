@@ -16,7 +16,7 @@ class CreateCareersTable extends Migration
         Schema::create('careers', function (Blueprint $table) {
           $table->increments('id');
           $table->string('name');
-          $table->integer('school_id')->unsigned();
+          $table->integer('school_id')->unsigned()->nullable();
           $table->foreign('school_id', 'fk_career_school')->references('id')->on('schools');
           $table->softDeletes();
           $table->timestamps();

@@ -15,13 +15,14 @@ class CreateVouchersTable extends Migration
     {
         Schema::create('vouchers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('request_id')->unsigned();
+            $table->integer('request_id')->unsigned()->nullable();
             $table->foreign('request_id', 'fk_voucher_request')->references('id')->on('requests');
-            $table->string('observations')->nullable();
+            $table->longtext('observations')->nullable();
             $table->date('date_subcomi_eq')->nullable();
             $table->date('date_comi_eq')->nullable();
             $table->date('date_con_fac')->nullable();
             $table->date('date_con_univ')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

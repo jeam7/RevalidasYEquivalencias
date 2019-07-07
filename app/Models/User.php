@@ -49,13 +49,11 @@ class User extends Model
     |--------------------------------------------------------------------------
     */
     public function scopeMyFaculty($query, $typeUser) {
-        // $query = $query->where('type_user', '=', 4)
-        //                 ->orWhere()
         $query = $query->where(function($query){
           $query->where('type_user', '=', 4);
-        })->orWhere(function($query){
+        })->orWhere(function($query) use($typeUser){
           $query->where('type_user', '=', 3)
-                ->where('faculty_id', '=', 3);
+                ->where('faculty_id', '=', $typeUser);
         });
         return $query;
     }

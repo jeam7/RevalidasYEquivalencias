@@ -34,12 +34,16 @@ class Academic_periodCrudController extends CrudController
         */
 
         $this->crud->denyAccess(['create', 'update', 'delete', 'list', 'show']);
-        if(backpack_user()->type_user == 1 || backpack_user()->type_user == 2) {
-          $this->crud->allowAccess(['create', 'update', 'list', 'delete', 'show']);
-        }
-
-        if (backpack_user()->type_user == 2) {
-          $this->crud->addClause('where', 'faculty_id', '=', backpack_user()->faculty_id);
+        switch (backpack_user()->type_user) {
+          case 1:
+            $this->crud->allowAccess(['create', 'list', 'update', 'delete', 'show']);
+            break;
+          case 2:
+            $this->crud->allowAccess(['create', 'list', 'update', 'show']);
+            $this->crud->addClause('where', 'faculty_id', '=', backpack_user()->faculty_id);
+            break;
+          default:
+            break;
         }
 
         $this->crud->addFields([
@@ -50,6 +54,9 @@ class Academic_periodCrudController extends CrudController
             'attribute' => 'faculty_college', // foreign key attribute that is shown to user
             'model' => "App\Models\Faculty",
             'options'   => (function ($query) {
+              if (backpack_user()->type_user == 2) {
+                return $query->where('id', '=', backpack_user()->faculty_id)->orderBy('id', 'ASC')->get();
+              }
               return $query->orderBy('id', 'ASC')->get();
             })
           ],
@@ -74,7 +81,12 @@ class Academic_periodCrudController extends CrudController
             'model' => "App\Models\Faculty",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
-            })
+            }),
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('faculty', function ($q) use ($column, $searchTerm) {
+                    $q->where('name', 'like', '%'.$searchTerm.'%');
+                });
+            }
           ],
           ['name'=>'name', 'label'=>'Nombre periodo academico', 'type'=>'text'],
           ['name'=>'dean', 'label'=>'Decano', 'type'=>'text'],
@@ -87,9 +99,30 @@ class Academic_periodCrudController extends CrudController
           ['name'=>'rep_comi_equi_two', 'label'=>'Segundo representante de comision de equivalencias', 'type'=>'text', 'visibleInTable' => false],
           ['name'=>'rep_comi_equi_three', 'label'=>'Tercer representante de comision de equivalencias', 'type'=>'text', 'visibleInTable' => false]
         ]);
-        // TODO: remove setFromDb() and manually define Fields and Columns
-        // $this->crud->setFromDb();
 
+        $this->crud->addFilter([
+            'type' => 'select2',
+            'name' => 'faculty_id',
+            'label'=> 'Facultad'
+          ],
+          function(){
+            return \App\Models\Faculty::all()->pluck('name', 'id')->toArray();
+          },
+          function($value) {
+              $this->crud->addClause('where', 'faculty_id', '=', $value);
+          }
+        );
+
+        $this->crud->addFilter([ // simple filter
+            'type' => 'text',
+            'name' => 'name',
+            'label'=> 'Periodo academico'
+          ],
+          false,
+          function($value) { // if the filter is active
+            $this->crud->addClause('where', 'name', '=', $value);
+          }
+        );
         // add asterisk for fields that are required in Academic_periodRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');

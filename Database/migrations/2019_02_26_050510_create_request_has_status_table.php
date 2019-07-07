@@ -15,9 +15,9 @@ class CreateRequestHasStatusTable extends Migration
     {
         Schema::create('request_has_status', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('request_id')->unsigned();
+            $table->integer('request_id')->unsigned()->nullable();
             $table->foreign('request_id', 'fk_requestHasStatus_request')->references('id')->on('requests');
-            $table->integer('request_status_id')->unsigned();
+            $table->integer('request_status_id')->unsigned()->nullable();
             $table->foreign('request_status_id', 'fk_requestHasStatus_requestStatus')->references('id')->on('request_status');
             $table->timestamps();
         });

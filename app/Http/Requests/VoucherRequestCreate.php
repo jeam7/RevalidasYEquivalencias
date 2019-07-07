@@ -4,10 +4,8 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
 
-class RequestRequestUpdate extends FormRequest
+class VoucherRequestCreate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,8 +26,7 @@ class RequestRequestUpdate extends FormRequest
     public function rules()
     {
         return [
-          'info_others' => 'required_if:others,1',
-          'estatus' => 'required'
+            'request_id' => 'required'
         ];
     }
 
@@ -53,8 +50,7 @@ class RequestRequestUpdate extends FormRequest
     public function messages()
     {
         return [
-            'info_others.required_if' => 'Por favor, ingrese una descripcion de los otros documentos entregados',
-            'estatus.required' => 'Por favor, seleccione el estatus de la solicitud'
+            'request_id.required' => 'Por favor, ingrese la solicitud asociada al comprobante'
         ];
     }
 }

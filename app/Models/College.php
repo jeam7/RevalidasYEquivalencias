@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Iatstuti\Database\Support\CascadeSoftDeletes;
 class College extends Model
 {
     use CrudTrait;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
 
     /*
     |--------------------------------------------------------------------------
@@ -23,7 +23,8 @@ class College extends Model
     // protected $guarded = ['id'];
     protected $fillable = ['name', 'foreign', 'address', 'abbreviation'];
     // protected $hidden = [];
-    // protected $dates = [];
+    protected $dates = ['deleted_at'];
+    protected $cascadeDeletes = ['faculty'];
 
     /*
     |--------------------------------------------------------------------------
@@ -39,6 +40,17 @@ class College extends Model
     public function faculty(){
         return $this->hasMany('App\Models\Faculty');
     }
+
+    // public static function boot()
+    // {
+    //     parent::boot();
+    //
+    //     // cause a delete of a product to cascade to children so they are also deleted
+    //     static::deleting(function($college)
+    //     {
+    //         $college->faculty()->delete();
+    //     });
+    // }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

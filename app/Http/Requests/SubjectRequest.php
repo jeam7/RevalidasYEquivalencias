@@ -34,7 +34,15 @@ class SubjectRequest extends FormRequest
                                 return $query->where('career_id', $this->input('career_id'));
                               })->ignore($this->input('id'))
                     ],
-            'credits' => 'required|integer|min:1'
+            'code' => ['required',
+                      'min:4',
+                      'max:50',
+                      Rule::unique('subjects')->where(function ($query) {
+                                return $query->where('career_id', $this->input('career_id'));
+                              })->ignore($this->input('id'))
+                    ],
+            'credits' => 'required|integer|min:1',
+            'career_id' => 'required'
         ];
     }
 
@@ -63,9 +71,16 @@ class SubjectRequest extends FormRequest
             'name.max' => 'El nombre de la asignatura debe tener maximo 50 caracteres',
             'name.unique' => 'El nombre de la materia ya se encuentra registrado para la carrera seleccionada',
 
+            'code.required' => 'Por favor, ingrese el codigo de la asignatira',
+            'code.min' => 'El codigo de la asignatura debe tener minimo 4 caracteres',
+            'code.max' => 'El codigo de la asignatura debe tener maximo 50 caracteres',
+            'code.unique' => 'El codigo de la materia ya se encuentra registrado para la carrera seleccionada',
+
             'credits.required' => 'Por favor, ingrese las unidades de credito',
             'credits.integer' => 'Las unidades de credito deben ser digitos',
-            'credits.min' => 'El valor minimo para las unidades de credito es 1'
+            'credits.min' => 'El valor minimo para las unidades de credito es 1',
+
+            'career_id.required' => 'Por favor, seleccione la carrera de la materia'
         ];
     }
 }

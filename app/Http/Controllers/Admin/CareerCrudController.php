@@ -33,11 +33,19 @@ class CareerCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
 
-        $this->crud->denyAccess(['create', 'update', 'delete', 'list']);
-        if(backpack_user()->type_user == 1 || backpack_user()->type_user == 2) {
-          $this->crud->allowAccess(['create', 'update', 'list']);
-        }elseif(backpack_user()->type_user == 3) {
-          $this->crud->allowAccess(['create', 'list']);
+        $this->crud->denyAccess(['create', 'update', 'delete', 'list', 'show']);
+        switch (backpack_user()->type_user) {
+          case 1:
+            $this->crud->allowAccess(['create', 'list', 'update', 'delete']);
+            break;
+          case 2:
+            $this->crud->allowAccess(['create', 'list', 'update']);
+            break;
+          case 3:
+            $this->crud->allowAccess(['create', 'list']);
+            break;
+          default:
+            break;
         }
 
         $this->crud->addFields([
@@ -72,6 +80,20 @@ class CareerCrudController extends CrudController
             }
           ],
         ]);
+
+        $this->crud->addFilter([
+            'type' => 'select2',
+            'name' => 'school_id',
+            'label'=> 'Escuela'
+          ],
+          function(){
+            return \App\Models\School::all()->pluck('name', 'id')->toArray();
+          },
+          function($value) {
+              $this->crud->addClause('where', 'school_id', '=', $value);
+          }
+        );
+
         // TODO: remove setFromDb() and manually define Fields and Columns
         // $this->crud->setFromDb();
 

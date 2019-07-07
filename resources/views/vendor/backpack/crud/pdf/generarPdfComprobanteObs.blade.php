@@ -66,152 +66,8 @@
       </div>
 
       <table>
-        <tr>
-          <td class="border-left-0" width="160">
-            <center><p class="font-10 m-0">FACULTAD DONDE DESEA CURSAR</p></center>
-          </td>
-          <td class="border-left-0" width="160">
-            <center><p class="font-10 m-0">ESCUELA O ESPECIALIDAD</p></center>
-          </td>
-          <td class="border-left-0" width="160">
-            <center><p class="font-10 m-0">UNIVERSIDAD O INSTITUTO DONDE DESEA CURSAR</p></center>
-          </td>
-          <td class="border-left-0" width="60">
-            <center><p class="font-10 m-0">PAG.</p></center>
-          </td>
-        </tr>
-
-        <tr>
-          <td class="border-left-0"  width="160">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $facultyDestination }} </p>
-          </td>
-          <td class="border-left-0" width="160">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $schoolDestination }} </p>
-          </td>
-          <td class="border-left-0" width="160">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $collegeDestination }} </p>
-          </td>
-          <td class="border-left-0" width="60">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $numPag }} </p>
-          </td>
-        </tr>
-
-        <tr>
-          <td class="border-left-0" width="160">
-            <center><p class="font-10 m-0">APELLIDO(S)</p></center>
-          </td>
-          <td class="border-left-0" width="160">
-            <center><p class="font-10 m-0">NOMBRE(S)</p></center>
-          </td>
-          <td class="border-left-0" width="160">
-            <center><p class="font-10 m-0">CEDULA DE IDENTIDAD</p></center>
-          </td>
-          <td class="border-left-0" width="60">
-            <center><p class="font-10 m-0">No. DE LA SOLICITUD</p></center>
-          </td>
-        </tr>
-
-        <tr>
-          <td class="border-left-0"  width="160">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $lastName }} </p>
-          </td>
-          <td class="border-left-0" width="160">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $firstName }} </p>
-          </td>
-          <td class="border-left-0" width="160">
-            <p class="mt-0 ml-3 mb-0 mr-0">{{ $ci }}</p>
-          </td>
-          <td class="border-left-0" width="60">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $requestId }} </p>
-          </td>
-        </tr>
-
-        <tr>
-          <td class="border-left-0">
-            <center><p class="font-10 m-0">FACULTAD DONDE CURSABA ANTERIORMENTE</p></center>
-          </td>
-          <td class="border-left-0">
-            <center><p class="font-10 m-0">ESCUELA O ESPECIALIDAD</p></center>
-          </td>
-          <td colspan="2" class="border-left-0">
-            <center><p class="font-10 m-0">UNIVERSIDAD DE PROCEDENCIA</p></center>
-          </td>
-        </tr>
-
-        <tr>
-          <td class="border-left-0">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $facultyOrigin }} </p>
-          </td>
-          <td class="border-left-0">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $schoolOrigin }} </p>
-          </td>
-          <td colspan="2" class="border-left-0">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $collegeOrigin }} </p>
-          </td>
-        </tr>
-
-        <tr>
-          <td colspan="2" class="border-left-0">
-            <center><p class="font-10 m-0">ASIGNATURAS EQUIVALENTES</p></center>
-          </td>
-          <td class="border-left-0">
-            <center><p class="font-10 m-0">CODIGO DE MATERIAS</p></center>
-          </td>
-          <td class="border-left-0">
-            <center><p class="font-10 m-0">UNIDADES DE CREDITO</p></center>
-          </td>
-        </tr>
-        <!-- Inicio de la renderizacion de materias -->
-        @if (sizeof($equivalents) > 0)
-          @for ($i=0; $i < sizeof($equivalents); $i++)
-            <tr>
-              <td colspan="2" class="border-left-0">
-                <p class="mt-0 ml-3 mb-0 mr-0"> {{ $equivalents[$i]->subjectName }} </p>
-              </td>
-              <td class="border-left-0">
-                <p class="mt-0 ml-3 mb-0 mr-0"> {{ $equivalents[$i]->subjectEquivalentId }} </p>
-              </td>
-              <td class="border-left-0">
-                <p class="mt-0 ml-3 mb-0 mr-0"> {{ $equivalents[$i]->subjectsCredits }} </p>
-              </td>
-            </tr>
-          @endfor
-          <tr>
-            <td colspan="3" class="border-left-0">
-              <p class="mt-1 ml-3 mb-1 mr-0"> Total creditos </p>
-            </td>
-            <td class="border-left-0">
-              <p class="mt-1 ml-3 mb-1 mr-0"> {{ $total }} </p>
-            </td>
-          </tr>
-        @else
-          <tr>
-            <td colspan="2" class="border-left-0">
-              <p class="mt-0 ml-3 mb-0 mr-0">  </p>
-            </td>
-            <td class="border-left-0">
-              <p class="mt-0 ml-3 mb-0 mr-0"> </p>
-            </td>
-            <td class="border-left-0">
-              <p class="mt-0 ml-3 mb-0 mr-0"> </p>
-            </td>
-          </tr>
-
-          <tr>
-            <td colspan="3" class="border-left-0">
-              <p class="mt-1 ml-3 mb-1 mr-0"> Total creditos </p>
-            </td>
-            <td class="border-left-0">
-              <p class="mt-1 ml-3 mb-1 mr-0"> 0 </p>
-            </td>
-          </tr>
-        @endif
-
-        <!-- Fin renderiza -->
-
-
         <!-- Inicio de las observaciones (Creo que se van) -->
-        <!-- <tr>
+        <tr>
           <td colspan="4" class="border-left-0">
             <p class="font-10 m-0">OBSERVACIONES</p>
           </td>
@@ -220,10 +76,10 @@
         <tr>
           <td colspan="4" class="border-left-0">
             <p class="mt-0 ml-3 mb-0 mr-0">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut porttitor elit vel blandit varius. Aenean massa felis, tempus non enim at, tincidunt posuere lorem. Aliquam facilisis semper rhoncus. Sed eget interdum est, sed efficitur sem. Praesent eu magna leo. Quisque placerat tristique semper. Vivamus id turpis augue. Aenean aliquet sem ex, sed suscipit ipsum condimentum in. Vestibulum fringilla eget diam id vehicula. Phasellus lacinia eget lorem ut consequat. Curabitur lectus purus, hendrerit quis consectetur sit amet, consectetur vitae nunc. Donec condimentum laoreet leo in maximus.
+                {{ $observations }}
             </p>
           </td>
-        </tr> -->
+        </tr>
       <!-- Fin de las observaciones -->
       </table>
       <br/>

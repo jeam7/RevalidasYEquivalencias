@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
-use App\Http\Requests\VoucherRequest as StoreRequest;
+use App\Http\Requests\VoucherRequestCreate as StoreRequest;
 use App\Http\Requests\VoucherRequest as UpdateRequest;
 use Illuminate\Support\Facades\DB;
 use Backpack\CRUD\CrudPanel;
@@ -38,6 +38,24 @@ class VoucherCrudController extends CrudController
         */
         $this->crud->setEditView('editVoucher');
         $this->crud->addButtonFromView('line', '', 'botonGenerarPdfComprobante', 'bottom');
+
+        $this->crud->denyAccess(['create', 'update', 'delete', 'list', 'show']);
+        switch (backpack_user()->type_user) {
+          case 1:
+            $this->crud->allowAccess(['create', 'list', 'update', 'delete', 'show']);
+            break;
+          case 2:
+            $this->crud->allowAccess(['create', 'list', 'update', 'show' ]);
+            $this->crud->addClause('VoucherByFaculty', backpack_user()->faculty_id);
+            break;
+          case 3:
+            $this->crud->allowAccess(['create', 'list', 'show']);
+            $this->crud->addClause('VoucherByFaculty', backpack_user()->faculty_id);
+            break;
+          default:
+            break;
+        }
+
         $this->crud->addFields([
             ['name' => 'request_id', // the db column for the foreign key
               'label' => "Numero de solicitud",
@@ -183,7 +201,7 @@ class VoucherCrudController extends CrudController
     public function getEquivalentSubject($id){
       $skip = DB::select('SET SESSION sql_mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"');
       $equivalents = DB::select('SELECT es.id id, es.voucher_id voucherId, s.id subjectId, s.name subjectName, s.credits subjectsCredits,
-			                           group_concat(s2.id SEPARATOR ",") subjectEquivalentId, group_concat(s2.name SEPARATOR ",") subjectEquivalentName
+			                           group_concat(s2.code SEPARATOR ",") subjectEquivalentId, group_concat(s2.name SEPARATOR ",") subjectEquivalentName
                                  FROM equivalent_subjects es
                                  JOIN subjects s ON (s.id = es.subject_a_id)
                                  JOIN subjects s2 ON (s2.id = es.subject_e_id)
@@ -203,25 +221,95 @@ class VoucherCrudController extends CrudController
     }
 
     public function generarPdfComprobante($id){
-      // $skip = DB::select('SET SESSION sql_mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"');
-      set_time_limit(240);
-      $dataDuplicates = ['Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto', 'Sexto'];
+      set_time_limit(480);
+      // $dataDuplicates = ['ORIGINAL EXPEDIENTE', 'DUPLICADO SOLICITANTE', 'TRIPLICADO SECRETARIA DEL CONSEJO UNIVERSITARIO',
+      //                     'CUADRUPLICADO CONTROL DE ESTUDIOS CENTRAL', 'QUINTUPLICADO FACULTAD (COMISION DE EQUIVALENCIAS)',
+      //                     'SEXTUPLICADO FACULTAD (SUBCOMISION DE EQUIVALENCIA)'];
+
+      $dataDuplicates = ['ORIGINAL EXPEDIENTE'];
 
       $dataVoucher = Voucher::find($id);
-      $dataRequest = $dataVoucher->request->id;
-      $dataUser = $dataVoucher->request->user;
-      $dataCareerDestination = $dataVoucher->request->career_destination;
-      $dataCareerOrigin = $dataVoucher->request->career_origin;
-      $views = view('backpack::crud.pdf.generarPdfComprobante',
-          ["voucherId"=> $dataVoucher->id, "dataVoucher" => $dataVoucher, 
-          "dataUser" => $dataUser, "requestId" => $dataRequest, "duplicates"=> $dataDuplicates[0]])->render();
-      // for ($i=1; $i < sizeof($dataDuplicates) ; $i++) {
-      //   $views .= view('backpack::crud.pdf.generarPdfComprobante', ["duplicates"=> $dataDuplicates[$i]])->render();
-      // }
-      // $views = view('backpack::crud.pdf.generarPdfComprobante', ["test"=>2])->render();
-      // $views .= view('backpack::crud.pdf.generarPdfComprobante', ["test"=>1])->render();
+
+      $skip = DB::select('SET SESSION sql_mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"');
+
+      $equivalents = DB::select('SELECT es.id id, es.voucher_id voucherId, s.id subjectId, s.name subjectName, s.credits subjectsCredits,
+                                 group_concat(s2.code SEPARATOR ",") subjectEquivalentId, group_concat(s2.name SEPARATOR ",") subjectEquivalentName
+                                 FROM equivalent_subjects es
+                                 JOIN subjects s ON (s.id = es.subject_a_id)
+                                 JOIN subjects s2 ON (s2.id = es.subject_e_id)
+                                 WHERE es.voucher_id = ?
+                                 GROUP BY es.subject_a_id', [$id]);
+
+      $numEquivalents = sizeof($equivalents);
+      $numRegisters = 5;
+      $numPag = (int)ceil($numEquivalents/$numRegisters);
+      $numPag = $numPag == 0 ? 1 : $numPag;
+      $views = "";
+      $total = 0;
+
+      $footer = DB::select('SELECT rep_sub_equi_one subComiOne, rep_sub_equi_two subComiTwo, rep_sub_equi_three subComiThree,
+	                         rep_comi_equi_one comiOne, rep_comi_equi_two comiTwo, rep_comi_equi_three comiThree,
+                           dean decano
+                           FROM academic_periods
+                          WHERE faculty_id = 3
+                          ORDER BY id DESC
+                          LIMIT 1', [$dataVoucher->request->career_destination->school->faculty->id]);
+
+      for ($i=0; $i < $numEquivalents; $i++) {
+        $total += (int)$equivalents[$i]->subjectsCredits;
+      }
+
+      $facultyDestination = $dataVoucher->request->career_destination->school->faculty ? $dataVoucher->request->career_destination->school->faculty->name : "";
+      $schoolDestination = $dataVoucher->request->career_destination->school ? $dataVoucher->request->career_destination->school->name : "";
+      $collegeDestination = $dataVoucher->request->career_destination->school->faculty->college ? $dataVoucher->request->career_destination->school->faculty->college->name : "";
+      $lastName = $dataVoucher->request->user ? $dataVoucher->request->user->last_name : "";
+      $firstName = $dataVoucher->request->user ? $dataVoucher->request->user->first_name : "";
+      $ci = $dataVoucher->request->user ? strtoupper($dataVoucher->request->user->nacionality) . " - " . $dataVoucher->request->user->ci : "";
+      $requestId = $dataVoucher->request ? $dataVoucher->request->id : "";
+      $facultyOrigin = $dataVoucher->request->career_origin->school->faculty ? $dataVoucher->request->career_origin->school->faculty->name : "";
+      $schoolOrigin = $dataVoucher->request->career_origin->school ? $dataVoucher->request->career_origin->school->name : "";
+      $collegeOrigin = $dataVoucher->request->career_origin->school->faculty->college ? $dataVoucher->request->career_origin->school->faculty->college->name : "";
+      $footer = sizeof($footer) > 0 ? $footer[0] : [];
+      $dateSubComi = $dataVoucher->date_subcomi_eq ? $dataVoucher->date_subcomi_eq : "";
+      $dateComi = $dataVoucher->date_comi_eq ? $dataVoucher->date_comi_eq : "";
+      $dateConFac = $dataVoucher->date_con_fac ? $dataVoucher->date_con_fac : "";
+      $dateUniv = $dataVoucher->date_con_univ ? $dataVoucher->date_con_univ : "";
+      $observations = $dataVoucher->observations ? $dataVoucher->observations : "Sin observaciones";
+      for ($j=0; $j < sizeof($dataDuplicates); $j++) {
+        for ($i=0; $i < $numPag; $i++) {
+          $equivalents = DB::select('SELECT es.id id, es.voucher_id voucherId, s.id subjectId, s.name subjectName, s.credits subjectsCredits,
+                                     group_concat(s2.code SEPARATOR ",") subjectEquivalentId, group_concat(s2.name SEPARATOR ",") subjectEquivalentName
+                                     FROM equivalent_subjects es
+                                     JOIN subjects s ON (s.id = es.subject_a_id)
+                                     JOIN subjects s2 ON (s2.id = es.subject_e_id)
+                                     WHERE es.voucher_id = ?
+                                     GROUP BY es.subject_a_id
+                                     LIMIT ? OFFSET ?', [$id, $numRegisters, ($i * $numRegisters)]);
+
+          $equivalents = sizeof($equivalents) > 0 ? $equivalents : [];
+           $views .= view('backpack::crud.pdf.generarPdfComprobante',
+               ["voucherId"=> $id,
+               "facultyDestination"=> $facultyDestination, "schoolDestination" => $schoolDestination, "collegeDestination" => $collegeDestination, "numPag" => ($i + 1),
+               "lastName" => $lastName, "firstName" => $firstName, "ci" => $ci, "requestId" => $requestId,
+               "facultyOrigin"=> $facultyOrigin, "schoolOrigin" => $schoolOrigin, "collegeOrigin" => $collegeOrigin,
+               "equivalents" => $equivalents,
+               "total" => $total,
+               "footer" => $footer,
+               "dateSubComi" => $dateSubComi, "dateComi" => $dateComi, "dateConFac" => $dateConFac, "dateUniv" => $dateUniv,
+               "duplicates"=> $dataDuplicates[$j]])->render();
+        }
+      }
+
+      $views .= view('backpack::crud.pdf.generarPdfComprobanteObs',
+      ["voucherId"=> $id,
+      "observations" => $observations,
+      "footer" => $footer,
+      "dateSubComi" => $dateSubComi, "dateComi" => $dateComi, "dateConFac" => $dateConFac, "dateUniv" => $dateUniv,
+      "duplicates"=> $dataDuplicates[0]
+      ]
+      )->render();
+
       $pdf = PDF::loadHTML($views)->setPaper('Letter-L', 'landscape');
-      // $pdf = \PDF::loadView('backpack::crud.pdf.generarPdfComprobante', [])->setPaper('Letter-L', 'landscape');
       return $pdf->stream();
     }
 }

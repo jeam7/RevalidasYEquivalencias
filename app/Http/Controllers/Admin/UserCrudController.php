@@ -35,14 +35,22 @@ class UserCrudController extends CrudController
         */
 
         $this->crud->denyAccess(['create', 'update', 'delete', 'list', 'show']);
-        if(backpack_user()->type_user == 1) {
-          $this->crud->allowAccess(['create', 'update', 'list', 'delete', 'show']);
-        }elseif (backpack_user()->type_user == 2) {
-          $this->crud->allowAccess(['create', 'update', 'list', 'delete', 'show']);
-          $this->crud->addClause('myFaculty', backpack_user()->faculty_id);
-        }elseif (backpack_user()->type_user == 3) {
-          $this->crud->allowAccess(['create', 'update', 'list', 'show']);
-          $this->crud->addClause('where', 'type_user', '=', 4);
+        switch (backpack_user()->type_user) {
+          case 1:
+            $this->crud->allowAccess(['create', 'list', 'update', 'delete', 'show']);
+            $this->crud->addClause('where', 'id', '!=', backpack_user()->id);
+            break;
+          case 2:
+            $this->crud->allowAccess(['create', 'list', 'update', 'delete', 'show']);
+            $this->crud->addClause('myFaculty', backpack_user()->faculty_id);
+            $this->crud->addClause('where', 'id', '!=', backpack_user()->id);
+            break;
+          case 3:
+            $this->crud->allowAccess(['create', 'list', 'show']);
+            $this->crud->addClause('where', 'type_user', '=', 4);
+            break;
+          default:
+            break;
         }
 
         $this->crud->allowAccess('show');
@@ -184,8 +192,64 @@ class UserCrudController extends CrudController
           ['name' => 'phone', 'label' => 'Telefono', 'type' => 'text', 'visibleInTable' => false],
         ]);
 
-        // TODO: remove setFromDb() and manually define Fields and Columns
-        // $this->crud->setFromDb();
+        $this->crud->addFilter([ // simple filter
+            'type' => 'text',
+            'name' => 'ci',
+            'label'=> 'Cedula'
+          ],
+          false,
+          function($value) { // if the filter is active
+            $this->crud->addClause('where', 'ci', '=', $value);
+          }
+        );
+
+        switch (backpack_user()->type_user) {
+          case 1:
+            $this->crud->addFilter([ // simple filter
+                'type' => 'dropdown',
+                'name' => 'type_user',
+                'label'=> 'Tipo de usuario'
+              ],
+              [
+                2 => 'Personal administrativo de revalidas y equivalencias',
+                3 => 'Personal interno de revalidas y equivalencias',
+                4 => 'Solicitante'
+              ],
+              function($value) { // if the filter is active
+                $this->crud->addClause('where', 'type_user', '=', $value);
+              }
+            );
+            $this->crud->addFilter([
+                'type' => 'select2',
+                'name' => 'faculty_id',
+                'label'=> 'Facultad'
+              ],
+              function(){
+                return \App\Models\Faculty::all()->pluck('name', 'id')->toArray();
+              },
+              function($value) {
+                  $this->crud->addClause('where', 'faculty_id', '=', $value);
+              }
+            );
+            break;
+          case 2:
+            $this->crud->addFilter([ // simple filter
+                'type' => 'dropdown',
+                'name' => 'type_user',
+                'label'=> 'Tipo de usuario'
+              ],
+              [
+                3 => 'Personal interno de revalidas y equivalencias',
+                4 => 'Solicitante'
+              ],
+              function($value) { // if the filter is active
+                $this->crud->addClause('where', 'type_user', '=', $value);
+              }
+            );
+            break;
+          default:
+            break;
+        }
 
         // add asterisk for fields that are required in UserRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');

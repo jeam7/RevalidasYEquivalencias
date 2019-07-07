@@ -32,11 +32,20 @@ class CollegeCrudController extends CrudController
         | CrudPanel Configuration
         |--------------------------------------------------------------------------
         */
-        $this->crud->denyAccess(['create', 'update', 'delete', 'list']);
-        if(backpack_user()->type_user == 1 || backpack_user()->type_user == 2) {
-          $this->crud->allowAccess(['create', 'update', 'list']);
-        }elseif(backpack_user()->type_user == 3) {
-          $this->crud->allowAccess(['create', 'list']);
+        $this->crud->denyAccess(['create', 'update', 'delete', 'list', 'show']);
+
+        switch (backpack_user()->type_user) {
+          case 1:
+            $this->crud->allowAccess(['create', 'list', 'update', 'delete', 'show']);
+            break;
+          case 2:
+            $this->crud->allowAccess(['create', 'list', 'update', 'show' ]);
+            break;
+          case 3:
+            $this->crud->allowAccess(['create', 'list', 'show']);
+            break;
+          default:
+            break;
         }
 
         $this->crud->addFields([
@@ -59,6 +68,18 @@ class CollegeCrudController extends CrudController
           ['name' => 'abbreviation', 'label' => 'Abreviacion', 'type' => 'text'],
           ['name' => 'address', 'label' => 'Direccion', 'type' => 'text', 'visibleInTable' => false]
         ]);
+
+        $this->crud->addFilter([ // dropdown filter
+          'name' => 'foreign',
+          'type' => 'dropdown',
+          'label'=> 'Nacional o extranjera'
+        ], [
+          1 => 'Nacional',
+          2 => 'Extranjera'
+        ], function($value) { // if the filter is active
+            $this->crud->addClause('where', 'foreign', $value);
+        });
+
         // TODO: remove setFromDb() and manually define Fields and Columns
         // $this->crud->setFromDb();
 

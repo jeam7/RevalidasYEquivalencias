@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Iatstuti\Database\Support\CascadeSoftDeletes;
 class Request extends Model
 {
     use CrudTrait;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
@@ -25,8 +26,9 @@ class Request extends Model
       'others','info_others','pensum','notes','study_programs','title','copy_ci',
       'ci_passport_copy','notes_legalized','study_program_legalized','cerification_category_college','certification_title_no_confered','translation'
       ];
-    // protected $hidden = [];
-    // protected $dates = [];
+    protected $hidden = ['origin', 'user_id', 'info_others'];
+    protected $dates = ['deleted_at'];
+    protected $cascadeDeletes = ['voucher'];
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +54,7 @@ class Request extends Model
     }
 
     public function voucher(){
-      return $this->belongsTo('App\Models\Voucher');
+      return $this->hasMany('App\Models\Voucher');
     }
 
     /*

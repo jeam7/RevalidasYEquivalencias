@@ -33,15 +33,24 @@ class SubjectCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
 
-        $this->crud->denyAccess(['create', 'update', 'delete', 'list']);
-        if(backpack_user()->type_user == 1 || backpack_user()->type_user == 2) {
-          $this->crud->allowAccess(['create', 'update', 'list']);
-        }elseif(backpack_user()->type_user == 3) {
-          $this->crud->allowAccess(['create', 'list']);
+        $this->crud->denyAccess(['create', 'update', 'delete', 'list', 'show']);
+        switch (backpack_user()->type_user) {
+          case 1:
+            $this->crud->allowAccess(['create', 'list', 'update', 'delete', 'show']);
+            break;
+          case 2:
+            $this->crud->allowAccess(['create', 'list', 'update', 'show']);
+            break;
+          case 3:
+            $this->crud->allowAccess(['create', 'list', 'show']);
+            break;
+          default:
+            break;
         }
 
         $this->crud->addFields([
           ['name'=>'name', 'label'=>'Nombre', 'type'=>'text'],
+          ['name'=>'code', 'label'=>'Codigo', 'type'=>'text'],
           ['name'=>'info', 'label'=>'Descripcion', 'type'=>'textarea'],
           ['name'=>'credits', 'label'=>'Unidades de credito', 'type'=>'number', 'attributes' => ["min" => "1"]],
           [ 'name' => 'career_id', // the db column for the foreign key
@@ -58,7 +67,7 @@ class SubjectCrudController extends CrudController
 
         $this->crud->setColumns([
           ['name'=>'name', 'label'=>'Nombre', 'type'=>'text'],
-          ['name'=>'info', 'label'=>'Descripcion', 'type'=>'text'],
+          ['name'=>'code', 'label'=>'Codigo', 'type'=>'text'],
           ['name'=>'credits', 'label'=>'Unidades de credito', 'type'=>'text'],
           [ 'name' => 'career_id', // the db column for the foreign key
             'label' => "Carrera",
@@ -68,11 +77,41 @@ class SubjectCrudController extends CrudController
             'model' => "App\Models\Career",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
-            })
+            }),
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('career', function ($q) use ($column, $searchTerm) {
+                    $q->where('name', 'like', '%'.$searchTerm.'%');
+                });
+            }
           ],
+          ['name'=>'info', 'label'=>'Descripcion', 'type'=>'text', 'visibleInTable' => false],
+
         ]);
-        // TODO: remove setFromDb() and manually define Fields and Columns
-        // $this->crud->setFromDb();
+
+        $this->crud->addFilter([
+            'type' => 'select2',
+            'name' => 'career_id',
+            'label'=> 'Carrera'
+          ],
+          function(){
+            return \App\Models\Career::all()->pluck('name', 'id')->toArray();
+          },
+          function($value) {
+              $this->crud->addClause('where', 'career_id', '=', $value);
+          }
+        );
+
+        $this->crud->addFilter([ // simple filter
+            'type' => 'text',
+            'name' => 'code',
+            'label'=> 'Codigo'
+          ],
+          false,
+          function($value) { // if the filter is active
+            $this->crud->addClause('where', 'code', '=', $value);
+          }
+        );
+
 
         // add asterisk for fields that are required in SubjectRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');

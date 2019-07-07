@@ -15,11 +15,11 @@ class CreateRequestsTable extends Migration
     {
         Schema::create('requests', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
+            $table->integer('user_id')->unsigned()->nullable();
             $table->foreign('user_id', 'fk_request_user')->references('id')->on('users');
-            $table->integer('career_origin_id')->unsigned();
+            $table->integer('career_origin_id')->unsigned()->nullable();
             $table->foreign('career_origin_id', 'fk_request_careerOrigin')->references('id')->on('careers');
-            $table->integer('career_destination_id')->unsigned();
+            $table->integer('career_destination_id')->unsigned()->nullable();
             $table->foreign('career_destination_id', 'fk_request_careerDestination')->references('id')->on('careers');
             $table->enum('origin',[1,2]);
             $table->boolean('others')->nullable();

@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Iatstuti\Database\Support\CascadeSoftDeletes;
 class Faculty extends Model
 {
     use CrudTrait;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
 
     /*
     |--------------------------------------------------------------------------
@@ -23,8 +23,8 @@ class Faculty extends Model
     // protected $guarded = ['id'];
     protected $fillable = ['name', 'college_id'];
     // protected $hidden = [];
-    // protected $dates = [];
-
+    protected $dates = ['deleted_at'];
+    protected $cascadeDeletes = ['user', 'school', 'academic_period'];
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -51,6 +51,19 @@ class Faculty extends Model
     public function academic_period(){
         return $this->hasMany('App\Models\Academic_period');
     }
+
+    // public static function boot()
+    // {
+    //     parent::boot();
+    //
+    //     // cause a delete of a product to cascade to children so they are also deleted
+    //     static::deleting(function($faculty)
+    //     {
+    //         $faculty->user()->delete();
+    //         $faculty->school()->delete();
+    //         $faculty->academic_period()->delete();
+    //     });
+    // }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -63,8 +76,16 @@ class Faculty extends Model
     |--------------------------------------------------------------------------
     */
     public function getFacultyCollegeAttribute($value) {
+      // $collegeName = $this->college ? ' - '.$this->college->name . ' - ' : "";
+      // if ($collegeName) {
+      //   $foreignValue = ($this->college->foreign == 1 ) ? ' Nacional' : ' Extranjera' ;
+      // } else {
+      //   $foreignValue = "";
+      // }
+      // return $this->name.$collegeName.$foreignValue;
+
       $foreignValue = ($this->college->foreign == 1 ) ? 'Nacional' : 'Extranjera' ;
-       return $this->name.' - '.$this->college->name.' - '.$foreignValue;
+      return $this->name . ' - ' . $this->college->name . ' - ' . $foreignValue;
     }
     /*
     |--------------------------------------------------------------------------

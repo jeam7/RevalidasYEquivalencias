@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Iatstuti\Database\Support\CascadeSoftDeletes;
 class Career extends Model
 {
     use CrudTrait;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
@@ -22,7 +22,8 @@ class Career extends Model
     // protected $guarded = ['id'];
     protected $fillable = ['name', 'school_id'];
     // protected $hidden = [];
-    // protected $dates = [];
+    protected $dates = ['deleted_at'];
+    protected $cascadeDeletes = ['subject'];
 
     /*
     |--------------------------------------------------------------------------
@@ -50,6 +51,19 @@ class Career extends Model
     public function request_destination(){
       return $this->hasMany('App\Models\Request');
     }
+
+    // public static function boot()
+    // {
+    //     parent::boot();
+    //
+    //     // cause a delete of a product to cascade to children so they are also deleted
+    //     static::deleted(function($career)
+    //     {
+    //         $career->subject()->delete();
+    //         $career->request_origin()->delete();
+    //         $career->request_destination()->delete();
+    //     });
+    // }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
