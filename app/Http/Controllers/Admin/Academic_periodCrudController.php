@@ -47,11 +47,11 @@ class Academic_periodCrudController extends CrudController
         }
 
         $this->crud->addFields([
-          [ 'name' => 'faculty_id', // the db column for the foreign key
+          [ 'name' => 'faculty_id',
             'label' => "Facultad",
             'type' => 'select2',
-            'entity' => 'faculty', // the method that defines the relationship in your Model
-            'attribute' => 'faculty_college', // foreign key attribute that is shown to user
+            'entity' => 'faculty',
+            'attribute' => 'faculty_college',
             'model' => "App\Models\Faculty",
             'options'   => (function ($query) {
               if (backpack_user()->type_user == 2) {
@@ -73,11 +73,11 @@ class Academic_periodCrudController extends CrudController
         ]);
 
         $this->crud->setColumns([
-          [ 'name' => 'faculty_id', // the db column for the foreign key
+          [ 'name' => 'faculty_id',
             'label' => "Facultad",
             'type' => 'select',
-            'entity' => 'faculty', // the method that defines the relationship in your Model
-            'attribute' => 'faculty_college', // foreign key attribute that is shown to user
+            'entity' => 'faculty',
+            'attribute' => 'faculty_college',
             'model' => "App\Models\Faculty",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
@@ -113,16 +113,16 @@ class Academic_periodCrudController extends CrudController
           }
         );
 
-        $this->crud->addFilter([ // simple filter
-            'type' => 'text',
-            'name' => 'name',
-            'label'=> 'Periodo academico'
-          ],
-          false,
-          function($value) { // if the filter is active
-            $this->crud->addClause('where', 'name', '=', $value);
-          }
-        );
+        // $this->crud->addFilter([
+        //     'type' => 'text',
+        //     'name' => 'name',
+        //     'label'=> 'Periodo academico'
+        //   ],
+        //   false,
+        //   function($value) {
+        //     $this->crud->addClause('where', 'name', '=', $value);
+        //   }
+        // );
         // add asterisk for fields that are required in Academic_periodRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');

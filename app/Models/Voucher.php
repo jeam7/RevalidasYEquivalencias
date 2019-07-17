@@ -48,13 +48,19 @@ class Voucher extends Model
     */
 
     public function scopeVoucherByFaculty($query, $facultyId) {
-      $query->select('vouchers.*')->join('requests', 'requests.id', '=', 'vouchers.request_id')
-                        ->join('careers', 'careers.id', '=', 'requests.career_destination_id')
-                        ->join('schools', 'schools.id', '=', 'careers.school_id')
-                        ->where('schools.faculty_id', '=', $facultyId);
+      $query->select('vouchers.*')->join('requests as r', 'r.id', '=', 'vouchers.request_id')
+                                  ->join('careers', 'careers.id', '=', 'r.career_destination_id')
+                                  ->join('schools', 'schools.id', '=', 'careers.school_id')
+                                  ->where('schools.faculty_id', '=', $facultyId);
+      // $query->select('vouchers.id', 'vouchers.request_id', 'vouchers.observations', 'vouchers.date_subcomi_eq', 'vouchers.date_comi_eq', 'vouchers.date_con_fac', 'vouchers.date_con_univ',
+      //                   'vouchers.deleted_at', 'vouchers.created_at', 'vouchers.updated_at')
+      //                   ->join('requests as r', 'r.id', '=', 'vouchers.request_id')
+      //                   ->join('careers', 'careers.id', '=', 'r.career_destination_id')
+      //                   ->join('schools', 'schools.id', '=', 'careers.school_id')
+      //                   ->where('schools.faculty_id', '=', $facultyId);
       return $query;
     }
-    
+
     /*
     |--------------------------------------------------------------------------
     | ACCESORS
@@ -64,6 +70,24 @@ class Voucher extends Model
     {
       return $this->request->career_origin_id;
     }
+
+    public function getUserCiAttribute($value)
+    {
+      return $this->request->user->ci;
+    }
+
+    public function getCareerOriginTableAttribute($value)
+    {
+      return ($this->request->career_origin ? $this->request->career_origin->school->faculty->college->name : '') . ' - '
+      . ($this->request->career_origin ? $this->request->career_origin->name : '');
+    }
+
+    public function getCareerDestinationTableAttribute($value)
+    {
+      return ($this->request->career_destination ? $this->request->career_destination->school->faculty->college->name : '') . ' - '
+      . ($this->request->career_destination ? $this->request->career_destination->name : '');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

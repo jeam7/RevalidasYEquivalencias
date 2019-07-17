@@ -21,16 +21,3 @@ Route::get('/home', function () {
 
 Route::get('/admin/register', 'Admin\RegisterController@showRegistrationForm')->name('backpack.auth.register');
 Route::post('/admin/register', 'Admin\RegisterController@register');
-
-
-// Route::get('/admin', function () {
-//     return redirect('/admin/sent_record');
-// });
-//
-// Route::get('/admin/dashboard', function () {
-//     return redirect('/admin/sent_record');
-// });
-//
-// Route::get('/admin/password/reset', function () {
-//     return redirect('/');
-// });

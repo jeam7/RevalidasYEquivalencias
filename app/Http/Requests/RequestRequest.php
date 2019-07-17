@@ -50,8 +50,8 @@ class RequestRequest extends FormRequest
                 $validator->errors()->add('user_id', 'Ya se encuentra una solicitud en proceso con el solicitante y las carreras ingresadas');
             }
             if ($this->input('career_origin_id') === $this->input('career_destination_id')) {
-              $validator->errors()->add('career_origin_id', 'La carrera - facultad - universidad de procedencia y donde desea cursar deben ser diferentes');
-              $validator->errors()->add('career_destination_id', 'La carrera - facultad - universidad de procedencia y donde desea cursar deben ser diferentes');
+              $validator->errors()->add('career_origin_id', 'La Carrera - Facultad - Universidad de procedencia y donde desea cursar deben ser diferentes');
+              $validator->errors()->add('career_destination_id', 'La Carrera - Facultad - Universidad de procedencia y donde desea cursar deben ser diferentes');
             }
         });
     }
@@ -77,8 +77,8 @@ class RequestRequest extends FormRequest
     {
         return [
             'user_id.required' => 'Por favor, ingrese la cedula del solicitante',
-            'career_origin_id' => 'Por favor, ingrese la carrera - facultad - universidad de procedencia',
-            'career_destination' => 'Por favor, ingrese la carrera - facultad - universidad donde desea cursar'
+            'career_origin_id.required' => 'Por favor, ingrese la Carrera - Facultad - Universidad de procedencia',
+            'career_destination_id.required' => 'Por favor, ingrese la Carrera - Facultad - Universidad donde desea cursar'
         ];
     }
 }

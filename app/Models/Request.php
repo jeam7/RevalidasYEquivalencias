@@ -22,7 +22,7 @@ class Request extends Model
     // public $timestamps = false;
     // protected $guarded = ['id'];
     protected $fillable = [
-      'user_id','career_origin_id','career_destination_id', 'origin',
+      'user_id','career_origin_id','career_destination_id', 'origin', 'date',
       'others','info_others','pensum','notes','study_programs','title','copy_ci',
       'ci_passport_copy','notes_legalized','study_program_legalized','cerification_category_college','certification_title_no_confered','translation'
       ];
@@ -85,7 +85,12 @@ class Request extends Model
 
     public function getDataRequestAttribute($value)
     {
-      return $this->id . ' - ' . $this->user->ci  . ' - ' . $this->user->first_name . ' ' . $this->user->last_name . ' - ' . $this->career_origin->name . ' - ' . $this->career_destination->name;
+      return $this->id . ' - '
+            . $this->user->ci  . ' - '
+            . $this->user->first_name . ' '
+            . $this->user->last_name . ' - '
+            . ($this->career_origin ? $this->career_origin->name : 'Sin carrera origen') . ' - '
+            . ($this->career_destination ? $this->career_destination->name : 'Sin carrera destino');
     }
     /*
     |--------------------------------------------------------------------------

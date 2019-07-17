@@ -53,7 +53,6 @@ class UserCrudController extends CrudController
             break;
         }
 
-        $this->crud->allowAccess('show');
         $this->crud->addFields([
           ['name'=>'ci', 'label'=>'Cedula', 'type'=>'text'],
           ['name'=>'first_name', 'label'=>'Nombre', 'type'=>'text'],

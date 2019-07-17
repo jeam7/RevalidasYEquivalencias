@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Iatstuti\Database\Support\CascadeSoftDeletes;
 class User extends Model
 {
     use CrudTrait;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
@@ -22,7 +23,8 @@ class User extends Model
     // protected $guarded = ['id'];
     protected $fillable = ['ci', 'first_name', 'last_name', 'place_birth', 'nacionality', 'birthdate', 'gender', 'address', 'phone', 'type_user', 'faculty_id', 'email', 'password'];
     protected $hidden = ['password'];
-    // protected $dates = [];
+    protected $dates = ['deleted_at'];
+    protected $cascadeDeletes = ['request'];
 
     /*
     |--------------------------------------------------------------------------

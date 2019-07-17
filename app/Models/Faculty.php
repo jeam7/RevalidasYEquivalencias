@@ -52,18 +52,6 @@ class Faculty extends Model
         return $this->hasMany('App\Models\Academic_period');
     }
 
-    // public static function boot()
-    // {
-    //     parent::boot();
-    //
-    //     // cause a delete of a product to cascade to children so they are also deleted
-    //     static::deleting(function($faculty)
-    //     {
-    //         $faculty->user()->delete();
-    //         $faculty->school()->delete();
-    //         $faculty->academic_period()->delete();
-    //     });
-    // }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -76,14 +64,6 @@ class Faculty extends Model
     |--------------------------------------------------------------------------
     */
     public function getFacultyCollegeAttribute($value) {
-      // $collegeName = $this->college ? ' - '.$this->college->name . ' - ' : "";
-      // if ($collegeName) {
-      //   $foreignValue = ($this->college->foreign == 1 ) ? ' Nacional' : ' Extranjera' ;
-      // } else {
-      //   $foreignValue = "";
-      // }
-      // return $this->name.$collegeName.$foreignValue;
-
       $foreignValue = ($this->college->foreign == 1 ) ? 'Nacional' : 'Extranjera' ;
       return $this->name . ' - ' . $this->college->name . ' - ' . $foreignValue;
     }

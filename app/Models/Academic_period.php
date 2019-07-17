@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Iatstuti\Database\Support\CascadeSoftDeletes;
 class Academic_period extends Model
 {
     use CrudTrait;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
@@ -24,6 +25,8 @@ class Academic_period extends Model
     ];
     // protected $hidden = [];
     // protected $dates = [];
+    protected $dates = ['deleted_at'];
+    // protected $cascadeDeletes = ['faculty'];
 
     /*
     |--------------------------------------------------------------------------

@@ -35,6 +35,7 @@ class CreateRequestsTable extends Migration
             $table->boolean('cerification_category_college')->nullable();
             $table->boolean('certification_title_no_confered')->nullable();
             $table->boolean('translation')->nullable();
+            $table->date('date');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -39,11 +39,11 @@ class Equivalent_subject extends Model
     }
 
     public function subject_a(){
-      return $this->hasMany('App\Models\Subject');
+      return $this->belongsTo('App\Models\Subject');
     }
 
     public function subject_e(){
-      return $this->hasMany('App\Models\Subject');
+      return $this->belongsTo('App\Models\Subject');
     }
     /*
     |--------------------------------------------------------------------------

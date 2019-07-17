@@ -68,7 +68,7 @@ class RegisterController extends Controller
             'password' => ['required', 'min:6', 'confirmed']
         ],
         [
-          'ci.required' => 'Por favor, ingrese su cedulaaaaaaaaaaa',
+          'ci.required' => 'Por favor, ingrese su cedula',
           'ci.numeric' => 'Su cedula debe contener solo caracteres numericos',
           'ci.digits_between' => 'Su cedula debe tener minimo 6 digitos',
           'ci.unique' => 'La cedula ingresada ya se encuentra en uso',

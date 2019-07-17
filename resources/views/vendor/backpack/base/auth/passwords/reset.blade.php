@@ -6,8 +6,8 @@
             <h3 class="text-center m-b-20">{{ trans('backpack::base.reset_password') }}</h3>
             <div class="nav-steps-wrapper">
                 <ul class="nav nav-tabs nav-steps">
-                      <li><a class="disabled text-muted"><strong>{{ trans('backpack::base.step') }} 1.</strong> {{ trans('backpack::base.confirm_email') }}</a></li>
-                      <li class="active"><a><strong>{{ trans('backpack::base.step') }} 2.</strong> {{ trans('backpack::base.choose_new_password') }}</a></li>
+                      <li><a class="disabled text-muted"><strong>Paso 1.</strong> {{ trans('backpack::base.confirm_email') }}</a></li>
+                      <li class="active"><a><strong>Paso 2.</strong> {{ trans('backpack::base.choose_new_password') }}</a></li>
                 </ul>
             </div>
             <div class="nav-tabs-custom">
@@ -27,7 +27,7 @@
                             <label class="control-label">{{ trans('backpack::base.email_address') }}</label>
 
                             <div>
-                                <input type="email" class="form-control" name="email" value="{{ $email ?? old('email') }}">
+                                <input type="email" class="form-control" name="email" value="{{ $email ?? old('email') }}" readonly>
 
                                 @if ($errors->has('email'))
                                     <span class="help-block">
@@ -45,7 +45,14 @@
 
                                 @if ($errors->has('password'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
+                                        <strong>
+                                          @if ($errors->first('password') == 'validation.confirmed')
+                                            Las contraseñas no coinciden
+                                          @else
+                                            Por favor, ingrese su nueva contraseña
+                                          @endif
+                                          {{-- <strong>{{ $errors->first('password') }}</strong> --}}
+                                        </strong>
                                     </span>
                                 @endif
                             </div>

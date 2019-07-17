@@ -66,7 +66,7 @@
       </div>
 
       <table>
-        <!-- Inicio de las observaciones (Creo que se van) -->
+        <!-- Inicio de las observaciones -->
         <tr>
           <td colspan="4" class="border-left-0">
             <p class="font-10 m-0">OBSERVACIONES</p>
@@ -111,13 +111,12 @@
                   <p class="font-10 m-0">FIRMA</p>
                 </td>
               </tr>
-
               <tr class="border border-danger">
                 <td class="border-right-0 border-left-0">
                   @if ($footer != [])
                     <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer->subComiOne }}</p>
                   @else
-                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left"> </p>
+                    <p class="mt-1 ml-3 mb-1 mr-0 text-white" style="text-align: left"> x </p>
                   @endif
 
                 </td>
@@ -131,7 +130,7 @@
                   @if ($footer != [])
                     <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer->subComiTwo }}</p>
                   @else
-                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left"> </p>
+                    <p class="mt-1 ml-3 mb-1 mr-0 text-white" style="text-align: left"> x </p>
                   @endif
                 </td>
                 <td class="border-right-0 border-left-0">
@@ -144,7 +143,7 @@
                   @if ($footer != [])
                     <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer->subComiThree }}</p>
                   @else
-                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left"> </p>
+                    <p class="mt-1 ml-3 mb-1 mr-0 text-white" style="text-align: left"> x </p>
                   @endif
                 </td>
                 <td class="border-right-0 border-left-0">
@@ -155,7 +154,17 @@
 
               <tr>
                 <td colspan="2" class="border-left-0 border-right-0 border-bottom-0">
-                  <p class="mt-1 ml-3 mb-1 mr-0"> Fecha: {{ substr($dateSubComi, 8, 2) }}/{{ substr($dateSubComi, 5, 2) }}/{{ substr($dateSubComi, 0, 4) }}</p>
+                  @if ($dateSubComi)
+                    <p class="mt-1 ml-3 mb-1 mr-0"> Fecha: {{ substr($dateSubComi, 8, 2) }}/{{ substr($dateSubComi, 5, 2) }}/{{ substr($dateSubComi, 0, 4) }}</p>
+                  @else
+                    <p class="mt-1 ml-3 mb-1 mr-0"> Fecha:
+                      <span class="mt-1 mb-1 mr-0 text-white"> x </span>
+                      /
+                      <span class="mt-1 mb-1 mr-0 text-white"> x </span>
+                      /
+                    </p>
+                  @endif
+
                 </td>
               </tr>
 
@@ -165,11 +174,11 @@
                 </td>
               </tr>
 
-            </table>
-          </td>
+             </table>
+             </td>
 
-          <td class="border-left-0 border-top-0">
-            <table>
+             <td class="border-left-0 border-top-0">
+             <table>
               <tr>
                 <td class="border-top-0 border-right-0 border-left-0">
                   <p class="font-10 m-0 ml-5" style="text-align: left">NOMBRE Y APELLIDO</p>
@@ -184,7 +193,7 @@
                   @if ($footer != [])
                     <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer->comiOne }}</p>
                   @else
-                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left"> </p>
+                    <p class="mt-1 ml-3 mb-1 mr-0 text-white" style="text-align: left"> x </p>
                   @endif
                 </td>
                 <td class="border-right-0 border-left-0">
@@ -197,7 +206,7 @@
                   @if ($footer != [])
                     <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer->comiTwo }}</p>
                   @else
-                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left"> </p>
+                    <p class="mt-1 ml-3 mb-1 mr-0 text-white" style="text-align: left"> x </p>
                   @endif
                 </td>
                 <td class="border-right-0 border-left-0">
@@ -210,7 +219,7 @@
                   @if ($footer != [])
                     <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer->comiThree }}</p>
                   @else
-                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left"> </p>
+                    <p class="mt-1 ml-3 mb-1 mr-0 text-white" style="text-align: left"> x </p>
                   @endif
                 </td>
                 <td class="border-right-0 border-left-0">
@@ -221,7 +230,16 @@
 
               <tr>
                 <td colspan="2" class="border-left-0 border-right-0 border-bottom-0">
+                @if($dateComi)
                   <p class="mt-1 ml-3 mb-1 mr-0">Fecha: {{ substr($dateComi, 8, 2) }}/{{ substr($dateComi, 5, 2) }}/{{ substr($dateComi, 0, 4) }}</p>
+                @else
+                  <p class="mt-1 ml-3 mb-1 mr-0"> Fecha:
+                    <span class="mt-1 mb-1 mr-0 text-white"> x </span>
+                    /
+                    <span class="mt-1 mb-1 mr-0 text-white"> x </span>
+                    /
+                  </p>
+                @endif
                 </td>
               </tr>
 
@@ -231,15 +249,24 @@
                 </td>
               </tr>
 
-            </table>
-          </td>
+             </table>
+             </td>
 
-          <td class="border-left-0">
-            <table>
+             <td class="border-left-0">
+             <table>
               <tr>
                 <td colspan="2" class="border-0 mb-4">
                   <center>
-                    <p class="mt-1 ml-3 mb-1 mr-0"> Fecha: {{ substr($dateConFac, 8, 2) }}/{{ substr($dateConFac, 5, 2) }}/{{ substr($dateConFac, 0, 4) }}</p>
+                    @if ($dateConFac)
+                      <p class="mt-1 ml-3 mb-1 mr-0"> Fecha: {{ substr($dateConFac, 8, 2) }}/{{ substr($dateConFac, 5, 2) }}/{{ substr($dateConFac, 0, 4) }}</p>
+                    @else
+                      <p class="mt-1 ml-3 mb-1 mr-0"> Fecha:
+                        <span class="mt-1 mb-1 mr-0 text-white"> x </span>
+                        /
+                        <span class="mt-1 mb-1 mr-0 text-white"> x </span>
+                        /
+                      </p>
+                    @endif
                   </center>
                 </td>
               </tr>
@@ -261,14 +288,23 @@
                   <p class="mt-1 ml-3 mb-1 mr-0">Sello: </p>
                 </td>
               </tr>
-            </table>
-          </td>
-          <td class="border-left-0">
-            <table>
+             </table>
+             </td>
+             <td class="border-left-0">
+             <table>
               <tr>
                 <td colspan="2" class="border-0 mb-4">
                   <center>
-                    <p class="mt-1 ml-3 mb-1 mr-0"> Fecha: {{ substr($dateUniv, 8, 2) }}/{{ substr($dateUniv, 5, 2) }}/{{ substr($dateUniv, 0, 4) }}</p>
+                    @if ($dateUniv)
+                      <p class="mt-1 ml-3 mb-1 mr-0"> Fecha: {{ substr($dateUniv, 8, 2) }}/{{ substr($dateUniv, 5, 2) }}/{{ substr($dateUniv, 0, 4) }}</p>
+                    @else
+                      <p class="mt-1 ml-3 mb-1 mr-0"> Fecha:
+                        <span class="mt-1 mb-1 mr-0 text-white"> x </span>
+                        /
+                        <span class="mt-1 mb-1 mr-0 text-white"> x </span>
+                        /
+                      </p>
+                    @endif
                   </center>
                 </td>
               </tr>
@@ -285,6 +321,7 @@
                   <p class="mt-1 ml-3 mb-1 mr-0">Sello: </p>
                 </td>
               </tr>
+
             </table>
           </td>
         </tr>

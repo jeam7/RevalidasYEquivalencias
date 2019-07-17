@@ -23,7 +23,7 @@ class Subject extends Model
     protected $fillable = ['name', 'info', 'credits', 'career_id', 'code'];
     // protected $hidden = [];
     protected $dates = ['deleted_at'];
-    protected $cascadeDeletes = ['equivalent_subject'];
+    protected $cascadeDeletes = ['equivalent_subject_a', 'equivalent_subject_e'];
 
     /*
     |--------------------------------------------------------------------------
@@ -40,8 +40,15 @@ class Subject extends Model
         return $this->belongsTo('App\Models\Career');
     }
 
-    public function equivalent_subject(){
-        return $this->hasMany('App\Models\Equivalent_subject');
+    // public function equivalent_subject_(){
+    //     return $this->hasMany('App\Models\Equivalent_subject');
+    // }
+    public function equivalent_subject_a(){
+        return $this->hasMany('App\Models\Equivalent_subject', 'subject_a_id');
+    }
+
+    public function equivalent_subject_e(){
+        return $this->hasMany('App\Models\Equivalent_subject', 'subject_e_id');
     }
     /*
     |--------------------------------------------------------------------------

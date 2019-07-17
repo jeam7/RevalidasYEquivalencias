@@ -56,31 +56,31 @@ class RequestCrudController extends CrudController
         }
 
         $this->crud->addFields([
-            ['name' => 'user_id', // the db column for the foreign key
+            ['name' => 'user_id',
               'label' => "Cedula solicitante",
               'type' => 'select2',
-              'entity' => 'user', // the method that defines the relationship in your Model
-              'attribute' => 'user_fullname', // foreign key attribute that is shown to user
+              'entity' => 'user',
+              'attribute' => 'user_fullname',
               'model' => "App\Models\User",
               'options'   => (function ($query) {
                 return $query->where('type_user','=', 4)->orderBy('id', 'ASC')->get();
               })
             ],
-            ['name' => 'career_origin_id', // the db column for the foreign key
+            ['name' => 'career_origin_id',
               'label' => "Carrera - Facultad - Universidad de procedencia",
               'type' => 'select2',
-              'entity' => 'career_origin', // the method that defines the relationship in your Model
-              'attribute' => 'career_faculty_college', // foreign key attribute that is shown to user
+              'entity' => 'career_origin',
+              'attribute' => 'career_faculty_college',
               'model' => "App\Models\Career",
               'options'   => (function ($query) {
                 return $query->orderBy('id', 'ASC')->get();
               })
             ],
-            ['name' => 'career_destination_id', // the db column for the foreign key
+            ['name' => 'career_destination_id',
               'label' => "Carrera - Facultad - Universidad donde desea cursar",
               'type' => 'select2',
-              'entity' => 'career_destination', // the method that defines the relationship in your Model
-              'attribute' => 'career_faculty_college', // foreign key attribute that is shown to user
+              'entity' => 'career_destination',
+              'attribute' => 'career_faculty_college',
               'model' => "App\Models\Career",
               'options'   => (function ($query) {
                 if (backpack_user()->type_user == 3 || backpack_user()->type_user == 2) {
@@ -98,33 +98,33 @@ class RequestCrudController extends CrudController
 
 
         $this->crud->addFields([
-          ['name' => 'user_id', // the db column for the foreign key
+          ['name' => 'user_id',
             'label' => "Cedula solicitante",
             'type' => 'select2',
-            'entity' => 'user', // the method that defines the relationship in your Model
-            'attribute' => 'user_fullname', // foreign key attribute that is shown to user
+            'entity' => 'user',
+            'attribute' => 'user_fullname',
             'model' => "App\Models\User",
             'options'   => (function ($query) {
               return $query->where('type_user','=', 4)->orderBy('id', 'ASC')->get();
             }),
             'attributes' => ['disabled' => 'disabled']
           ],
-          ['name' => 'career_origin_id', // the db column for the foreign key
+          ['name' => 'career_origin_id',
             'label' => "Carrera - Facultad - Universidad de procedencia",
             'type' => 'select2',
-            'entity' => 'career_origin', // the method that defines the relationship in your Model
-            'attribute' => 'career_faculty_college', // foreign key attribute that is shown to user
+            'entity' => 'career_origin',
+            'attribute' => 'career_faculty_college',
             'model' => "App\Models\Career",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
             }),
             'attributes' => ['disabled' => 'disabled']
           ],
-          ['name' => 'career_destination_id', // the db column for the foreign key
+          ['name' => 'career_destination_id',
             'label' => "Carrera - Facultad - Universidad donde desea cursar",
             'type' => 'select2',
-            'entity' => 'career_destination', // the method that defines the relationship in your Model
-            'attribute' => 'career_faculty_college', // foreign key attribute that is shown to user
+            'entity' => 'career_destination',
+            'attribute' => 'career_faculty_college',
             'model' => "App\Models\Career",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
@@ -178,11 +178,19 @@ class RequestCrudController extends CrudController
         ], 'update');
 
         $this->crud->setColumns([
-          ['name' => 'user_id', // the db column for the foreign key
+          ['name' => 'id',
+          'label' =>
+          'Número solicitud',
+          'type' => 'text',
+          'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhere('requests.id', 'like', '%'.$searchTerm.'%');
+            },
+          ],
+          ['name' => 'user_id',
             'label' => "Cedula solicitante",
             'type' => 'select',
-            'entity' => 'user', // the method that defines the relationship in your Model
-            'attribute' => 'ci', // foreign key attribute that is shown to user
+            'entity' => 'user',
+            'attribute' => 'ci',
             'model' => "App\Models\User",
             'options'   => (function ($query) {
               return $query->orderBy('ci', 'ASC')->get();
@@ -194,11 +202,11 @@ class RequestCrudController extends CrudController
                 });
             }
           ],
-          ['name' => 'user_id', // the db column for the foreign key
+          ['name' => 'user_id',
             'label' => "Nombre completo solicitante",
             'type' => 'select',
-            'entity' => 'user', // the method that defines the relationship in your Model
-            'attribute' => 'fullname', // foreign key attribute that is shown to user
+            'entity' => 'user',
+            'attribute' => 'fullname',
             'model' => "App\Models\User",
             'options'   => (function ($query) {
               return $query->orderBy('ci', 'ASC')->get();
@@ -211,36 +219,37 @@ class RequestCrudController extends CrudController
                 $query->orWhereHas('user', function ($q) use ($column, $searchTerm) {
                     $q->where('first_name', 'like', '%'.$searchTerm.'%');
                 });
-            }
+            },
+            "visibleInTable" => false
           ],
-          ['name' => 'created_at', 'label' => 'Fecha', 'type' => 'datetime'],
-          ['name' => 'career_origin_id', // the db column for the foreign key
+          ['name' => 'date', 'label' => 'Fecha', 'type' => 'date'],
+          ['name' => 'career_origin_id',
             'label' => "Universidad - Carrera (Procedencia)",
             'type' => 'select',
-            'entity' => 'career_origin', // the method that defines the relationship in your Model
-            'attribute' => 'college_faculty', // foreign key attribute that is shown to user
+            'entity' => 'career_origin',
+            'attribute' => 'college_faculty',
             'model' => "App\Models\Career",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
             }),
             'searchLogic' => function ($query, $column, $searchTerm) {
                 $query->orWhereHas('career_origin', function ($q) use ($column, $searchTerm) {
-                    $q->where('name', 'like', '%'.$searchTerm.'%');
+                    $q->where('careers.name', 'like', '%'.$searchTerm.'%');
                 });
             }
           ],
-          ['name' => 'career_destination_id', // the db column for the foreign key
+          ['name' => 'career_destination_id',
             'label' => "Universidad - Carrera (Destino)",
             'type' => 'select',
-            'entity' => 'career_destination', // the method that defines the relationship in your Model
-            'attribute' => 'college_faculty', // foreign key attribute that is shown to user
+            'entity' => 'career_destination',
+            'attribute' => 'college_faculty',
             'model' => "App\Models\Career",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
             }),
             'searchLogic' => function ($query, $column, $searchTerm) {
                 $query->orWhereHas('career_destination', function ($q) use ($column, $searchTerm) {
-                    $q->where('name', 'like', '%'.$searchTerm.'%');
+                    $q->where('careers.name', 'like', '%'.$searchTerm.'%');
                 });
             }
           ],
@@ -265,6 +274,18 @@ class RequestCrudController extends CrudController
           ['name'=>'last_status', 'type' => 'text_custom', 'label' => 'Estatus actual', 'visibleInTable' => false]
         ]);
 
+
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'id',
+            'label'=> 'Numero solicitud'
+          ],
+          false,
+          function($value) {
+            $this->crud->addClause('where', 'requests.id', '=', $value);
+          }
+        );
+
         $this->crud->addFilter([
             'type' => 'text',
             'name' => 'ci',
@@ -279,6 +300,17 @@ class RequestCrudController extends CrudController
         );
 
         $this->crud->addFilter([
+            'type' => 'date',
+            'name' => 'date',
+            'label'=> 'Fecha',
+          ],
+          false,
+          function($value) {
+              $this->crud->addClause('where', 'date', '=', $value);
+          }
+        );
+
+        $this->crud->addFilter([
             'type' => 'select2',
             'name' => 'career_origin',
             'label'=> 'Carrera procedencia'
@@ -287,13 +319,10 @@ class RequestCrudController extends CrudController
             return \App\Models\Career::all()->pluck('name', 'id')->toArray();
           },
           function($value) {
-            // $this->crud->query = $this->crud->query->select('requests.*')
-            //                                       ->join('careers', 'careers.id', '=', 'requests.career_origin_id')
-            //                                       ->where('careers.id', '=', $value);
             $this->crud->addClause('where', 'career_origin_id', '=', $value);
           }
         );
-
+        // dd(\App\Models\Career::vainilla()->pluck('careers.name', 'careers.id')->toArray());
         switch (backpack_user()->type_user) {
           case 1:
             $this->crud->addFilter([
@@ -305,9 +334,6 @@ class RequestCrudController extends CrudController
                 return \App\Models\Career::all()->pluck('name', 'id')->toArray();
               },
               function($value) {
-                // $this->crud->query = $this->crud->query->select('requests.*')
-                //                                       ->join('careers', 'careers.id', '=', 'requests.career_destination_id')
-                //                                       ->where('careers.id', '=', $value);
                 $this->crud->addClause('where', 'career_destination_id', '=', $value);
               }
             );
@@ -319,12 +345,9 @@ class RequestCrudController extends CrudController
                 'label'=> 'Carrera destino'
               ],
               function(){
-                return \App\Models\Faculty::find(backpack_user()->faculty_id)->school()->pluck('name', 'id')->toArray();
+                return \App\Models\Career::careersByFaculty(backpack_user()->faculty_id)->pluck('careers.name', 'careers.id')->toArray();
               },
               function($value) {
-                // $this->crud->query = $this->crud->query->select('requests.*')
-                //                                       ->join('careers', 'careers.id', '=', 'requests.career_destination_id')
-                //                                       ->where('careers.id', '=', $value);
                 $this->crud->addClause('where', 'career_destination_id', '=', $value);
               }
             );
@@ -336,12 +359,9 @@ class RequestCrudController extends CrudController
                 'label'=> 'Carrera destino'
               ],
               function(){
-                return \App\Models\Faculty::find(backpack_user()->faculty_id)->school()->pluck('name', 'id')->toArray();
+                return \App\Models\Career::careersByFaculty(backpack_user()->faculty_id)->pluck('careers.name', 'careers.id')->toArray();
               },
               function($value) {
-                // $this->crud->query = $this->crud->query->select('requests.*')
-                //                                       ->join('careers', 'careers.id', '=', 'requests.career_destination_id')
-                //                                       ->where('careers.id', '=', $value);
                 $this->crud->addClause('where', 'career_destination_id', '=', $value);
               }
             );
@@ -349,17 +369,6 @@ class RequestCrudController extends CrudController
           default:
             break;
         }
-
-        // $this->crud->addFilter([
-        //     'type' => 'date',
-        //     'name' => 'date',
-        //     'label'=> 'Fecha'
-        //   ],
-        //   false,
-        //   function($value) {
-        //       $this->crud->addClause('where', 'created_at', '=', $value);
-        //   }
-        // );
 
         // TODO: remove setFromDb() and manually define Fields and Columns
         // $this->crud->setFromDb();
@@ -376,6 +385,8 @@ class RequestCrudController extends CrudController
 
           $origin = Career::find($request->request->get('career_origin_id'));
           $request->request->set('origin', $origin->school->faculty->college->foreign);
+          $request->request->set('date', Carbon::now());
+
           // dd($request->request);
           $redirect_location = parent::storeCrud($request);
 
@@ -406,15 +417,15 @@ class RequestCrudController extends CrudController
       $currentRequest = Request::find($id);
       $currentUser = $currentRequest->user;
 
-      $currentUserOriginC = $currentRequest->career_origin;
-      $currentUserOriginS = $currentRequest->career_origin->school;
-      $currentUserOriginF = $currentRequest->career_origin->school->faculty;
-      $currentUserOriginU = $currentRequest->career_origin->school->faculty->college;
+      $currentUserOriginC = $currentRequest->career_origin ? $currentRequest->career_origin->name : "";
+      $currentUserOriginS = $currentRequest->career_origin ? $currentRequest->career_origin->school->name : "";
+      $currentUserOriginF = $currentRequest->career_origin ? $currentRequest->career_origin->school->faculty->name : "";
+      $currentUserOriginU = $currentRequest->career_origin ? $currentRequest->career_origin->school->faculty->college->name : "";
 
-      $currentUserDestinationC = $currentRequest->career_destination;
-      $currentUserDestinationS = $currentRequest->career_destination->school;
-      $currentUserDestinationF = $currentRequest->career_destination->school->faculty;
-      $currentUserDestinationU = $currentRequest->career_destination->school->faculty->college;
+      $currentUserDestinationC = $currentRequest->career_destination ? $currentRequest->career_destination->name : "";
+      $currentUserDestinationS = $currentRequest->career_destination ? $currentRequest->career_destination->school->name : "";
+      $currentUserDestinationF = $currentRequest->career_destination ? $currentRequest->career_destination->school->faculty->name : "";
+      $currentUserDestinationU = $currentRequest->career_destination ? $currentRequest->career_destination->school->faculty->college->name : "";
 
       $pdf = \PDF::loadView('backpack::crud.pdf.generarPdfSolicitud',
             compact("currentRequest", "currentUser", "currentUserOriginC", "currentUserOriginS", "currentUserOriginF", "currentUserOriginU",

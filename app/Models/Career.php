@@ -69,7 +69,11 @@ class Career extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
-
+    public function scopeCareersByFaculty($query, $facultyId){
+        return $query->join('schools', 'schools.id', '=', 'careers.school_id')
+                      ->join('faculties', 'faculties.id', '=', 'schools.faculty_id')
+                      ->where('faculties.id', '=', $facultyId);
+    }
     /*
     |--------------------------------------------------------------------------
     | ACCESORS

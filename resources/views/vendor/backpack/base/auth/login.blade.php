@@ -17,7 +17,14 @@
 
                                 @if ($errors->has($username))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first($username) }}</strong>
+                                        <strong>
+                                          @if ($errors->first($username) == 'validation.required')
+                                            Por favor, ingrese su cedula
+                                          @else
+                                            Cedula o contraseña invalidos
+                                          @endif
+                                          {{-- {{ $errors->first($username) }} --}}
+                                        </strong>
                                     </span>
                                 @endif
                             </div>
@@ -31,7 +38,12 @@
 
                                 @if ($errors->has('password'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
+                                      <strong>
+                                        @if ($errors->first('password') == 'validation.required')
+                                          Por favor, ingrese su contraseña
+                                        @endif
+                                      </strong>
+                                        {{-- <strong>{{ $errors->first('password') }}</strong> --}}
                                     </span>
                                 @endif
                             </div>

@@ -120,7 +120,7 @@
         <tr>
           <td colspan="6" class="border-left-0 border-right-0" width="100%">
             <p class="font-10 m-0 ml-2">UNIVERSIDAD O INSTITUTO DE PROCEDENCIA</p>
-            <p class="m-0 ml-3">{{ $currentUserOriginU['name'] }}</p>
+            <p class="m-0 ml-3">{{ $currentUserOriginU }}</p>
           </td>
         </tr>
 
@@ -140,30 +140,54 @@
         <tr>
           <td colspan ="2" class="border-left-0" width="33.3%">
             <p class="font-10 m-0 ml-2">FACULTAD DE LOS ESTUDIOS CURSADOS</p>
-            <p class="m-0 ml-3">{{ $currentUserOriginF['name'] }}</p>
+            @if ($currentUserOriginF)
+              <p class="m-0 ml-3">{{ $currentUserOriginF }}</p>
+            @else
+              <p class="m-0 ml-3 text-white"> x </p>
+            @endif
           </td>
           <td colspan ="2" width="33.4%">
             <p class="font-10 m-0 ml-2">ESCUELA DE LOS ESTUDIOS CURSADOS</p>
-            <p class="m-0 ml-3">{{ $currentUserOriginS['name'] }}</p>
+            @if ($currentUserOriginS)
+              <p class="m-0 ml-3">{{ $currentUserOriginS }}</p>
+            @else
+              <p class="m-0 ml-3 text-white"> x </p>
+            @endif
           </td>
           <td colspan ="2" class="border-right-0" width="33.3%">
             <p class="font-10 m-0 ml-2">CARRERA DE LOS ESTUDIOS CURSADOS</p>
-            <p class="m-0 ml-3">{{ $currentUserOriginC['name'] }}</p>
+            @if ($currentUserOriginC)
+              <p class="m-0 ml-3">{{ $currentUserOriginC }}</p>
+            @else
+              <p class="m-0 ml-3 text-white"> x </p>
+            @endif
           </td>
         </tr>
 
         <tr>
           <td colspan ="2" class="border-left-0" width="33.3%">
             <p class="font-10 m-0 ml-2">FACULTAD DONDE DESEA CURSAR</p>
-            <p class="m-0 ml-3">{{ $currentUserDestinationF['name'] }}</p>
+            @if ($currentUserDestinationF)
+              <p class="m-0 ml-3">{{ $currentUserDestinationF }}</p>
+            @else
+              <p class="m-0 ml-3 text-white"> x </p>
+            @endif
           </td>
           <td colspan ="2" width="33.4%">
             <p class="font-10 m-0 ml-2">ESCUELA DONDE DESEA CURSAR</p>
-            <p class="m-0 ml-3">{{ $currentUserDestinationS['name'] }}</p>
+            @if ($currentUserDestinationS)
+              <p class="m-0 ml-3">{{ $currentUserDestinationS }}</p>
+            @else
+              <p class="m-0 ml-3 text-white"> x </p>
+            @endif
           </td>
           <td colspan ="2" class="border-right-0" width="33.3%">
             <p class="font-10 m-0 ml-2">CARRERA DONDE DESEA CURSAR</p>
-            <p class="m-0 ml-3">{{ $currentUserDestinationC['name'] }}</p>
+            @if ($currentUserDestinationC)
+              <p class="m-0 ml-3">{{ $currentUserDestinationC }}</p>
+            @else
+              <p class="m-0 ml-3 text-white"> x </p>
+            @endif
           </td>
         </tr>
 

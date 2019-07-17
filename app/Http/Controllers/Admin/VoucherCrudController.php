@@ -57,11 +57,11 @@ class VoucherCrudController extends CrudController
         }
 
         $this->crud->addFields([
-            ['name' => 'request_id', // the db column for the foreign key
+            ['name' => 'request_id',
               'label' => "Numero de solicitud",
               'type' => 'select2',
-              'entity' => 'request', // the method that defines the relationship in your Model
-              'attribute' => 'data_request', // foreign key attribute that is shown to user
+              'entity' => 'request',
+              'attribute' => 'data_request',
               'model' => "App\Models\Request",
               'options'   => (function ($query) {
                 if (backpack_user()->type_user == 3) {
@@ -78,11 +78,11 @@ class VoucherCrudController extends CrudController
         ], 'create');
 
         $this->crud->addFields([
-            ['name' => 'request_id', // the db column for the foreign key
+            ['name' => 'request_id',
               'label' => "Numero de solicitud",
               'type' => 'select2',
-              'entity' => 'request', // the method that defines the relationship in your Model
-              'attribute' => 'data_request', // foreign key attribute that is shown to user
+              'entity' => 'request',
+              'attribute' => 'data_request',
               'model' => "App\Models\Request",
               'options'   => (function ($query) {
                 return $query->orderBy('id', 'ASC')->get();
@@ -123,25 +123,194 @@ class VoucherCrudController extends CrudController
         ], 'update');
 
         $this->crud->setColumns([
-            ['name' => 'id', 'label' => 'Numero comprobante', 'type'=>'number'],
-            ['name' => 'request_id', // the db column for the foreign key
+            ['name' => 'id',
+              'label' => 'Numero de comprobante',
+              'type'=>'text',
+              'searchLogic' => function ($query, $column, $searchTerm) {
+                    $query->orWhere('vouchers.id', 'like', '%'.$searchTerm.'%');
+                },
+            ],
+            ['name' => 'request_id',
               'label' => "Numero de solicitud",
               'type' => 'select',
-              'entity' => 'request', // the method that defines the relationship in your Model
-              'attribute' => 'id', // foreign key attribute that is shown to user
+              'entity' => 'request',
+              'attribute' => 'id',
               'model' => "App\Models\Request",
               'options'   => (function ($query) {
                 return $query->orderBy('id', 'ASC')->get();
               })
             ],
-            ['name' => 'date_subcomi_eq', 'label' => 'Fecha subcomision de equivalencias', 'type'=>'date'],
-            ['name' => 'date_comi_eq', 'label' => 'Fecha comision de equivalencias', 'type'=>'date'],
-            ['name' => 'date_con_fac', 'label' => 'Fecha consejo de facultad', 'type'=>'date'],
-            ['name' => 'date_con_univ', 'label' => 'Fecha consejo universitario', 'type'=>'date']
+            ['name' => 'user_ci',
+              'label' => 'Cedula solicitante',
+              'type'=>'text',
+              'searchLogic' => function ($query, $column, $searchTerm) {
+                  $query->orWhereHas('request', function ($q) use ($column, $searchTerm) {
+                      $q->join('users', 'users.id', '=', 'requests.user_id')
+                        ->where('users.ci', 'like', '%'.$searchTerm.'%');
+                  });
+              },
+              'orderable' => true,
+              'orderLogic' => function ($query, $column, $columnDirection) {
+                  return $query->join('requests', 'requests.id', '=', 'vouchers.request_id')
+                                ->join('users', 'users.id', '=', 'requests.user_id')
+                                ->orderBy('users.ci', $columnDirection)->select('vouchers.*');
+              }
+            ],
+            ['name' => 'career_origin_table',
+              'label' => 'Universidad - Carrera (Procedencia)',
+              'type'=>'text',
+              'searchLogic' => function ($query, $column, $searchTerm) {
+                  $query->orWhereHas('request', function ($q) use ($column, $searchTerm) {
+                      $q->join('careers', 'careers.id', '=', 'requests.career_origin_id')
+                        ->where('careers.name', 'like', '%'.$searchTerm.'%');
+                  });
+              },
+              'orderable' => true,
+              'orderLogic' => function ($query, $column, $columnDirection) {
+                  return $query->join('requests', 'requests.id', '=', 'vouchers.request_id')
+                                ->join('careers as o', 'o.id', '=', 'requests.career_origin_id')
+                                ->orderBy('o.name', $columnDirection)->select('vouchers.*');
+              },
+              'limit'=>500
+            ],
+            ['name' => 'career_destination_table',
+              'label' => 'Universidad - Carrera (Destino)',
+              'type'=>'text',
+              'searchLogic' => function ($query, $column, $searchTerm) {
+                  $query->orWhereHas('request', function ($q) use ($column, $searchTerm) {
+                      $q->join('careers', 'careers.id', '=', 'requests.career_destination_id')
+                        ->where('careers.name', 'like', '%'.$searchTerm.'%');
+                  });
+              },
+              'orderable' => true,
+              'orderLogic' => function ($query, $column, $columnDirection) {
+                  return $query->join('requests', 'requests.id', '=', 'vouchers.request_id')
+                                ->join('careers as d', 'd.id', '=', 'requests.career_destination_id')
+                                ->orderBy('d.name', $columnDirection)->select('vouchers.*');
+              },
+              'limit'=>500
+            ],
+            ['name' => 'date_subcomi_eq', 'label' => 'Fecha subcomision de equivalencias', 'type'=>'date', 'visibleInTable' => false],
+            ['name' => 'date_comi_eq', 'label' => 'Fecha comision de equivalencias', 'type'=>'date', 'visibleInTable' => false],
+            ['name' => 'date_con_fac', 'label' => 'Fecha consejo de facultad', 'type'=>'date', 'visibleInTable' => false],
+            ['name' => 'date_con_univ', 'label' => 'Fecha consejo universitario', 'type'=>'date', 'visibleInTable' => false]
         ]);
 
-        // TODO: remove setFromDb() and manually define Fields and Columns
-        // $this->crud->setFromDb();
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'id',
+            'label'=> 'Numero comprobante'
+          ],
+          false,
+          function($value) {
+            $this->crud->addClause('where', 'vouchers.id', '=', $value);
+          }
+        );
+
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'requestid',
+            'label'=> 'Numero solicitud'
+          ],
+          false,
+          function($value) {
+            $this->crud->addClause('where', 'vouchers.request_id', '=', $value);
+          }
+        );
+
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'userci',
+            'label'=> 'Cedula'
+          ],
+          false,
+          function($value) {
+            $this->crud->query = $this->crud->query->select('vouchers.*')
+                                                  ->join('requests as rfci', 'rfci.id', '=', 'vouchers.request_id')
+                                                  ->join('users as ufci', 'ufci.id', '=', 'rfci.user_id')
+                                                  ->where('ufci.ci', '=', $value);
+          }
+        );
+
+        $this->crud->addFilter([
+            'type' => 'select2',
+            'name' => 'careerorigin',
+            'label'=> 'Carrera procedencia'
+          ],
+          function(){
+            return \App\Models\Career::all()->pluck('name', 'id')->toArray();
+          },
+          function($value) {
+            $this->crud->query = $this->crud->query->select('vouchers.*')
+                                                  ->join('requests as rfco', 'rfco.id', '=', 'vouchers.request_id')
+                                                  ->join('careers as cfco', 'cfco.id', '=', 'rfco.career_origin_id')
+                                                  ->where('cfco.id', '=', $value);
+          }
+        );
+
+        switch (backpack_user()->type_user) {
+          case 1:
+            $this->crud->addFilter([
+                'type' => 'select2',
+                'name' => 'careerdestination',
+                'label'=> 'Carrera destino'
+              ],
+              function(){
+                return \App\Models\Career::all()->pluck('name', 'id')->toArray();
+              },
+              function($value) {
+                $this->crud->query = $this->crud->query->select('vouchers.*')
+                                                      ->join('requests as rfcd', 'rfcd.id', '=', 'vouchers.request_id')
+                                                      ->join('careers as cfcoa', 'cfcoa.id', '=', 'rfcd.career_destination_id')
+                                                      ->where('cfcoa.id', '=', $value);
+              }
+            );
+            break;
+          case 2:
+            $this->crud->addFilter([
+                'type' => 'select2',
+                'name' => 'careerdestination',
+                'label'=> 'Carrera destino'
+              ],
+              function(){
+                return \App\Models\Career::careersByFaculty(backpack_user()->faculty_id)->pluck('careers.name', 'careers.id')->toArray();
+              },
+              function($value) {
+                // $this->crud->query = $this->crud->query->select('vouchers.*')
+                //                                       ->join('requests', 'requests.id', '=', 'vouchers.request_id')
+                //                                       ->join('careers', 'careers.id', '=', 'requests.career_destination_id')
+                //                                       ->where('careers.id', '=', $value);
+                $this->crud->query = $this->crud->query->select('vouchers.*')
+                                                      ->join('requests as rfcd', 'rfcd.id', '=', 'vouchers.request_id')
+                                                      ->join('careers as cfcoa', 'cfcoa.id', '=', 'rfcd.career_destination_id')
+                                                      ->where('cfcoa.id', '=', $value);
+              }
+            );
+            break;
+          case 3:
+            $this->crud->addFilter([
+                'type' => 'select2',
+                'name' => 'careerdestination',
+                'label'=> 'Carrera destino'
+              ],
+              function(){
+                return \App\Models\Career::careersByFaculty(backpack_user()->faculty_id)->pluck('careers.name', 'careers.id')->toArray();
+              },
+              function($value) {
+                // $this->crud->query = $this->crud->query->select('vouchers.*')
+                //                                       ->join('requests', 'requests.id', '=', 'vouchers.request_id')
+                //                                       ->join('careers', 'careers.id', '=', 'requests.career_destination_id')
+                //                                       ->where('careers.id', '=', $value);
+                $this->crud->query = $this->crud->query->select('vouchers.*')
+                                                      ->join('requests as rfcd', 'rfcd.id', '=', 'vouchers.request_id')
+                                                      ->join('careers as cfcoa', 'cfcoa.id', '=', 'rfcd.career_destination_id')
+                                                      ->where('cfcoa.id', '=', $value);
+              }
+            );
+            break;
+          default:
+            break;
+        }
 
         // add asterisk for fields that are required in VoucherRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
@@ -247,34 +416,58 @@ class VoucherCrudController extends CrudController
       $views = "";
       $total = 0;
 
-      $footer = DB::select('SELECT rep_sub_equi_one subComiOne, rep_sub_equi_two subComiTwo, rep_sub_equi_three subComiThree,
-	                         rep_comi_equi_one comiOne, rep_comi_equi_two comiTwo, rep_comi_equi_three comiThree,
-                           dean decano
-                           FROM academic_periods
-                          WHERE faculty_id = 3
-                          ORDER BY id DESC
-                          LIMIT 1', [$dataVoucher->request->career_destination->school->faculty->id]);
+      if ($dataVoucher->request->career_destination) {
+        $footer = DB::select('SELECT rep_sub_equi_one subComiOne, rep_sub_equi_two subComiTwo, rep_sub_equi_three subComiThree,
+  	                         rep_comi_equi_one comiOne, rep_comi_equi_two comiTwo, rep_comi_equi_three comiThree,
+                             dean decano
+                             FROM academic_periods
+                            WHERE faculty_id = 3 AND deleted_at IS NULL
+                            ORDER BY id DESC
+                            LIMIT 1', [$dataVoucher->request->career_destination->school->faculty->id]);
+      } else {
+        $footer = [];
+      }
+
+
 
       for ($i=0; $i < $numEquivalents; $i++) {
         $total += (int)$equivalents[$i]->subjectsCredits;
       }
 
-      $facultyDestination = $dataVoucher->request->career_destination->school->faculty ? $dataVoucher->request->career_destination->school->faculty->name : "";
-      $schoolDestination = $dataVoucher->request->career_destination->school ? $dataVoucher->request->career_destination->school->name : "";
-      $collegeDestination = $dataVoucher->request->career_destination->school->faculty->college ? $dataVoucher->request->career_destination->school->faculty->college->name : "";
+      // $facultyDestination = $dataVoucher->request->career_destination->school->faculty ? $dataVoucher->request->career_destination->school->faculty->name : "";
+      // $schoolDestination = $dataVoucher->request->career_destination->school ? $dataVoucher->request->career_destination->school->name : "";
+      // $collegeDestination = $dataVoucher->request->career_destination->school->faculty->college ? $dataVoucher->request->career_destination->school->faculty->college->name : "";
+      // $lastName = $dataVoucher->request->user ? $dataVoucher->request->user->last_name : "";
+      // $firstName = $dataVoucher->request->user ? $dataVoucher->request->user->first_name : "";
+      // $ci = $dataVoucher->request->user ? strtoupper($dataVoucher->request->user->nacionality) . " - " . $dataVoucher->request->user->ci : "";
+      // $requestId = $dataVoucher->request ? $dataVoucher->request->id : "";
+      // $facultyOrigin = $dataVoucher->request->career_origin->school->faculty ? $dataVoucher->request->career_origin->school->faculty->name : "";
+      // $schoolOrigin = $dataVoucher->request->career_origin->school ? $dataVoucher->request->career_origin->school->name : "";
+      // $collegeOrigin = $dataVoucher->request->career_origin->school->faculty->college ? $dataVoucher->request->career_origin->school->faculty->college->name : "";
+      // $footer = sizeof($footer) > 0 ? $footer[0] : [];
+      // $dateSubComi = $dataVoucher->date_subcomi_eq ? $dataVoucher->date_subcomi_eq : "";
+      // $dateComi = $dataVoucher->date_comi_eq ? $dataVoucher->date_comi_eq : "";
+      // $dateConFac = $dataVoucher->date_con_fac ? $dataVoucher->date_con_fac : "";
+      // $dateUniv = $dataVoucher->date_con_univ ? $dataVoucher->date_con_univ : "";
+      // $observations = $dataVoucher->observations ? $dataVoucher->observations : "Sin observaciones";
+
+      $facultyDestination = $dataVoucher->request->career_destination ? $dataVoucher->request->career_destination->school->faculty->name : "";
+      $schoolDestination = $dataVoucher->request->career_destination ? $dataVoucher->request->career_destination->school->name : "";
+      $collegeDestination = $dataVoucher->request->career_destination ? $dataVoucher->request->career_destination->school->faculty->college->name : "";
       $lastName = $dataVoucher->request->user ? $dataVoucher->request->user->last_name : "";
       $firstName = $dataVoucher->request->user ? $dataVoucher->request->user->first_name : "";
       $ci = $dataVoucher->request->user ? strtoupper($dataVoucher->request->user->nacionality) . " - " . $dataVoucher->request->user->ci : "";
       $requestId = $dataVoucher->request ? $dataVoucher->request->id : "";
-      $facultyOrigin = $dataVoucher->request->career_origin->school->faculty ? $dataVoucher->request->career_origin->school->faculty->name : "";
-      $schoolOrigin = $dataVoucher->request->career_origin->school ? $dataVoucher->request->career_origin->school->name : "";
-      $collegeOrigin = $dataVoucher->request->career_origin->school->faculty->college ? $dataVoucher->request->career_origin->school->faculty->college->name : "";
+      $facultyOrigin = $dataVoucher->request->career_origin ? $dataVoucher->request->career_origin->school->faculty->name : "";
+      $schoolOrigin = $dataVoucher->request->career_origin ? $dataVoucher->request->career_origin->school->name : "";
+      $collegeOrigin = $dataVoucher->request->career_origin ? $dataVoucher->request->career_origin->school->faculty->college->name : "";
       $footer = sizeof($footer) > 0 ? $footer[0] : [];
       $dateSubComi = $dataVoucher->date_subcomi_eq ? $dataVoucher->date_subcomi_eq : "";
       $dateComi = $dataVoucher->date_comi_eq ? $dataVoucher->date_comi_eq : "";
       $dateConFac = $dataVoucher->date_con_fac ? $dataVoucher->date_con_fac : "";
       $dateUniv = $dataVoucher->date_con_univ ? $dataVoucher->date_con_univ : "";
       $observations = $dataVoucher->observations ? $dataVoucher->observations : "Sin observaciones";
+
       for ($j=0; $j < sizeof($dataDuplicates); $j++) {
         for ($i=0; $i < $numPag; $i++) {
           $equivalents = DB::select('SELECT es.id id, es.voucher_id voucherId, s.id subjectId, s.name subjectName, s.credits subjectsCredits,

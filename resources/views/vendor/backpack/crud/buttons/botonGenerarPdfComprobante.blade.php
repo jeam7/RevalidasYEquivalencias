@@ -20,11 +20,20 @@
                 var link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
                 link.download = "Comprobante"+id+".pdf";
-                // link.target = '_blank';
                 link.click();
+
             },
             error: function(result) {
                 // no ejecuto
+            },
+            beforeSend: function () {
+              var loader = '<div id="loading" class="bg-black" style="opacity: 0.5; height:100%; width:100%; position:absolute; top:0; margin-left: 0%;">';
+              loader += '<img src="{{asset('images/loader.gif')}}" alt="loading" style="width: 32px; height: 32px; position: absolute; top: 35%; left: 45%;" />';
+              loader += '</div>';
+              $('.content-wrapper').append(loader);
+            },
+            complete: function(){
+              $("#loading").remove();
             }
         });
       }
