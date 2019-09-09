@@ -50,9 +50,9 @@ class SubjectCrudController extends CrudController
 
         $this->crud->addFields([
           ['name'=>'name', 'label'=>'Nombre', 'type'=>'text'],
-          ['name'=>'code', 'label'=>'Codigo', 'type'=>'text'],
-          ['name'=>'info', 'label'=>'Descripcion', 'type'=>'textarea'],
-          ['name'=>'credits', 'label'=>'Unidades de credito', 'type'=>'number', 'attributes' => ["min" => "1"]],
+          ['name'=>'code', 'label'=>'Código', 'type'=>'text'],
+          ['name'=>'info', 'label'=>'Descripción', 'type'=>'textarea'],
+          ['name'=>'credits', 'label'=>'Unidades de crédito', 'type'=>'number', 'attributes' => ["min" => "1"]],
           [ 'name' => 'career_id', // the db column for the foreign key
             'label' => "Carrera",
             'type' => 'select2',
@@ -67,8 +67,8 @@ class SubjectCrudController extends CrudController
 
         $this->crud->setColumns([
           ['name'=>'name', 'label'=>'Nombre', 'type'=>'text'],
-          ['name'=>'code', 'label'=>'Codigo', 'type'=>'text'],
-          ['name'=>'credits', 'label'=>'Unidades de credito', 'type'=>'text'],
+          ['name'=>'code', 'label'=>'Código', 'type'=>'text'],
+          ['name'=>'credits', 'label'=>'Unidades de crédito', 'type'=>'text'],
           [ 'name' => 'career_id', // the db column for the foreign key
             'label' => "Carrera",
             'type' => 'select',
@@ -84,7 +84,7 @@ class SubjectCrudController extends CrudController
                 });
             }
           ],
-          ['name'=>'info', 'label'=>'Descripcion', 'type'=>'text', 'visibleInTable' => false],
+          ['name'=>'info', 'label'=>'Descripción', 'type'=>'text', 'visibleInTable' => false],
 
         ]);
 
@@ -104,7 +104,7 @@ class SubjectCrudController extends CrudController
         $this->crud->addFilter([ // simple filter
             'type' => 'text',
             'name' => 'code',
-            'label'=> 'Codigo'
+            'label'=> 'Código'
           ],
           false,
           function($value) { // if the filter is active

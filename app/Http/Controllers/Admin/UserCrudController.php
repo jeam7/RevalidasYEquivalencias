@@ -54,7 +54,7 @@ class UserCrudController extends CrudController
         }
 
         $this->crud->addFields([
-          ['name'=>'ci', 'label'=>'Cedula', 'type'=>'text'],
+          ['name'=>'ci', 'label'=>'Cédula', 'type'=>'text'],
           ['name'=>'first_name', 'label'=>'Nombre', 'type'=>'text'],
           ['name'=>'last_name', 'label'=>'Apellido', 'type'=>'text'],
           ['name'=>'place_birth', 'label'=>'Lugar de nacimiento', 'type'=>'text'],
@@ -65,13 +65,13 @@ class UserCrudController extends CrudController
           ],
           ['name'=>'birthdate', 'label'=>'Fecha de nacimiento', 'type'=>'date'],
           ['name' => 'gender',
-            'label' => "Genero",
+            'label' => "Género",
             'type' => 'select_from_array',
             'options' => ['f' => 'Femenino', 'm' => 'Masculino']
           ],
-          ['name'=>'address', 'label'=>'Direccion', 'type'=>'textarea'],
-          ['name'=>'phone', 'label'=>'Telefono', 'type'=>'text'],
-          ['name'=>'email', 'label'=>'Email', 'type'=>'email'],
+          ['name'=>'address', 'label'=>'Dirección', 'type'=>'textarea'],
+          ['name'=>'phone', 'label'=>'Teléfono', 'type'=>'text'],
+          ['name'=>'email', 'label'=>'Correo', 'type'=>'email'],
         ]);
 
 
@@ -83,8 +83,8 @@ class UserCrudController extends CrudController
             'type' => 'toggle',
             'inline' => true,
             'options' => [
-              2 => 'Personal administrativo de revalidas y equivalencias',
-              3 => 'Personal interno de revalidas y equivalencias',
+              2 => 'Personal Administrativo de Reválidas y Equivalencias',
+              3 => 'Personal Interno de Reválidas y Equivalencias',
               4 => 'Solicitante'
             ],
             'hide_when' => [
@@ -111,7 +111,7 @@ class UserCrudController extends CrudController
           	'type' => 'toggle',
           	'inline' => true,
           	'options' => [
-              3 => 'Personal interno de revalidas y equivalencias',
+              3 => 'Personal Interno de Reválidas y Equivalencias',
               4 => 'Solicitante'
           	],
           	'hide_when' => [
@@ -150,7 +150,7 @@ class UserCrudController extends CrudController
         }
 
         $this->crud->setColumns([
-          ['name' => 'ci', 'label' => 'Cedula', 'type' => 'text'],
+          ['name' => 'ci', 'label' => 'Cédula', 'type' => 'text'],
           ['name' => 'first_name', 'label' => 'Nombre', 'type' => 'text'],
           ['name' => 'last_name', 'label' => 'Apellido', 'type' => 'text'],
           ['name' => 'faculty_id', // the db column for the foreign key
@@ -168,8 +168,8 @@ class UserCrudController extends CrudController
             'type' => 'select_from_array',
             'options' => [
               1 => 'Super admin',
-              2 => 'Personal administrativo de revalidas y equivalencias',
-              3 => 'Personal interno de revalidas y equivalencias',
+              2 => 'Personal Administrativo de Reválidas y Equivalencias',
+              3 => 'Personal Interno de Reválidas y Equivalencias',
               4 => 'Solicitante'
             ]
           ],
@@ -187,14 +187,14 @@ class UserCrudController extends CrudController
             'options' => ['f' => 'Femenino', 'm' => 'Masculino'],
             'visibleInTable' => false
           ],
-          ['name' => 'address', 'label' => 'Direccion', 'type' => 'text', 'visibleInTable' => false],
-          ['name' => 'phone', 'label' => 'Telefono', 'type' => 'text', 'visibleInTable' => false],
+          ['name' => 'address', 'label' => 'Dirección', 'type' => 'text', 'visibleInTable' => false],
+          ['name' => 'phone', 'label' => 'Teléfono', 'type' => 'text', 'visibleInTable' => false],
         ]);
 
         $this->crud->addFilter([ // simple filter
             'type' => 'text',
             'name' => 'ci',
-            'label'=> 'Cedula'
+            'label'=> 'Cédula'
           ],
           false,
           function($value) { // if the filter is active
@@ -210,8 +210,8 @@ class UserCrudController extends CrudController
                 'label'=> 'Tipo de usuario'
               ],
               [
-                2 => 'Personal administrativo de revalidas y equivalencias',
-                3 => 'Personal interno de revalidas y equivalencias',
+                2 => 'Personal Administrativo de Reválidas y Equivalencias',
+                3 => 'Personal Interno de Reválidas y Equivalencias',
                 4 => 'Solicitante'
               ],
               function($value) { // if the filter is active
@@ -238,7 +238,7 @@ class UserCrudController extends CrudController
                 'label'=> 'Tipo de usuario'
               ],
               [
-                3 => 'Personal interno de revalidas y equivalencias',
+                3 => 'Personal Interno de Reválidas y Equivalencias',
                 4 => 'Solicitante'
               ],
               function($value) { // if the filter is active

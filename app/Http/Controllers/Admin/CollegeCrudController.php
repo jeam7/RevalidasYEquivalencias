@@ -25,7 +25,7 @@ class CollegeCrudController extends CrudController
         */
         $this->crud->setModel('App\Models\College');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/college');
-        $this->crud->setEntityNameStrings('universidad', 'Universidades');
+        $this->crud->setEntityNameStrings('Universidad', 'Universidades');
 
         /*
         |--------------------------------------------------------------------------
@@ -55,8 +55,8 @@ class CollegeCrudController extends CrudController
             'type' => 'select_from_array',
             'options' => [1 => 'Nacional', 2 => 'Extrajera']
           ],
-          ['name' => 'address', 'label' => 'Direccion', 'type' => 'textarea'],
-          ['name' => 'abbreviation', 'label' => 'Abreviacion', 'type' => 'text']
+          ['name' => 'address', 'label' => 'Dirección', 'type' => 'textarea'],
+          ['name' => 'abbreviation', 'label' => 'Abreviación', 'type' => 'text']
         ]);
         $this->crud->setColumns([
           ['name' => 'name', 'label' => 'Nombre', 'type' => 'text'],
@@ -65,8 +65,8 @@ class CollegeCrudController extends CrudController
             'type' => 'select_from_array',
             'options' => [1 => 'Nacional', 2 => 'Extrajera']
           ],
-          ['name' => 'abbreviation', 'label' => 'Abreviacion', 'type' => 'text'],
-          ['name' => 'address', 'label' => 'Direccion', 'type' => 'text', 'visibleInTable' => false]
+          ['name' => 'abbreviation', 'label' => 'Abreviación', 'type' => 'text'],
+          ['name' => 'address', 'label' => 'Dirección', 'type' => 'text', 'visibleInTable' => false]
         ]);
 
         $this->crud->addFilter([ // dropdown filter

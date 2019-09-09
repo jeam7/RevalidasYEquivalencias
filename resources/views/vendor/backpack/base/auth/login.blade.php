@@ -19,9 +19,9 @@
                                     <span class="help-block">
                                         <strong>
                                           @if ($errors->first($username) == 'validation.required')
-                                            Por favor, ingrese su cedula
+                                            Por favor, ingrese su cédula
                                           @else
-                                            Cedula o contraseña invalidos
+                                            Cédula o contraseña inválidos
                                           @endif
                                           {{-- {{ $errors->first($username) }} --}}
                                         </strong>

@@ -41,7 +41,7 @@ class RequestRequest extends FormRequest
                                         FROM users u
                                         JOIN requests r ON (r.user_id = u.id)
                                         JOIN request_has_status rhs ON (rhs.request_id = r.id)
-                                        WHERE r.career_origin_id = ? AND r.career_destination_id = ? AND u.id = ?
+                                        WHERE r.career_origin_id = ? AND r.career_destination_id = ? AND u.id = ? AND r.deleted_at IS NULL
                                         ORDER BY rhs.id DESC LIMIT 1',
                                         [$this->input('career_origin_id'), $this->input('career_destination_id'),  $this->input('user_id')]);
             $existRequest = ($existRequest) ? $existRequest[0]->id : NULL ;

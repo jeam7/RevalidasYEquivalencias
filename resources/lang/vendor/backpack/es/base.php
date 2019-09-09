@@ -47,7 +47,7 @@ return [
     'account_updated'        => 'Cuenta actualizada correctamente.',
     'unknown_error'          => 'Ha ocurrido un error. Por favor vuelva a intenter.',
     'error_saving'           => 'Error mientras se guardaba. Por favor vuelva a intenter.',
-    'confirm_email' => 'Introduzca su correo.',
+    'confirm_email' => 'Introduzca su correo',
     'choose_new_password' => 'Introduzca su nueva contraseña',
     'confirm_new_password' => 'Confirmar contraseña nueva',
     'password_reset' => [

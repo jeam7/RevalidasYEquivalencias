@@ -23,7 +23,7 @@ class MyRequest extends Model
     protected $fillable = [
       'user_id','career_origin_id','career_destination_id', 'origin',
       'others','info_others','pensum','notes','study_programs','title','copy_ci',
-      'ci_passport_copy','notes_legalized','study_program_legalized','cerification_category_college','certification_title_no_confered','translation'
+      'ci_passport_copy','notes_legalized','study_program_legalized','cerification_category_college','certification_title_no_confered','translation', 'date'
       ];
     // protected $hidden = [];
     // protected $dates = [];

@@ -25,7 +25,7 @@ class Academic_periodCrudController extends CrudController
         */
         $this->crud->setModel('App\Models\Academic_period');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/academic_period');
-        $this->crud->setEntityNameStrings('Periodo Academico', 'Periodos Academicos');
+        $this->crud->setEntityNameStrings('Período Académico', 'Períodos Académicos');
 
         /*
         |--------------------------------------------------------------------------
@@ -60,16 +60,16 @@ class Academic_periodCrudController extends CrudController
               return $query->orderBy('id', 'ASC')->get();
             })
           ],
-          ['name'=>'name', 'label'=>'Nombre periodo academico', 'type'=>'text'],
-          ['name'=>'info', 'label'=>'Descripcion', 'type'=>'textarea'],
+          ['name'=>'name', 'label'=>'Nombre período académico', 'type'=>'text'],
+          ['name'=>'info', 'label'=>'Descripción', 'type'=>'textarea'],
           ['name'=>'dean', 'label'=>'Decano', 'type'=>'text'],
-          ['name'=>'rep_sub_equi_one', 'label'=>'Primer representante de subcomision de equivalencias', 'type'=>'text'],
-          ['name'=>'rep_sub_equi_two', 'label'=>'Segundo representante de subcomision de equivalencias', 'type'=>'text'],
-          ['name'=>'rep_sub_equi_three', 'label'=>'Tercer representante de subcomision de equivalencias', 'type'=>'text'],
+          ['name'=>'rep_sub_equi_one', 'label'=>'Primer representante de Subcomisión de Equivalencias', 'type'=>'text'],
+          ['name'=>'rep_sub_equi_two', 'label'=>'Segundo representante de Subcomisión de Equivalencias', 'type'=>'text'],
+          ['name'=>'rep_sub_equi_three', 'label'=>'Tercer representante de Subcomisión de Equivalencias', 'type'=>'text'],
 
-          ['name'=>'rep_comi_equi_one', 'label'=>'Primer representante de comision de equivalencias', 'type'=>'text'],
-          ['name'=>'rep_comi_equi_two', 'label'=>'Segundo representante de comision de equivalencias', 'type'=>'text'],
-          ['name'=>'rep_comi_equi_three', 'label'=>'Tercer representante de comision de equivalencias', 'type'=>'text'],
+          ['name'=>'rep_comi_equi_one', 'label'=>'Primer representante de Comisión de Equivalencias', 'type'=>'text'],
+          ['name'=>'rep_comi_equi_two', 'label'=>'Segundo representante de Comisión de Equivalencias', 'type'=>'text'],
+          ['name'=>'rep_comi_equi_three', 'label'=>'Tercer representante de Comisión de Equivalencias', 'type'=>'text'],
         ]);
 
         $this->crud->setColumns([
@@ -88,16 +88,16 @@ class Academic_periodCrudController extends CrudController
                 });
             }
           ],
-          ['name'=>'name', 'label'=>'Nombre periodo academico', 'type'=>'text'],
+          ['name'=>'name', 'label'=>'Nombre período académico', 'type'=>'text'],
           ['name'=>'dean', 'label'=>'Decano', 'type'=>'text'],
-          ['name'=>'info', 'label'=>'Descripcion', 'type'=>'text', 'visibleInTable' => false],
-          ['name'=>'rep_sub_equi_one', 'label'=>'Primer representante de subcomision de equivalencias', 'type'=>'text', 'visibleInTable' => false],
-          ['name'=>'rep_sub_equi_two', 'label'=>'Segundo representante de subcomision de equivalencias', 'type'=>'text', 'visibleInTable' => false],
-          ['name'=>'rep_sub_equi_three', 'label'=>'Tercer representante de subcomision de equivalencias', 'type'=>'text', 'visibleInTable' => false],
+          ['name'=>'info', 'label'=>'Descripción', 'type'=>'text', 'visibleInTable' => false],
+          ['name'=>'rep_sub_equi_one', 'label'=>'Primer representante de Subcomisión de Equivalencias', 'type'=>'text', 'visibleInTable' => false],
+          ['name'=>'rep_sub_equi_two', 'label'=>'Segundo representante de Subcomisión de Equivalencias', 'type'=>'text', 'visibleInTable' => false],
+          ['name'=>'rep_sub_equi_three', 'label'=>'Tercer representante de Subcomisión de Equivalencias', 'type'=>'text', 'visibleInTable' => false],
 
-          ['name'=>'rep_comi_equi_one', 'label'=>'Primer representante de comision de equivalencias', 'type'=>'text', 'visibleInTable' => false],
-          ['name'=>'rep_comi_equi_two', 'label'=>'Segundo representante de comision de equivalencias', 'type'=>'text', 'visibleInTable' => false],
-          ['name'=>'rep_comi_equi_three', 'label'=>'Tercer representante de comision de equivalencias', 'type'=>'text', 'visibleInTable' => false]
+          ['name'=>'rep_comi_equi_one', 'label'=>'Primer representante de Comisión de Equivalencias', 'type'=>'text', 'visibleInTable' => false],
+          ['name'=>'rep_comi_equi_two', 'label'=>'Segundo representante de Comisión de Equivalencias', 'type'=>'text', 'visibleInTable' => false],
+          ['name'=>'rep_comi_equi_three', 'label'=>'Tercer representante de Comisión de Equivalencias', 'type'=>'text', 'visibleInTable' => false]
         ]);
 
         $this->crud->addFilter([

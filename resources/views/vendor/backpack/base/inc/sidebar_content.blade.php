@@ -13,7 +13,7 @@
   <li><a href='{{ backpack_url('school') }}'><i class='fa fa-tag'></i> <span>Escuelas</span></a></li>
   <li><a href='{{ backpack_url('career') }}'><i class='fa fa-tag'></i> <span>Carreras</span></a></li>
   <li><a href='{{ backpack_url('subject') }}'><i class='fa fa-tag'></i> <span>Asignaturas</span></a></li>
-  <li class="header">Administracion de usuarios</li>
+  <li class="header">Administración de usuarios</li>
   <li><a href='{{ backpack_url('user') }}'><i class='fa fa-tag'></i> <span>Usuarios</span></a></li>
 @elseif (backpack_user()->type_user == 2)
   <li class="header">Solicitudes / Comprobantes</li>
@@ -25,8 +25,8 @@
   <li><a href='{{ backpack_url('school') }}'><i class='fa fa-tag'></i> <span>Escuelas</span></a></li>
   <li><a href='{{ backpack_url('career') }}'><i class='fa fa-tag'></i> <span>Carreras</span></a></li>
   <li><a href='{{ backpack_url('subject') }}'><i class='fa fa-tag'></i> <span>Asignaturas</span></a></li>
-  <li><a href='{{ backpack_url('academic_period') }}'><i class='fa fa-tag'></i> <span>Periodo Academico</span></a></li>
-  <li class="header">Administracion de usuarios</li>
+  <li><a href='{{ backpack_url('academic_period') }}'><i class='fa fa-tag'></i> <span>Período Académico</span></a></li>
+  <li class="header">Administración de usuarios</li>
   <li><a href='{{ backpack_url('user') }}'><i class='fa fa-tag'></i> <span>Usuarios</span></a></li>
 @elseif (backpack_user()->type_user == 1)
   <li class="header">Solicitudes / Comprobantes</li>
@@ -38,8 +38,8 @@
   <li><a href='{{ backpack_url('school') }}'><i class='fa fa-tag'></i> <span>Escuelas</span></a></li>
   <li><a href='{{ backpack_url('career') }}'><i class='fa fa-tag'></i> <span>Carreras</span></a></li>
   <li><a href='{{ backpack_url('subject') }}'><i class='fa fa-tag'></i> <span>Asignaturas</span></a></li>
-  <li><a href='{{ backpack_url('academic_period') }}'><i class='fa fa-tag'></i> <span>Periodo Academico</span></a></li>
-  <li class="header">Administracion de usuarios</li>
+  <li><a href='{{ backpack_url('academic_period') }}'><i class='fa fa-tag'></i> <span>Período Académico</span></a></li>
+  <li class="header">Administración de usuarios</li>
   <li><a href='{{ backpack_url('user') }}'><i class='fa fa-tag'></i> <span>Usuarios</span></a></li>
 @endif
 

@@ -35,7 +35,7 @@ class MyRequestCrudController extends CrudController
         | CrudPanel Configuration
         |--------------------------------------------------------------------------
         */
-        
+
         $this->crud->addClause('where', 'user_id', '=', backpack_user()->id);
         $this->crud->denyAccess(['update','delete']);
         $this->crud->addFields([
@@ -211,16 +211,17 @@ class MyRequestCrudController extends CrudController
     {
         // dd($request->request);
         // your additional operations before save here
-
+          $today = Carbon::now();
           $origin = Career::find($request->request->get('career_origin_id'));
           $request->request->set('origin', $origin->school->faculty->college->foreign);
           $request->request->set('user_id', backpack_user()->id);
+          $request->request->set('date', $today);
           // dd($request->request);
           $redirect_location = parent::storeCrud($request);
 
           $lastRequestId = Request::orderBy('created_at', 'desc')->first();
           $lastRequestId = $lastRequestId->id;
-          $today = Carbon::now();
+
           $insertStatus = DB::insert('INSERT INTO request_has_status VALUES (?, ?, ?, ?, ?)', [NULL, $lastRequestId, 1, $today, NULL]);
         // your additional operations after save here
         // use $this->data['entry'] or $this->crud->entry

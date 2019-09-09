@@ -57,7 +57,7 @@ class RequestCrudController extends CrudController
 
         $this->crud->addFields([
             ['name' => 'user_id',
-              'label' => "Cedula solicitante",
+              'label' => "Cédula solicitante",
               'type' => 'select2',
               'entity' => 'user',
               'attribute' => 'user_fullname',
@@ -99,7 +99,7 @@ class RequestCrudController extends CrudController
 
         $this->crud->addFields([
           ['name' => 'user_id',
-            'label' => "Cedula solicitante",
+            'label' => "Cédula solicitante",
             'type' => 'select2',
             'entity' => 'user',
             'attribute' => 'user_fullname',
@@ -148,29 +148,29 @@ class RequestCrudController extends CrudController
             'attributes' => ['disabled' => 'disabled']
           ],
           ['name' => 'others', 'label' => 'Otros documentos entregados', 'type' => 'checkbox'],
-          ['name' => 'info_others', 'label' => 'Descripcion de otros documentos entregados', 'type' => 'textarea'],
+          ['name' => 'info_others', 'label' => 'Descripción de otros documentos entregados', 'type' => 'textarea'],
           ['name' => 'pensum', 'label' => 'Pensum', 'type' => 'checkbox'],
-          ['name' => 'notes', 'label' => 'Certificacion de notas (original)', 'type' => 'checkbox'],
+          ['name' => 'notes', 'label' => 'Certificación de notas (original)', 'type' => 'checkbox'],
           ['name' => 'study_programs', 'label' => 'Programas de estudios (autenticados)', 'type' => 'checkbox'],
-          ['name' => 'title', 'label' => 'Si es egresado universitario, copia del titulo', 'type' => 'checkbox'],
-          ['name' => 'copy_ci', 'label' => 'Fotocopia de la cedula de identidad', 'type' => 'checkbox'],
-          ['name' => 'ci_passport_copy', 'label' => 'Cedula de identidad o pasaporte (fotocopia)', 'type' => 'checkbox'],
-          ['name' => 'notes_legalized', 'label' => 'Certificacion de notas, legalizadas por las autoridades competentes (original y copia)', 'type' => 'checkbox'],
+          ['name' => 'title', 'label' => 'Si es egresado universitario, copia del título', 'type' => 'checkbox'],
+          ['name' => 'copy_ci', 'label' => 'Fotocopia de la cédula de identidad', 'type' => 'checkbox'],
+          ['name' => 'ci_passport_copy', 'label' => 'Cédula de identidad o pasaporte (fotocopia)', 'type' => 'checkbox'],
+          ['name' => 'notes_legalized', 'label' => 'Certificación de notas, legalizadas por las autoridades competentes (original y copia)', 'type' => 'checkbox'],
           ['name' => 'study_program_legalized', 'label' => 'Programas de estudios (originales, legalizados)', 'type' => 'checkbox'],
-          ['name' => 'cerification_category_college', 'label' => 'Certificacion de la categoria universitaria del instituto de procedencia (oficialmente reconocida por las autoridades del pais de origen)', 'type' => 'checkbox'],
-          ['name' => 'certification_title_no_confered', 'label' => 'Certificacion en donde conste que no le ha sido conferido el titulo correspondiente (En caso de haber aprobado todos los anos de estudio sin obtener el titulo)', 'type' => 'checkbox'],
-          ['name' => 'translation', 'label' => 'Traduccion al castellano por interprete publico autorizado, en caso de estar la documentacion en idioma extranjero (original y fotocopia)', 'type' => 'checkbox'],
+          ['name' => 'cerification_category_college', 'label' => 'Certificación de la categoría universitaria del instituto de procedencia (oficialmente reconocida por las autoridades del país de origen)', 'type' => 'checkbox'],
+          ['name' => 'certification_title_no_confered', 'label' => 'Certificación en donde conste que no le ha sido conferido el título correspondiente (En caso de haber aprobado todos los años de estudio sin obtener el título)', 'type' => 'checkbox'],
+          ['name' => 'translation', 'label' => 'Traducción al castellano por interprete píblico autorizado, en caso de estar la documentación en idioma extranjero (original y fotocopia)', 'type' => 'checkbox'],
           ['name'=>'last_status', 'type' => 'text_custom', 'label' => 'Estatus actual'],
           [ 'name' => 'estatus',
             'label' => "Estatus",
             'type' => 'select_from_array',
             'options' => [
               2 => 'Devuelta por falta de documentos',
-              3 => 'Enviada a la comision de revalidas y equivalencias',
-              4 => 'Enviada de la subcomision de revalidas y equivalencias',
-              5 => 'Enviada al consejo de facultad',
-              6 => 'Recibida por la direccion de revalidas y equivalencias',
-              7 => 'Enviada al consejo universitario',
+              3 => 'Enviada a la Comisión de Reválidas y Equivalencias',
+              4 => 'Enviada de la Subcomisión de Reválidas y Equivalencias',
+              5 => 'Enviada al Consejo de Facultad',
+              6 => 'Recibida por la Dirección de Reválidas y Equivalencias',
+              7 => 'Enviada al Consejo Universitario',
               8 => 'Procesada'
             ],
             'allows_null' => true
@@ -187,7 +187,7 @@ class RequestCrudController extends CrudController
             },
           ],
           ['name' => 'user_id',
-            'label' => "Cedula solicitante",
+            'label' => "Cédula solicitante",
             'type' => 'select',
             'entity' => 'user',
             'attribute' => 'ci',
@@ -254,22 +254,22 @@ class RequestCrudController extends CrudController
             }
           ],
           ['name' => 'others', 'label' => 'Otros documentos entregados', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
-          ['name' => 'info_others', 'label' => 'Descripcion de otros documentos entregados', 'type' => 'textarea', 'visibleInTable' => false],
+          ['name' => 'info_others', 'label' => 'Descripción de otros documentos entregados', 'type' => 'textarea', 'visibleInTable' => false],
           ['name' => 'pensum', 'label' => 'Pensum', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
-          ['name' => 'notes', 'label' => 'Certificacion de notas (original)', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'notes', 'label' => 'Certificación de notas (original)', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
           ['name' => 'study_programs', 'label' => 'Programas de estudios (autenticados)', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
-          ['name' => 'title', 'label' => 'Si es egresado universitario, copia del titulo', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
-          ['name' => 'copy_ci', 'label' => 'Fotocopia de la cedula de identidad', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
-          ['name' => 'ci_passport_copy', 'label' => 'Cedula de identidad o pasaporte (fotocopia)', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
-          ['name' => 'notes_legalized', 'label' => 'Certificacion de notas, legalizadas por las autoridades competentes (original y copia)', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'title', 'label' => 'Si es egresado universitario, copia del título', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'copy_ci', 'label' => 'Fotocopia de la cédula de identidad', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'ci_passport_copy', 'label' => 'Cédula de identidad o pasaporte (fotocopia)', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
+          ['name' => 'notes_legalized', 'label' => 'Certificación de notas, legalizadas por las autoridades competentes (original y copia)', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
           ['name' => 'study_program_legalized', 'label' => 'Programas de estudios (originales, legalizados)', 'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
           ['name' => 'cerification_category_college',
-            'label' => 'Certificacion de la categoria universitaria del instituto de procedencia (oficialmente reconocida por las autoridades del pais de origen)',
+            'label' => 'Certificación de la categoría universitaria del instituto de procedencia (oficialmente reconocida por las autoridades del país de origen)',
             'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
           ['name' => 'certification_title_no_confered',
-            'label' => 'Certificacion en donde conste que no le ha sido conferido el titulo correspondiente (En caso de haber aprobado todos los anos de estudio sin obtener el titulo)',
+            'label' => 'Certificación en donde conste que no le ha sido conferido el título correspondiente (En caso de haber aprobado todos los años de estudio sin obtener el título)',
             'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
-          ['name' => 'translation', 'label' => 'Traduccion al castellano por interprete publico autorizado, en caso de estar la documentacion en idioma extranjero (original y fotocopia)',
+          ['name' => 'translation', 'label' => 'Traducción al castellano por interprete público autorizado, en caso de estar la documentación en idioma extranjero (original y fotocopia)',
             'type' => 'select_from_array', 'options' =>[1 => 'Si', 0=> "No"], 'visibleInTable' => false],
           ['name'=>'last_status', 'type' => 'text_custom', 'label' => 'Estatus actual', 'visibleInTable' => false]
         ]);
@@ -278,7 +278,7 @@ class RequestCrudController extends CrudController
         $this->crud->addFilter([
             'type' => 'text',
             'name' => 'id',
-            'label'=> 'Numero solicitud'
+            'label'=> 'Número solicitud'
           ],
           false,
           function($value) {
@@ -289,7 +289,7 @@ class RequestCrudController extends CrudController
         $this->crud->addFilter([
             'type' => 'text',
             'name' => 'ci',
-            'label'=> 'Cedula'
+            'label'=> 'Cédula'
           ],
           false,
           function($value) {

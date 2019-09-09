@@ -58,7 +58,7 @@ class VoucherCrudController extends CrudController
 
         $this->crud->addFields([
             ['name' => 'request_id',
-              'label' => "Numero de solicitud",
+              'label' => "Número de solicitud",
               'type' => 'select2',
               'entity' => 'request',
               'attribute' => 'data_request',
@@ -79,7 +79,7 @@ class VoucherCrudController extends CrudController
 
         $this->crud->addFields([
             ['name' => 'request_id',
-              'label' => "Numero de solicitud",
+              'label' => "Número de solicitud",
               'type' => 'select2',
               'entity' => 'request',
               'attribute' => 'data_request',
@@ -90,22 +90,14 @@ class VoucherCrudController extends CrudController
               'attributes' => ['disabled' => 'disabled']
             ],
             ['name' => 'observations', 'label' => 'Observaciones', 'type'=>'textarea'],
-            ['name' => 'date_subcomi_eq', 'label' => 'Fecha subcomision de equivalencias', 'type'=>'date_picker',
+            ['name' => 'date_subcomi_eq', 'label' => 'Fecha Subcomisión de Equivalencias', 'type'=>'date_picker',
             'date_picker_options' => [
               'todayBtn' => 'linked',
               'format' => 'yyyy-mm-dd',
               'language' => 'es'
               ]
             ],
-            ['name' => 'date_comi_eq', 'label' => 'Fecha comision de equivalencias', 'type'=>'date_picker',
-            'date_picker_options' => [
-              'todayBtn' => 'linked',
-              'format' => 'yyyy-mm-dd',
-              'language' => 'es'
-              ]
-            ],
-
-            ['name' => 'date_con_fac', 'label' => 'Fecha consejo de facultad', 'type'=>'date_picker',
+            ['name' => 'date_comi_eq', 'label' => 'Fecha Comisión de Equivalencias', 'type'=>'date_picker',
             'date_picker_options' => [
               'todayBtn' => 'linked',
               'format' => 'yyyy-mm-dd',
@@ -113,7 +105,15 @@ class VoucherCrudController extends CrudController
               ]
             ],
 
-            ['name' => 'date_con_univ', 'label' => 'Fecha consejo universitario', 'type'=>'date_picker',
+            ['name' => 'date_con_fac', 'label' => 'Fecha Consejo de Facultad', 'type'=>'date_picker',
+            'date_picker_options' => [
+              'todayBtn' => 'linked',
+              'format' => 'yyyy-mm-dd',
+              'language' => 'es'
+              ]
+            ],
+
+            ['name' => 'date_con_univ', 'label' => 'Fecha Consejo Universitario', 'type'=>'date_picker',
             'date_picker_options' => [
               'todayBtn' => 'linked',
               'format' => 'yyyy-mm-dd',
@@ -124,14 +124,14 @@ class VoucherCrudController extends CrudController
 
         $this->crud->setColumns([
             ['name' => 'id',
-              'label' => 'Numero de comprobante',
+              'label' => 'Número de comprobante',
               'type'=>'text',
               'searchLogic' => function ($query, $column, $searchTerm) {
                     $query->orWhere('vouchers.id', 'like', '%'.$searchTerm.'%');
                 },
             ],
             ['name' => 'request_id',
-              'label' => "Numero de solicitud",
+              'label' => "Número de solicitud",
               'type' => 'select',
               'entity' => 'request',
               'attribute' => 'id',
@@ -141,7 +141,7 @@ class VoucherCrudController extends CrudController
               })
             ],
             ['name' => 'user_ci',
-              'label' => 'Cedula solicitante',
+              'label' => 'Cédula solicitante',
               'type'=>'text',
               'searchLogic' => function ($query, $column, $searchTerm) {
                   $query->orWhereHas('request', function ($q) use ($column, $searchTerm) {
@@ -190,16 +190,16 @@ class VoucherCrudController extends CrudController
               },
               'limit'=>500
             ],
-            ['name' => 'date_subcomi_eq', 'label' => 'Fecha subcomision de equivalencias', 'type'=>'date', 'visibleInTable' => false],
-            ['name' => 'date_comi_eq', 'label' => 'Fecha comision de equivalencias', 'type'=>'date', 'visibleInTable' => false],
-            ['name' => 'date_con_fac', 'label' => 'Fecha consejo de facultad', 'type'=>'date', 'visibleInTable' => false],
-            ['name' => 'date_con_univ', 'label' => 'Fecha consejo universitario', 'type'=>'date', 'visibleInTable' => false]
+            ['name' => 'date_subcomi_eq', 'label' => 'Fecha Subcomisión de Equivalencias', 'type'=>'date', 'visibleInTable' => false],
+            ['name' => 'date_comi_eq', 'label' => 'Fecha Comisión de Equivalencias', 'type'=>'date', 'visibleInTable' => false],
+            ['name' => 'date_con_fac', 'label' => 'Fecha Consejo de Facultad', 'type'=>'date', 'visibleInTable' => false],
+            ['name' => 'date_con_univ', 'label' => 'Fecha Consejo Universitario', 'type'=>'date', 'visibleInTable' => false]
         ]);
 
         $this->crud->addFilter([
             'type' => 'text',
             'name' => 'id',
-            'label'=> 'Numero comprobante'
+            'label'=> 'Número comprobante'
           ],
           false,
           function($value) {
@@ -210,7 +210,7 @@ class VoucherCrudController extends CrudController
         $this->crud->addFilter([
             'type' => 'text',
             'name' => 'requestid',
-            'label'=> 'Numero solicitud'
+            'label'=> 'Número solicitud'
           ],
           false,
           function($value) {
@@ -221,7 +221,7 @@ class VoucherCrudController extends CrudController
         $this->crud->addFilter([
             'type' => 'text',
             'name' => 'userci',
-            'label'=> 'Cedula'
+            'label'=> 'Cédula'
           ],
           false,
           function($value) {

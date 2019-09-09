@@ -91,7 +91,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('gender') ? ' has-error' : '' }}">
-                            <label class="control-label">Genero</label>
+                            <label class="control-label">Género</label>
                             <div>
                                 {{-- <input type="text" class="form-control" name="gender" value="{{ old('gender') }}"> --}}
                                 <select class="form-control" name="gender">
@@ -107,7 +107,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
-                            <label class="control-label">Direccion</label>
+                            <label class="control-label">Dirección</label>
                             <div>
                                 <input type="text" class="form-control" name="address" value="{{ old('address') }}">
                                 @if ($errors->has('address'))
@@ -119,7 +119,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
-                            <label class="control-label">Telefono</label>
+                            <label class="control-label">Teléfono</label>
                             <div>
                                 <input type="text" class="form-control" name="phone" value="{{ old('phone') }}">
                                 @if ($errors->has('phone'))
@@ -131,7 +131,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label class="control-label">Email</label>
+                            <label class="control-label">Correo</label>
                             <div>
                                 <input type="text" class="form-control" name="email" value="{{ old('email') }}">
 
