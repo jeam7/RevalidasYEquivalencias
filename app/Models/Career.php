@@ -24,6 +24,7 @@ class Career extends Model
     // protected $hidden = [];
     protected $dates = ['deleted_at'];
     protected $cascadeDeletes = ['subject'];
+    protected $appends = ['college_name'];
 
     /*
     |--------------------------------------------------------------------------
@@ -52,18 +53,6 @@ class Career extends Model
       return $this->hasMany('App\Models\Request');
     }
 
-    // public static function boot()
-    // {
-    //     parent::boot();
-    //
-    //     // cause a delete of a product to cascade to children so they are also deleted
-    //     static::deleted(function($career)
-    //     {
-    //         $career->subject()->delete();
-    //         $career->request_origin()->delete();
-    //         $career->request_destination()->delete();
-    //     });
-    // }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -79,22 +68,39 @@ class Career extends Model
     | ACCESORS
     |--------------------------------------------------------------------------
     */
-    public function getCareerSchoolAttribute($value) {
-      $foreignValue = ($this->school->faculty->college->foreign == 1 ) ? 'Nacional' : 'Extranjera' ;
-       return $this->name.' - '.$this->school->name.'-'.$this->school->faculty->name.' - '.$this->school->faculty->college->name.' - '.$foreignValue;
+    // public function getCareerSchoolAttribute($value) {
+    //   $foreignValue = ($this->school->faculty->college->foreign == 1 ) ? 'Nacional' : 'Extranjera' ;
+    //    return $this->name.' - '.$this->school->name.'-'.$this->school->faculty->name.' - '.$this->school->faculty->college->name.' - '.$foreignValue;
+    // }
+    //
+    // public function getCollegeAttribute($value) {
+    //    return $this->school->faculty->college->name;
+    // }
+    //
+    // public function getCollegeFacultyAttribute($value) {
+    //    return $this->school->faculty->college->name .' - '. $this->name;
+    // }
+    //
+    // public function getCareerFacultyCollegeAttribute($value) {
+    //   $foreignValue = ($this->school->faculty->college->foreign == 1 ) ? 'Nacional' : 'Extranjera' ;
+    //    return $this->name.' - '.$this->school->faculty->name.' - '.$this->school->faculty->college->name.' - '.$foreignValue;
+    // }
+
+    // public function getTestTestAttribute($value) {
+    //    return $this->name;
+    // }
+
+    public function getCollegeNameAttribute($value) {
+       $foreignValue = ($this->school->college->foreign == 1 ) ? 'Nacional' : 'Extranjera' ;
+       return $this->school->college->name . ' - ' . $foreignValue;
     }
 
-    public function getCollegeAttribute($value) {
-       return $this->school->faculty->college->name;
+    public function getFacultyNameAttribute($value) {
+       return $this->school->faculty ? $this->school->faculty->name : 'No aplica';
     }
 
-    public function getCollegeFacultyAttribute($value) {
-       return $this->school->faculty->college->name .' - '. $this->name;
-    }
-
-    public function getCareerFacultyCollegeAttribute($value) {
-      $foreignValue = ($this->school->faculty->college->foreign == 1 ) ? 'Nacional' : 'Extranjera' ;
-       return $this->name.' - '.$this->school->faculty->name.' - '.$this->school->faculty->college->name.' - '.$foreignValue;
+    public function getSchoolNameAttribute($value) {
+       return $this->school->name;
     }
     /*
     |--------------------------------------------------------------------------

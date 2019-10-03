@@ -105,7 +105,7 @@ img {
 .header {
     padding: 25px 0;
     text-align: center;
-    background-color: #57549C;
+    background-color: #161966;
 }
 
 .header a {
@@ -220,11 +220,11 @@ img {
 }
 
 .button-custom {
-  background-color: #57549C;
-  border-top: 10px solid #57549C;
-  border-right: 18px solid #57549C;
-  border-bottom: 10px solid #57549C;
-  border-left: 18px solid #57549C;
+  background-color: #161966;
+  border-top: 10px solid #161966;
+  border-right: 18px solid #161966;
+  border-bottom: 10px solid #161966;
+  border-left: 18px solid #161966;
 }
 
 .button-blue,

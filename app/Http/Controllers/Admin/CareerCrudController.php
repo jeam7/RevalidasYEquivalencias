@@ -8,7 +8,11 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\CareerRequest as StoreRequest;
 use App\Http\Requests\CareerRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
-
+use Illuminate\Support\Facades\Input;
+use App\Models\Career;
+use App\Models\School;
+use App\Models\Faculty;
+use App\Models\College;
 /**
  * Class CareerCrudController
  * @package App\Http\Controllers\Admin
@@ -32,17 +36,34 @@ class CareerCrudController extends CrudController
         | CrudPanel Configuration
         |--------------------------------------------------------------------------
         */
+        $this->crud->setShowView('showCareer');
+        $this->crud->addButtonFromView('line', '', 'botonAnadirAsignatura', 'bottom');
+
+        $school_from = Input::get('school_from');
+        if ($school_from != null) {
+          $current = School::find($school_from);
+          $currentSchool = $current ? $current->toArray()['id'] : NULL;
+          $currentFaculty = $current ? $current->toArray()['faculty_id'] : NULL;
+          $currentCollege = $current ? $current->toArray()['college_id'] : NULL;
+        }else{
+          $school_from = \Route::current()->parameter('career');
+          $aux = Career::find($school_from);
+          $current = $aux ? School::find($aux->school_id) : NULL;
+          $currentSchool = $current ? $current->id : NULL;
+          $currentFaculty = $current ? $current->faculty_id : NULL;
+          $currentCollege = $current ? $current->college_id : NULL;
+        }
 
         $this->crud->denyAccess(['create', 'update', 'delete', 'list', 'show']);
         switch (backpack_user()->type_user) {
           case 1:
-            $this->crud->allowAccess(['create', 'list', 'update', 'delete']);
+            $this->crud->allowAccess(['create', 'list', 'update', 'delete', 'show']);
             break;
           case 2:
-            $this->crud->allowAccess(['create', 'list', 'update']);
+            $this->crud->allowAccess(['create', 'list', 'update', 'show']);
             break;
           case 3:
-            $this->crud->allowAccess(['create', 'list']);
+            $this->crud->allowAccess(['create', 'list', 'update','show']);
             break;
           default:
             break;
@@ -50,73 +71,151 @@ class CareerCrudController extends CrudController
 
         $this->crud->addFields([
           ['name'=>'name', 'label'=>'Nombre', 'type'=>'text'],
-          [ 'name' => 'school_id', // the db column for the foreign key
-            'label' => "Escuela",
-            'type' => 'select2',
-            'entity' => 'school', // the method that defines the relationship in your Model
-            'attribute' => 'school_faculty', // foreign key attribute that is shown to user
-            'model' => "App\Models\School",
-            'options'   => (function ($query) {
-              return $query->orderBy('id', 'ASC')->get();
-            })
+          //
+          [
+              'name' => 'college_id',
+              'label' => "Universidad",
+              'type' => 'select2_from_array',
+              'options' => College::all()->pluck('name', 'id'),
+              'allows_null' => false,
+              'default' => $currentCollege
           ],
+          //
+          [
+              'name' => 'faculty_id',
+              'label' => "Facultad",
+              'type' => 'select2_from_ajax_custom',
+              'data_source' => url("/admin/api/faculty"),
+              'placeholder' => '',
+              'minimum_input_length' => 0,
+              'method' => 'POST',
+              'dependencies' => ['college_id'],
+              'model' => 'App\Models\Faculty',
+              'allows_null' => true,
+              'default' => $currentFaculty,
+              'attribute' => 'name',
+              'entity' => 'School'
+          ],
+          //
+          [
+              'name' => 'school_id',
+              'label' => "Escuela",
+              'type' => 'select2_from_ajax_custom',
+              'data_source' => url("/admin/api/school"),
+              'placeholder' => '',
+              'minimum_input_length' => 0,
+              'method' => 'POST',
+              'dependencies' => ['college_id'],
+              'model' => 'App\Models\School',
+              'default' => $currentSchool,
+              'attribute' => 'name',
+              'entity' => 'school'
+          ]
         ]);
 
         $this->crud->setColumns([
-          ['name'=>'name', 'label'=>'Nombre', 'type'=>'text'],
-          [ 'name' => 'school_id', // the db column for the foreign key
+          ['name'=>'name',
+            'label'=>'Nombre',
+            'type'=>'text',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('school', function ($q) use ($column, $searchTerm) {
+                    $q->where('careers.name', 'like', '%'.$searchTerm.'%');
+                });
+            }
+          ],
+          //
+          ['name'=>'college_name',
+            'label'=>'Universidad',
+            'type'=>'text',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('school', function ($q) use ($column, $searchTerm) {
+                    $q->join('colleges as csl', 'csl.id', '=', 'schools.college_id')
+                      ->where('csl.name', 'like', '%'.$searchTerm.'%');
+                });
+            }
+          ],
+          //
+          ['name'=>'faculty_name',
+            'label'=>'Facultad',
+            'type'=>'text',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('school', function ($q) use ($column, $searchTerm) {
+                    $q->join('faculties as fsl', 'fsl.id', '=', 'schools.faculty_id')
+                      ->where('fsl.name', 'like', '%'.$searchTerm.'%');
+                });
+            }
+          ],
+          //
+          [ 'name' => 'school_id',
             'label' => "Escuela",
             'type' => 'select',
-            'entity' => 'school', // the method that defines the relationship in your Model
-            'attribute' => 'school_faculty', // foreign key attribute that is shown to user
+            'entity' => 'school',
+            'attribute' => 'name',
             'model' => "App\Models\School",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
             }),
             'searchLogic' => function ($query, $column, $searchTerm) {
                 $query->orWhereHas('school', function ($q) use ($column, $searchTerm) {
-                    $q->where('name', 'like', '%'.$searchTerm.'%');
+                    $q->where('schools.name', 'like', '%'.$searchTerm.'%');
                 });
             }
-          ],
+          ]
         ]);
 
         $this->crud->addFilter([
             'type' => 'select2',
-            'name' => 'school_id',
-            'label'=> 'Escuela'
+            'name' => 'college_id',
+            'label'=> 'Universidad',
+            'placeholder' => 'Seleccione una Universidad'
           ],
           function(){
-            return \App\Models\School::all()->pluck('name', 'id')->toArray();
+            return College::all()->pluck('name', 'id')->toArray();
           },
           function($value) {
-              $this->crud->addClause('where', 'school_id', '=', $value);
+              $this->crud->query = $this->crud->query->select('careers.*')
+                                                    ->join('schools as sfc', 'sfc.id', '=', 'careers.school_id')
+                                                    ->where('sfc.college_id', '=', $value);
           }
         );
+        //
+        $this->crud->addFilter([
+          'name' => 'faculty_id',
+          'type' => 'select2_ajax_faculty',
+          'label'=> 'Facultad',
+          'placeholder' => 'Seleccione una Facultad'
+        ],
+        url('admin/api/facultyFilterAjax'),
+        function($value) {
+          $this->crud->query = $this->crud->query->select('careers.*')
+                                                ->join('schools as sff', 'sff.id', '=', 'careers.school_id')
+                                                ->where('sff.faculty_id', '=', $value);
+        });
 
-        // TODO: remove setFromDb() and manually define Fields and Columns
-        // $this->crud->setFromDb();
+        $this->crud->addFilter([
+          'name' => 'school_id',
+          'type' => 'select2_ajax_school',
+          'label'=> 'Escuela',
+          'placeholder' => 'Seleccione una Escuela'
+        ],
+        url('admin/api/schoolFilterAjax'),
+        function($value) {
+            $this->crud->addClause('where', 'school_id', '=', $value);
+        });
 
-        // add asterisk for fields that are required in CareerRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
     }
 
     public function store(StoreRequest $request)
     {
-        // your additional operations before save here
         $redirect_location = parent::storeCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
     }
 
     public function update(UpdateRequest $request)
     {
-        // your additional operations before save here
         $redirect_location = parent::updateCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
     }
 }

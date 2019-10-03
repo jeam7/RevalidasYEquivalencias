@@ -30,9 +30,7 @@ class CollegeRequest extends FormRequest
             'name' => ['required',
                         'min:10',
                         'max:100',
-                        Rule::unique('colleges')->where(function ($query) {
-                                  return $query->where('foreign', $this->input('foreign'));
-                                })
+                        Rule::unique('colleges')->ignore($this->input('id'))
                       ],
             'address' => 'required',
             'abbreviation' => 'required|min:2'
@@ -59,15 +57,13 @@ class CollegeRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Por favor, ingrese el nombre de la universidad',
-            'name.min' => 'El nombre de la universidad debe tener minimo 10 caracteres',
-            'name.max' => 'El nombre de la universidad debe tener maximo 100 caracteres',
-            'name.unique' => 'Esta universidad ya se encuentra registrada',
-
-            'address.required' => 'Por favor, ingrese la direccion de la universidad',
-
-            'abbreviation.required' => 'Por favor, ingrese la abreviacion de la universidad',
-            'abbreviation.min' => 'La abreviacion de la universidad debe tener minimo 2 caracteres'
+            'name.required' => 'Por favor, ingrese el nombre de la Universidad',
+            'name.min' => 'El nombre de la Universidad debe tener mínimo 10 caracteres',
+            'name.max' => 'El nombre de la Universidad debe tener máximo 100 caracteres',
+            'name.unique' => 'Esta Universidad ya se encuentra registrada',
+            'address.required' => 'Por favor, ingrese la dirección de la Universidad',
+            'abbreviation.required' => 'Por favor, ingrese la abreviación de la Universidad',
+            'abbreviation.min' => 'La abreviación de la Universidad debe tener mínimo 2 caracteres'
         ];
     }
 }

@@ -6,7 +6,7 @@
 
 .form-group.required label:not(:empty)::after {
     content: ' *';
-    color: #ff0000;
+    color: #e6141f;
 }
 
 .tab-container .nav-tabs-custom {

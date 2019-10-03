@@ -144,7 +144,8 @@
 	.pagination>li>a:hover,
 	.pagination>li>span:focus,
 	.pagination>li>span:hover {
-	  background: white;
+	  background: #2e306d;
+		color:white;
 	}
 
 	.pagination>li:last-child>a, .pagination>li:last-child>span,

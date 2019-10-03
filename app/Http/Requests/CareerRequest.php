@@ -32,7 +32,7 @@ class CareerRequest extends FormRequest
                         'max:50',
                         Rule::unique('careers')->where(function ($query) {
                                   return $query->where('school_id', $this->input('school_id'));
-                                })
+                                })->ignore($this->input('id'))
                       ],
             'school_id' => 'required'
       ];
@@ -58,12 +58,11 @@ class CareerRequest extends FormRequest
     public function messages()
     {
       return [
-          'name.required' => 'Por favor, ingrese el nombre de la carrera',
-          'name.min' => 'El nombre de la carrera debe tener minimo 5 caracteres',
-          'name.max' => 'El nombre de la carrera debe tener maximo 50 caracteres',
-          'name.unique' => 'El nombre de esta carrera ya se encuentra registrado para la escuela seleccionada',
-
-          'school_id.required' => 'Por favor, ingrese la escuela a la que pertenece la carrera'
+          'name.required' => 'Por favor, ingrese el nombre de la Carrera',
+          'name.min' => 'El nombre de la Carrera debe tener mínimo 5 caracteres',
+          'name.max' => 'El nombre de la Carrera debe tener máximo 50 caracteres',
+          'name.unique' => 'El nombre de esta Carrera ya se encuentra registrado para la Escuela seleccionada',
+          'school_id.required' => 'Por favor, ingrese la Escuela a la que pertenece la Carrera'
       ];
     }
 }

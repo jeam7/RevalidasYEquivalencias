@@ -32,8 +32,10 @@ class CollegeCrudController extends CrudController
         | CrudPanel Configuration
         |--------------------------------------------------------------------------
         */
-        $this->crud->denyAccess(['create', 'update', 'delete', 'list', 'show']);
+        $this->crud->setShowView('showCollege');
+        $this->crud->addButtonFromView('line', '', 'botonAnadirFacultad', 'bottom');
 
+        $this->crud->denyAccess(['create', 'update', 'delete', 'list', 'show']);
         switch (backpack_user()->type_user) {
           case 1:
             $this->crud->allowAccess(['create', 'list', 'update', 'delete', 'show']);
@@ -42,7 +44,7 @@ class CollegeCrudController extends CrudController
             $this->crud->allowAccess(['create', 'list', 'update', 'show' ]);
             break;
           case 3:
-            $this->crud->allowAccess(['create', 'list', 'show']);
+            $this->crud->allowAccess(['create', 'list', 'update', 'show' ]);
             break;
           default:
             break;
@@ -50,59 +52,57 @@ class CollegeCrudController extends CrudController
 
         $this->crud->addFields([
           ['name' => 'name', 'label' => 'Nombre', 'type' => 'text'],
+          //
           ['name' => 'foreign',
             'label' => 'Nacional o extranjera',
             'type' => 'select_from_array',
             'options' => [1 => 'Nacional', 2 => 'Extrajera']
           ],
+          //
           ['name' => 'address', 'label' => 'Dirección', 'type' => 'textarea'],
+          //
           ['name' => 'abbreviation', 'label' => 'Abreviación', 'type' => 'text']
         ]);
+
         $this->crud->setColumns([
           ['name' => 'name', 'label' => 'Nombre', 'type' => 'text'],
+          //
           ['name' => 'foreign',
             'label' => 'Nacional o extranjera',
             'type' => 'select_from_array',
             'options' => [1 => 'Nacional', 2 => 'Extrajera']
           ],
+          //
           ['name' => 'abbreviation', 'label' => 'Abreviación', 'type' => 'text'],
+          //
           ['name' => 'address', 'label' => 'Dirección', 'type' => 'text', 'visibleInTable' => false]
         ]);
 
-        $this->crud->addFilter([ // dropdown filter
+        $this->crud->addFilter([
           'name' => 'foreign',
           'type' => 'dropdown',
           'label'=> 'Nacional o extranjera'
         ], [
           1 => 'Nacional',
           2 => 'Extranjera'
-        ], function($value) { // if the filter is active
+        ], function($value) {
             $this->crud->addClause('where', 'foreign', $value);
         });
 
-        // TODO: remove setFromDb() and manually define Fields and Columns
-        // $this->crud->setFromDb();
-
-        // add asterisk for fields that are required in CollegeRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
+
     }
 
     public function store(StoreRequest $request)
     {
-        // your additional operations before save here
         $redirect_location = parent::storeCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
     }
 
     public function update(UpdateRequest $request)
     {
-        // your additional operations before save here
         $redirect_location = parent::updateCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
     }
 }

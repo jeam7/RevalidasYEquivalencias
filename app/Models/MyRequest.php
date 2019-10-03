@@ -55,10 +55,6 @@ class MyRequest extends Model
       return $this->belongsTo('App\Models\Voucher');
     }
 
-
-    // public function request_status(){
-    //     return $this->belongsToMany('App\Models\RequestStatus','request_has_status')->withPivot('request_status_id','create_at');
-    // }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -83,6 +79,16 @@ class MyRequest extends Model
     public function getDataRequestAttribute($value)
     {
       return $this->id . ' - ' . $this->user->ci  . ' - ' . $this->user->first_name . ' ' . $this->user->last_name . ' - ' . $this->career_origin->name . ' - ' . $this->career_destination->name;
+    }
+
+    public function getCollegeCareerOriginAttribute($value)
+    {
+      return $this->career_origin->school->college->name . ' - ' . $this->career_origin->name;
+    }
+
+    public function getCollegeCareerDestinationAttribute($value)
+    {
+      return $this->career_destination->school->college->name . ' - ' . $this->career_destination->name;
     }
     /*
     |--------------------------------------------------------------------------

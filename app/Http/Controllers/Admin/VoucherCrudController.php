@@ -369,7 +369,7 @@ class VoucherCrudController extends CrudController
 
     public function getEquivalentSubject($id){
       $skip = DB::select('SET SESSION sql_mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"');
-      $equivalents = DB::select('SELECT es.id id, es.voucher_id voucherId, s.id subjectId, s.name subjectName, s.credits subjectsCredits,
+      $equivalents = DB::select('SELECT es.id id, es.voucher_id voucherId, s.code subjectId, s.name subjectName, s.credits subjectsCredits,
 			                           group_concat(s2.code SEPARATOR ",") subjectEquivalentId, group_concat(s2.name SEPARATOR ",") subjectEquivalentName
                                  FROM equivalent_subjects es
                                  JOIN subjects s ON (s.id = es.subject_a_id)

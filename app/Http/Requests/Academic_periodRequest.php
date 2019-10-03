@@ -58,38 +58,38 @@ class Academic_periodRequest extends FormRequest
     public function messages()
     {
         return [
-            'faculty_id.required' => 'Por favor, ingrese la facultad del periodo academico',
-            'name.required' => 'Por favor, ingrese el nombre del periodo academico',
-            'name.min' => 'El nombre del periodo academico debe contener minimo 5 caracteres',
-            'name.max' => 'El nombre del periodo academico debe contener maximo 7 caracteres',
+            'faculty_id.required' => 'Por favor, ingrese la Facultad del Período Académico',
+            'name.required' => 'Por favor, ingrese el nombre del Período Académico',
+            'name.min' => 'El nombre del Período Académico debe contener mínimo 5 caracteres',
+            'name.max' => 'El nombre del Período Académico debe contener máximo 7 caracteres',
 
-            'dean.required' => 'Por favor, ingrese el nombre del decano para el periodo academico',
-            'dean.min' => 'El nombre del decano debe contener minimo 10 caracteres',
-            'dean.max' => 'El nombre del decano debe contener maximo 100 caracteres',
+            'dean.required' => 'Por favor, ingrese el nombre del Decano para el Período Académico',
+            'dean.min' => 'El nombre del Decano debe contener mínimo 10 caracteres',
+            'dean.max' => 'El nombre del Decano debe contener máximo 100 caracteres',
 
-            'rep_sub_equi_one.required' => 'Por favor, ingrese el nombre del primer representante de la subcomision de equivalencias',
-            'rep_sub_equi_one.min' => 'El nombre del primer representante de la subcomision de equivalencias debe contener minimo 10 caracteres',
-            'rep_sub_equi_one.max' => 'El nombre del primer representante de la subcomision de equivalencias debe contener maximo 100 caracteres',
+            'rep_sub_equi_one.required' => 'Por favor, ingrese el nombre del primer representante de la Subcomisión de Equivalencias',
+            'rep_sub_equi_one.min' => 'El nombre del primer representante de la Subcomisión de Equivalencias debe contener mínimo 10 caracteres',
+            'rep_sub_equi_one.max' => 'El nombre del primer representante de la Subcomisión de Equivalencias debe contener máximo 100 caracteres',
 
-            'rep_sub_equi_two.required' => 'Por favor, ingrese el nombre del segundo representante de la subcomision de equivalencias',
-            'rep_sub_equi_two.min' => 'El nombre del segundo representante de la subcomision de equivalencias debe contener minimo 10 caracteres',
-            'rep_sub_equi_two.max' => 'El nombre del segundo representante de la subcomision de equivalencias debe contener maximo 100 caracteres',
+            'rep_sub_equi_two.required' => 'Por favor, ingrese el nombre del segundo representante de la Subcomisión de Equivalencias',
+            'rep_sub_equi_two.min' => 'El nombre del segundo representante de la Subcomisión de Equivalencias debe contener mínimo 10 caracteres',
+            'rep_sub_equi_two.max' => 'El nombre del segundo representante de la Subcomisión de Equivalencias debe contener máximo 100 caracteres',
 
-            'rep_sub_equi_three.required' => 'Por favor, ingrese el nombre del tercero representante de la subcomision de equivalencias',
-            'rep_sub_equi_three.min' => 'El nombre del tercero representante de la subcomision de equivalencias debe contener minimo 10 caracteres',
-            'rep_sub_equi_three.max' => 'El nombre del tercero representante de la subcomision de equivalencias debe contener maximo 100 caracteres',
+            'rep_sub_equi_three.required' => 'Por favor, ingrese el nombre del tercero representante de la Subcomisión de Equivalencias',
+            'rep_sub_equi_three.min' => 'El nombre del tercero representante de la Subcomisión de Equivalencias debe contener mínimo 10 caracteres',
+            'rep_sub_equi_three.max' => 'El nombre del tercero representante de la Subcomisión de Equivalencias debe contener máximo 100 caracteres',
 
-            'rep_comi_equi_one.required' => 'Por favor, ingrese el nombre del primer representante de la comision de equivalencias',
-            'rep_comi_equi_one.min' => 'El nombre del primer representante de la comision de equivalencias debe contener minimo 10 caracteres',
-            'rep_comi_equi_one.max' => 'El nombre del primer representante de la comision de equivalencias debe contener maximo 100 caracteres',
+            'rep_comi_equi_one.required' => 'Por favor, ingrese el nombre del primer representante de la Comisión de Equivalencias',
+            'rep_comi_equi_one.min' => 'El nombre del primer representante de la Comisión de Equivalencias debe contener mínimo 10 caracteres',
+            'rep_comi_equi_one.max' => 'El nombre del primer representante de la Comisión de Equivalencias debe contener máximo 100 caracteres',
 
-            'rep_comi_equi_two.required' => 'Por favor, ingrese el nombre del segundo representante de la comision de equivalencias',
-            'rep_comi_equi_two.min' => 'El nombre del segundo representante de la comision de equivalencias debe contener minimo 10 caracteres',
-            'rep_comi_equi_two.max' => 'El nombre del segundo representante de la comision de equivalencias debe contener maximo 100 caracteres',
+            'rep_comi_equi_two.required' => 'Por favor, ingrese el nombre del segundo representante de la Comisión de Equivalencias',
+            'rep_comi_equi_two.min' => 'El nombre del segundo representante de la Comisión de Equivalencias debe contener mínimo 10 caracteres',
+            'rep_comi_equi_two.max' => 'El nombre del segundo representante de la Comisión de Equivalencias debe contener máximo 100 caracteres',
 
-            'rep_comi_equi_three.required' => 'Por favor, ingrese el nombre del tercero representante de la comision de equivalencias',
-            'rep_comi_equi_three.min' => 'El nombre del tercero representante de la comision de equivalencias debe contener minimo 10 caracteres',
-            'rep_comi_equi_three.max' => 'El nombre del tercero representante de la comision de equivalencias debe contener maximo 100 caracteres'
+            'rep_comi_equi_three.required' => 'Por favor, ingrese el nombre del tercero representante de la Comisión de Equivalencias',
+            'rep_comi_equi_three.min' => 'El nombre del tercero representante de la Comisión de Equivalencias debe contener mínimo 10 caracteres',
+            'rep_comi_equi_three.max' => 'El nombre del tercero representante de la Comisión de Equivalencias debe contener máximo 100 caracteres'
         ];
     }
 }

@@ -22,7 +22,7 @@ class Faculty extends Model
     // public $timestamps = false;
     // protected $guarded = ['id'];
     protected $fillable = ['name', 'college_id'];
-    // protected $hidden = [];
+    protected $hidden = ['college_id'];
     protected $dates = ['deleted_at'];
     protected $cascadeDeletes = ['user', 'school', 'academic_period'];
     /*

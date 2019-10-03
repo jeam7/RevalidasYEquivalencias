@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class SchoolRequest extends FormRequest
 {
@@ -29,13 +30,26 @@ class SchoolRequest extends FormRequest
         return [
               'name' => ['required',
                           'min:5',
-                          'max:50',
-                          Rule::unique('schools')->where(function ($query) {
-                                    return $query->where('faculty_id', $this->input('faculty_id'));
-                                  })
+                          'max:50'
                         ],
-              'faculty_id' => 'required'
+              'college_id' => 'required'
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if (!$this->input('faculty_id')) {
+              $existSchool = DB::select('SELECT 1 FROM schools WHERE name = ? AND college_id = ?', [$this->input('name'), $this->input('college_id')]);
+            }else {
+              $existSchool = DB::select('SELECT 1 FROM schools WHERE name = ? AND college_id = ? AND faculty_id = ?',
+                                        [$this->input('name'), $this->input('college_id'), $this->input('faculty_id')]);
+            }
+
+            if ($existSchool) {
+              $validator->errors()->add('name', 'El nombre de esta Escuela ya se encuentra registrado para esta Universidad/Facultad');
+            }
+        });
     }
 
     /**
@@ -58,12 +72,10 @@ class SchoolRequest extends FormRequest
     public function messages()
     {
       return [
-          'name.required' => 'Por favor, ingrese el nombre de la escuela',
-          'name.min' => 'El nombre de la escuela debe tener minimo 5 caracteres',
-          'name.max' => 'El nombre de la escuela debe tener maximo 50 caracteres',
-          'name.unique' => 'El nombre de esta escuela ya se encuentra registrado para la facultad seleccionada',
-
-          'faculty_id.required' => 'Por favor, ingrese la facultad a la que pertenece la escuela'
+          'name.required' => 'Por favor, ingrese el nombre de la Escuela',
+          'name.min' => 'El nombre de la Escuela debe tener mínimo 5 caracteres',
+          'name.max' => 'El nombre de la Escuela debe tener máximo 50 caracteres',
+          'college_id.required' => 'Por favor, ingrese la Universidad a la que pertenece la Escuela'
       ];
     }
 }

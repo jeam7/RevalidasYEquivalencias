@@ -41,16 +41,10 @@ class College extends Model
         return $this->hasMany('App\Models\Faculty');
     }
 
-    // public static function boot()
-    // {
-    //     parent::boot();
-    //
-    //     // cause a delete of a product to cascade to children so they are also deleted
-    //     static::deleting(function($college)
-    //     {
-    //         $college->faculty()->delete();
-    //     });
-    // }
+    public function school(){
+        return $this->hasMany('App\Models\School');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

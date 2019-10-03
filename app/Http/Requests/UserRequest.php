@@ -62,18 +62,18 @@ class UserRequest extends FormRequest
     public function messages()
     {
         return [
-          'ci.required' => 'Por favor, ingrese su cedula',
-          'ci.numeric' => 'Su cedula debe contener solo caracteres numericos',
-          'ci.digits_between' => 'Su cedula debe tener minimo 6 digitos',
-          'ci.unique' => 'La cedula ingresada ya se encuentra en uso',
+          'ci.required' => 'Por favor, ingrese su cédula',
+          'ci.numeric' => 'Su cédula debe contener solo caracteres numéricos',
+          'ci.digits_between' => 'Su cédula debe tener mínimo 6 dígitos',
+          'ci.unique' => 'La cédula ingresada ya se encuentra en uso',
 
           'first_name.required' => 'Por favor, ingrese su nombre',
-          'first_name.min' => 'Su nombre debe tener minimo 2 caracteres',
-          'first_name.max' => 'Su nombre debe tener maximo 50 caracteres',
+          'first_name.min' => 'Su nombre debe tener mínimo 2 caracteres',
+          'first_name.max' => 'Su nombre debe tener máximo 50 caracteres',
 
           'last_name.required' => 'Por favor, ingrese su apellido',
-          'last_name.min' => 'Su apellido debe tener minimo 2 caracteres',
-          'last_name.max' => 'Su apellido debe tener maximo 50 caracteres',
+          'last_name.min' => 'Su apellido debe tener mínimo 2 caracteres',
+          'last_name.max' => 'Su apellido debe tener máximo 50 caracteres',
 
           'place_birth.required' => 'Por favor, ingrese su lugar de nacimiento',
 
@@ -83,16 +83,16 @@ class UserRequest extends FormRequest
 
           'gender.required' => 'Por favor, ingrese su genero',
 
-          'address.required' => 'Por favor, ingrese su direccion',
+          'address.required' => 'Por favor, ingrese su dirección',
 
-          'phone.required' => 'Por favor, ingrese su telefono',
-          'phone.numeric' => 'Su telefono debe contener solo caracteres numericos',
+          'phone.required' => 'Por favor, ingrese su teléfono',
+          'phone.numeric' => 'Su telefono debe contener solo caracteres numéricos',
 
           'email.required' => 'Por favor, ingrese su email',
-          'email.email' => 'Por favor, ingrese un email valido',
+          'email.email' => 'Por favor, ingrese un email válido',
           'email.unique' => 'El email ingresado ya se encuentra en uso',
 
-          'faculty_id.required_if' => 'El tipo de usuario seleccionado requiere una facultad'
+          'faculty_id.required_if' => 'El tipo de usuario seleccionado requiere una Facultad'
         ];
     }
 }

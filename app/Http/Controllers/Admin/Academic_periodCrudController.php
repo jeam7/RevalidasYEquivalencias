@@ -8,6 +8,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\Academic_periodRequest as StoreRequest;
 use App\Http\Requests\Academic_periodRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
+use App\Models\Faculty;
 
 /**
  * Class Academic_periodCrudController
@@ -51,24 +52,33 @@ class Academic_periodCrudController extends CrudController
             'label' => "Facultad",
             'type' => 'select2',
             'entity' => 'faculty',
-            'attribute' => 'faculty_college',
+            'attribute' => 'name',
             'model' => "App\Models\Faculty",
             'options'   => (function ($query) {
               if (backpack_user()->type_user == 2) {
                 return $query->where('id', '=', backpack_user()->faculty_id)->orderBy('id', 'ASC')->get();
               }
-              return $query->orderBy('id', 'ASC')->get();
-            })
+              return $query->where('college_id', '=', 1)->orderBy('id', 'ASC')->get();
+            }),
+            'default' => backpack_user()->faculty_id
           ],
+          //
           ['name'=>'name', 'label'=>'Nombre período académico', 'type'=>'text'],
+          //
           ['name'=>'info', 'label'=>'Descripción', 'type'=>'textarea'],
+          //
           ['name'=>'dean', 'label'=>'Decano', 'type'=>'text'],
+          //
           ['name'=>'rep_sub_equi_one', 'label'=>'Primer representante de Subcomisión de Equivalencias', 'type'=>'text'],
+          //
           ['name'=>'rep_sub_equi_two', 'label'=>'Segundo representante de Subcomisión de Equivalencias', 'type'=>'text'],
+          //
           ['name'=>'rep_sub_equi_three', 'label'=>'Tercer representante de Subcomisión de Equivalencias', 'type'=>'text'],
-
+          //
           ['name'=>'rep_comi_equi_one', 'label'=>'Primer representante de Comisión de Equivalencias', 'type'=>'text'],
+          //
           ['name'=>'rep_comi_equi_two', 'label'=>'Segundo representante de Comisión de Equivalencias', 'type'=>'text'],
+          //
           ['name'=>'rep_comi_equi_three', 'label'=>'Tercer representante de Comisión de Equivalencias', 'type'=>'text'],
         ]);
 
@@ -77,7 +87,7 @@ class Academic_periodCrudController extends CrudController
             'label' => "Facultad",
             'type' => 'select',
             'entity' => 'faculty',
-            'attribute' => 'faculty_college',
+            'attribute' => 'name',
             'model' => "App\Models\Faculty",
             'options'   => (function ($query) {
               return $query->orderBy('id', 'ASC')->get();
@@ -88,61 +98,58 @@ class Academic_periodCrudController extends CrudController
                 });
             }
           ],
+          //
           ['name'=>'name', 'label'=>'Nombre período académico', 'type'=>'text'],
+          //
           ['name'=>'dean', 'label'=>'Decano', 'type'=>'text'],
+          //
           ['name'=>'info', 'label'=>'Descripción', 'type'=>'text', 'visibleInTable' => false],
           ['name'=>'rep_sub_equi_one', 'label'=>'Primer representante de Subcomisión de Equivalencias', 'type'=>'text', 'visibleInTable' => false],
+          //
           ['name'=>'rep_sub_equi_two', 'label'=>'Segundo representante de Subcomisión de Equivalencias', 'type'=>'text', 'visibleInTable' => false],
+          //
           ['name'=>'rep_sub_equi_three', 'label'=>'Tercer representante de Subcomisión de Equivalencias', 'type'=>'text', 'visibleInTable' => false],
-
+          //
           ['name'=>'rep_comi_equi_one', 'label'=>'Primer representante de Comisión de Equivalencias', 'type'=>'text', 'visibleInTable' => false],
+          //
           ['name'=>'rep_comi_equi_two', 'label'=>'Segundo representante de Comisión de Equivalencias', 'type'=>'text', 'visibleInTable' => false],
+          //
           ['name'=>'rep_comi_equi_three', 'label'=>'Tercer representante de Comisión de Equivalencias', 'type'=>'text', 'visibleInTable' => false]
         ]);
 
-        $this->crud->addFilter([
-            'type' => 'select2',
-            'name' => 'faculty_id',
-            'label'=> 'Facultad'
-          ],
-          function(){
-            return \App\Models\Faculty::all()->pluck('name', 'id')->toArray();
-          },
-          function($value) {
-              $this->crud->addClause('where', 'faculty_id', '=', $value);
-          }
-        );
+        if (backpack_user()->type_user == 1) {
+          $this->crud->addFilter([
+              'type' => 'select2',
+              'name' => 'faculty_id',
+              'label'=> 'Facultad'
+            ],
+            function(){
+              $facultiesUCV = Faculty::whereHas('college', function($q){
+                                                  $q->where('id', 1);
+                                                })->get()
+                                                ->pluck('name', 'id')
+                                                ->toArray();
+              return $facultiesUCV;
+            },
+            function($value) {
+                $this->crud->addClause('where', 'faculty_id', '=', $value);
+            }
+          );
+        }
 
-        // $this->crud->addFilter([
-        //     'type' => 'text',
-        //     'name' => 'name',
-        //     'label'=> 'Periodo academico'
-        //   ],
-        //   false,
-        //   function($value) {
-        //     $this->crud->addClause('where', 'name', '=', $value);
-        //   }
-        // );
-        // add asterisk for fields that are required in Academic_periodRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
     }
 
     public function store(StoreRequest $request)
     {
-        // your additional operations before save here
         $redirect_location = parent::storeCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
     }
 
     public function update(UpdateRequest $request)
     {
-        // your additional operations before save here
         $redirect_location = parent::updateCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
     }
 }

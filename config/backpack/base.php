@@ -12,10 +12,10 @@ return [
     */
 
     // Project name. Shown in the breadcrumbs and a few other places.
-    'project_name' => 'Revalidas y Equivalencias',
+    'project_name' => 'Reválida y Equivalencias',
 
     // Menu logos
-    'logo_lg'   => 'Revalidas y Equivalencias',
+    'logo_lg'   => '<img style="max-height:50px;" src="/images/logo-secretaria-login.png" alt="ReválidayEquivalencias">',
     'logo_mini' => '<b>R</b>yE',
 
     // Developer or company name. Shown in footer.
@@ -28,7 +28,7 @@ return [
     'show_powered_by' => false,
 
     // The AdminLTE skin. Affects menu color and primary/secondary colors used throughout the application.
-    'skin' => 'skin-purple',
+    'skin' => 'skin-blue',
     // Options: skin-black, skin-blue, skin-purple, skin-red, skin-yellow, skin-green, skin-blue-light, skin-black-light, skin-purple-light, skin-green-light, skin-red-light, skin-yellow-light
 
     // Date & Datetime Format Syntax: https://github.com/jenssegers/date#usage

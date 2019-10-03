@@ -20,7 +20,7 @@ class School extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['name', 'faculty_id'];
+    protected $fillable = ['name', 'faculty_id', 'college_id'];
     // protected $hidden = [];
     protected $dates = ['deleted_at'];
     protected $cascadeDeletes = ['career'];
@@ -38,6 +38,10 @@ class School extends Model
     */
     public function faculty(){
         return $this->belongsTo('App\Models\Faculty');
+    }
+
+    public function college(){
+        return $this->belongsTo('App\Models\College');
     }
 
     public function career(){
@@ -60,8 +64,13 @@ class School extends Model
     |--------------------------------------------------------------------------
     */
     public function getSchoolFacultyAttribute($value) {
-      $foreignValue = ($this->faculty->college->foreign == 1 ) ? 'Nacional' : 'Extranjera' ;
-       return $this->name.' - '.$this->faculty->name.' - '.$this->faculty->college->name.' - '.$foreignValue;
+      if ($this->faculty == null) {
+        $foreignValue = ($this->college->foreign == 1 ) ? 'Nacional' : 'Extranjera' ;
+        return $this->name.' - '.'No aplica'.' - '.$this->college->name.' - '.$foreignValue;
+      }else {
+        $foreignValue = ($this->faculty->college->foreign == 1 ) ? 'Nacional' : 'Extranjera' ;
+         return $this->name.' - '.$this->faculty->name.' - '.$this->faculty->college->name.' - '.$foreignValue;
+      }
     }
     /*
     |--------------------------------------------------------------------------

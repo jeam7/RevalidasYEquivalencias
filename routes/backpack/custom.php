@@ -1,11 +1,5 @@
 <?php
 
-// --------------------------
-// Custom Backpack Routes
-// --------------------------
-// This route file is loaded automatically by Backpack\Base.
-// Routes you generate using Backpack\Generators will be placed here.
-
 Route::group([
     'prefix'     => config('backpack.base.route_prefix', 'admin'),
     'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
@@ -17,9 +11,6 @@ Route::group([
         Route::post('edit-account-info', 'MyAccountController@postAccountInfoForm');
         Route::get('change-password', 'MyAccountController@getChangePasswordForm')->name('backpack.account.password');
         Route::post('change-password', 'MyAccountController@postChangePasswordForm');
-
-        // Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('backpack.auth.register');
-        // Route::post('register', 'Auth\RegisterController@register');
     }
     CRUD::resource('college', 'CollegeCrudController');
     CRUD::resource('faculty', 'FacultyCrudController');
@@ -31,7 +22,6 @@ Route::group([
       Route::get('request/generarPdfSolicitud/{id}', 'RequestCrudController@generarPdfSolicitud');
     });
     CRUD::resource('myrequest', 'MyRequestCrudController');
-    // CRUD::resource('voucher', 'VoucherCrudController');
     CRUD::resource('voucher', 'VoucherCrudController')->with(function(){
       Route::get('voucher/getSubjectsOrigin/{id}', 'VoucherCrudController@getSubjectsOrigin');
       Route::get('voucher/getSubjectsDestination/{id}', 'VoucherCrudController@getSubjectsDestination');
@@ -40,5 +30,17 @@ Route::group([
       Route::post('voucher/deleteEquivalentSubject', 'VoucherCrudController@deleteEquivalentSubject');
       Route::get('voucher/generarPdfComprobante/{id}', 'VoucherCrudController@generarPdfComprobante');
     });
-    // CRUD::resource('equivalent_subject', 'Equivalent_subjectCrudController');
-}); // this should be the absolute last line of this file
+
+    Route::post('api/faculty', 'ApiSelect\FacultyApiController@index');
+    Route::get('api/facultyFilterAjax', 'ApiSelect\FacultyApiController@indexFilterAjax');
+
+    Route::post('api/school', 'ApiSelect\SchoolApiController@index');
+    Route::get('api/schoolFilterAjax', 'ApiSelect\SchoolApiController@indexFilterAjax');
+
+    Route::post('api/career', 'ApiSelect\CareerApiController@index');
+    Route::get('api/careerFilterAjax', 'ApiSelect\CareerApiController@indexFilterAjax');
+    Route::post('api/careerOrigin', 'ApiSelect\CareerApiController@indexFacultyCareerOrigin');
+    Route::post('api/careerDestination', 'ApiSelect\CareerApiController@indexFacultyCareerDestination');
+
+    Route::get('api/subjectOrigin', 'ApiSelect\SubjectApiController@index');
+});

@@ -64,6 +64,23 @@ class Subject extends Model
     public function getSubjectFacultyAttribute($value) {
        return $this->name . ' - ' . $this->career->name;
     }
+
+    public function getCollegeNameAttribute($value) {
+      $foreignValue = ($this->career->school->college->foreign == 1 ) ? 'Nacional' : 'Extranjera' ;
+      return $this->career->school->college->name . ' - ' . $foreignValue;
+    }
+
+    public function getFacultyNameAttribute($value) {
+      return $this->career->school->faculty ? $this->career->school->faculty->name : 'No aplica';
+    }
+
+    public function getSchoolNameAttribute($value) {
+       return $this->career->school->name;
+    }
+
+    public function getCareerNameAttribute($value) {
+       return $this->career->name;
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
