@@ -24,9 +24,10 @@ class Request extends Model
     protected $fillable = [
       'user_id','career_origin_id','career_destination_id', 'origin', 'date',
       'others','info_others','pensum','notes','study_programs','title','copy_ci',
-      'ci_passport_copy','notes_legalized','study_program_legalized','cerification_category_college','certification_title_no_confered','translation'
+      'ci_passport_copy','notes_legalized','study_program_legalized','cerification_category_college','certification_title_no_confered','translation',
+      'disciplinary_sanction', 'voucher'
       ];
-    protected $hidden = ['origin', 'user_id', 'info_others'];
+    protected $hidden = ['origin', 'user_id', 'info_others', 'career_origin_id', 'career_destination_id'];
     protected $dates = ['deleted_at'];
     protected $cascadeDeletes = ['voucher'];
 
@@ -57,6 +58,10 @@ class Request extends Model
       return $this->hasMany('App\Models\Voucher');
     }
 
+    public function subject()
+    {
+        return $this->belongsToMany('App\Models\Subject','requests_subjects', 'request_id', 'subject_id')->withPivot('created_at', 'updated_at');
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -66,6 +71,16 @@ class Request extends Model
       $query->select('requests.*')->join('careers', 'careers.id', '=', 'requests.career_destination_id')
                         ->join('schools', 'schools.id', '=', 'careers.school_id')
                         ->where('schools.faculty_id', '=', $typeUser);
+      return $query;
+    }
+
+    public function scopeRequestList($query) {
+      $query->select('requests.*')
+                        ->leftJoin('vouchers as v', function($join){
+                          $join->on('v.request_id', '=', 'requests.id');
+                          $join->where('v.deleted_at', '=', NULL);
+                        })
+                        ->where('v.id', '=', NULL);
       return $query;
     }
     /*

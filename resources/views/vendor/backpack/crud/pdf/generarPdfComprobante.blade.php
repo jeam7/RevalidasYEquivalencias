@@ -59,7 +59,9 @@
             <p class="font-weight-bold m-1 mt-2 font-10">UNIVERSIDAD CENTRAL DE VENEZUELA</p>
             <p class="font-weight-bold m-1 font-10">CONSEJO UNIVERSITARIO</p>
             <p class="font-weight-bold m-1 font-10">SECRETARIA</p>
-          <h6 class="idSolicitud">No. <span style="color:red; font-size:18px;">{{$voucherId}}</span></h6>
+          <h6 class="idSolicitud">No. <span style="color:red; font-size:18px;">
+            {{$currentVoucher->id}}
+          </span></h6>
           <center>
             <h6> COMPROBANTE DE ASIGNATURAS EQUIVALENTES </h6>
           </center>
@@ -67,7 +69,7 @@
 
       <table>
         <tr>
-          <td class="border-left-0" width="160">
+          <td class="border-left-0" width="200">
             <center><p class="font-10 m-0">FACULTAD DONDE DESEA CURSAR</p></center>
           </td>
           <td class="border-left-0" width="160">
@@ -76,28 +78,32 @@
           <td class="border-left-0" width="160">
             <center><p class="font-10 m-0">UNIVERSIDAD O INSTITUTO DONDE DESEA CURSAR</p></center>
           </td>
-          <td class="border-left-0" width="60">
+          <td class="border-left-0" width="100">
             <center><p class="font-10 m-0">PAG.</p></center>
           </td>
         </tr>
 
         <tr>
-          <td class="border-left-0"  width="160">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $facultyDestination }} </p>
+          <td class="border-left-0"  width="200">
+            <p class="mt-0 ml-3 mb-0 mr-0 font-10">
+              {{ $currentVoucher->request->career_destination->school->faculty ?  $currentVoucher->request->career_destination->school->faculty->name : ""}}
+            </p>
           </td>
           <td class="border-left-0" width="160">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $schoolDestination }} </p>
+            <p class="mt-0 ml-3 mb-0 mr-0 font-10">
+              {{ $currentVoucher->request->career_destination->school ?  $currentVoucher->request->career_destination->school->name : ""}}
+            </p>
           </td>
-          <td class="border-left-0" width="160">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $collegeDestination }} </p>
+          <td class="border-left-0 ml-3" width="160">
+            <p class="font-10 m-0">{{ $currentVoucher->request->career_destination->school->college ?  $currentVoucher->request->career_destination->school->college->name : ""}}</p>
           </td>
           <td class="border-left-0" width="60">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $numPag }} </p>
+            <p class="mt-0 ml-3 mb-0 mr-0 font-10"> {{ $numPag+1 }} </p>
           </td>
         </tr>
 
         <tr>
-          <td class="border-left-0" width="160">
+          <td class="border-left-0" width="200">
             <center><p class="font-10 m-0">APELLIDO(S)</p></center>
           </td>
           <td class="border-left-0" width="160">
@@ -112,22 +118,22 @@
         </tr>
 
         <tr>
-          <td class="border-left-0"  width="160">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $lastName }} </p>
+          <td class="border-left-0 ml-3"  width="200">
+            <p class="font-10 m-0"> {{ $currentVoucher->request->user ?  $currentVoucher->request->user->last_name : ""}}</p>
           </td>
-          <td class="border-left-0" width="160">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $firstName }} </p>
+          <td class="border-left-0 ml-3" width="160">
+            <p class="font-10 m-0"> {{ $currentVoucher->request->user ?  $currentVoucher->request->user->first_name : ""}}</p>
           </td>
-          <td class="border-left-0" width="160">
-            <p class="mt-0 ml-3 mb-0 mr-0">{{ $ci }}</p>
+          <td class="border-left-0 ml-3" width="160">
+            <p class="font-10 m-0"> {{ $currentVoucher->request->user ?  $currentVoucher->request->user->ci : ""}}</p>
           </td>
-          <td class="border-left-0" width="60">
-            <p class="mt-0 ml-3 mb-0 mr-0"> {{ $requestId }} </p>
+          <td class="border-left-0 ml-3" width="60">
+            <p class="font-10 m-0"> {{ $currentVoucher->request ?  $currentVoucher->request->id : ""}}</p>
           </td>
         </tr>
 
         <tr>
-          <td class="border-left-0">
+          <td class="border-left-0" width="200">
             <center><p class="font-10 m-0">FACULTAD DONDE CURSABA ANTERIORMENTE</p></center>
           </td>
           <td class="border-left-0">
@@ -139,95 +145,97 @@
         </tr>
 
         <tr>
-          <td class="border-left-0" width="160">
-            @if ($facultyOrigin)
-              <p class="mt-0 ml-3 mb-0 mr-0"> {{ $facultyOrigin }} </p>
-            @else
-              <p class="mt-0 ml-3 mb-0 mr-0 text-white"> x </p>
-            @endif
+          <td class="border-left-0"  width="200">
+            <p class="mt-0 ml-3 mb-0 mr-0 font-10">
+              {{ $currentVoucher->request->career_origin->school->faculty ?  $currentVoucher->request->career_origin->school->faculty->name : ""}}
+            </p>
           </td>
-          <td class="border-left-0" width="160">
-            @if ($schoolOrigin)
-              <p class="mt-0 ml-3 mb-0 mr-0"> {{ $schoolOrigin }} </p>
-            @else
-              <p class="mt-0 ml-3 mb-0 mr-0 text-white"> x </p>
-            @endif
+          <td class="border-left-0"  width="160">
+            <p class="mt-0 ml-3 mb-0 mr-0 font-10">
+              {{ $currentVoucher->request->career_origin->school ?  $currentVoucher->request->career_origin->school->name : ""}}
+            </p>
           </td>
-          <td colspan="2" class="border-left-0" width="160">
-            @if ($collegeOrigin)
-              <p class="mt-0 ml-3 mb-0 mr-0"> {{ $collegeOrigin }} </p>
-            @else
-              <p class="mt-0 ml-3 mb-0 mr-0 text-white"> x </p>
-            @endif
+          <td class="border-left-0"  width="160" colspan="2">
+            <p class="mt-0 ml-3 mb-0 mr-0 font-10">
+              {{ $currentVoucher->request->career_origin->school->college ?  $currentVoucher->request->career_origin->school->college->name : ""}}
+            </p>
           </td>
         </tr>
-
+      </table>
+      <br>
+      <table>
         <tr>
-          <td colspan="2" class="border-left-0">
+          <td class="border-left-0" width="200">
             <center><p class="font-10 m-0">ASIGNATURAS EQUIVALENTES</p></center>
           </td>
-          <td class="border-left-0">
-            <center><p class="font-10 m-0">CODIGO DE MATERIAS</p></center>
+          <td class="border-left-0" width="100">
+            <center><p class="font-10 m-0">CÓDIGO DE MATERIAS</p></center>
           </td>
-          <td class="border-left-0">
+          <td class="border-left-0" width="50">
+            <center><p class="font-10 m-0">UNIDADES DE CREDITO</p></center>
+          </td>
+
+          <td class="border-left-0" width="200">
+            <center><p class="font-10 m-0">ASIGNATURAS EQUIVALENTES</p></center>
+          </td>
+          <td class="border-left-0" width="100">
+            <center><p class="font-10 m-0" >CÓDIGO DE MATERIAS</p></center>
+          </td>
+          <td class="border-left-0" width="50">
             <center><p class="font-10 m-0">UNIDADES DE CREDITO</p></center>
           </td>
         </tr>
-        <!-- Inicio de la renderizacion de materias -->
-        @if (sizeof($equivalents) > 0)
-          @for ($i=0; $i < sizeof($equivalents); $i++)
+
+        @for ($i=0; $i < 14; $i=$i+2)
             <tr>
-              <td colspan="2" class="border-left-0">
-                <p class="mt-0 ml-3 mb-0 mr-0"> {{ $equivalents[$i]->subjectName }} </p>
-              </td>
-              <td class="border-left-0">
-                <p class="mt-0 ml-3 mb-0 mr-0"> {{ $equivalents[$i]->subjectEquivalentId }} </p>
-              </td>
-              <td class="border-left-0">
-                <p class="mt-0 ml-3 mb-0 mr-0"> {{ $equivalents[$i]->subjectsCredits }} </p>
-              </td>
+                <td class="border-left-0" width="200">
+                  <p class="font-10 m-0 ml-3 {{$i >= sizeof($subjects) ? 'text-white' : ''}}">{{  ($i >= sizeof($subjects) ? "xxx" : $subjects[$i]->subjectName) }}</p>
+                </td>
+                <td class="border-left-0" width="100">
+                  <center><p class="font-10 m-0 {{$i >= sizeof($subjects) ? 'text-white' : ''}}">{{  ($i >= sizeof($subjects) ? "xxx" : $subjects[$i]->subjectCode) }}</p></center>
+                </td>
+                <td class="border-left-0" width="50">
+                  <center><p class="font-10 m-0 {{$i >= sizeof($subjects) ? 'text-white' : ''}}">{{  ($i >= sizeof($subjects) ? "xxx" : $subjects[$i]->subjectCredits) }}</p></center>
+                </td>
+
+                <td class="border-left-0" width="200">
+                  <p class="font-10 m-0 ml-3 {{$i+1 >= sizeof($subjects) ? 'text-white' : ''}}">{{  ($i+1 >= sizeof($subjects) ? "xxx" : $subjects[$i+1]->subjectName) }}</p>
+                </td>
+                <td class="border-left-0" width="100">
+                  <center><p class="font-10 m-0 {{$i+1 >= sizeof($subjects) ? 'text-white' : ''}}">{{  ($i+1 >= sizeof($subjects) ? "xxx" : $subjects[$i+1]->subjectCode) }}</p></center>
+                </td>
+                <td class="border-left-0" width="50">
+                  <center><p class="font-10 m-0 {{$i+1 >= sizeof($subjects) ? 'text-white' : ''}}">{{  ($i+1 >= sizeof($subjects) ? "xxx" : $subjects[$i+1]->subjectCredits) }}</p></center>
+                </td>
             </tr>
           @endfor
           <tr>
-            <td colspan="3" class="border-left-0">
-              <p class="mt-1 ml-3 mb-1 mr-0"> Total creditos </p>
+            <td class="border-left-0" colspan="4">
+              <p class="font-10 mt-1 ml-3 mb-0 mr-0"> OBSERVACIONES </p>
             </td>
             <td class="border-left-0">
-              <p class="mt-1 ml-3 mb-1 mr-0"> {{ $total }} </p>
+              <p class="font-10 mt-1 ml-3 mb-0 mr-0"> TOTAL CRÉDITOS </p>
+            </td>
+            <td class="border-left-0">
+              <p class="font-10 mt-1 ml-3 mb-0 mr-0"> {{ $totalCreditos }} </p>
             </td>
           </tr>
-        @else
           <tr>
-            <td colspan="2" class="border-left-0">
-              <p class="mt-0 ml-3 mb-0 mr-0 text-white"> x </p>
-            </td>
-            <td class="border-left-0">
-              <p class="mt-0 ml-3 mb-0 mr-0 text-white"> x </p>
-            </td>
-            <td class="border-left-0">
-              <p class="mt-0 ml-3 mb-0 mr-0 text-white"> x </p>
+            <td class="border-left-0" colspan="6">
+              <p class="font-10 mt-1 ml-3 mb-0 mr-0 {{$currentVoucher->observations ? '' : 'text-white'}}"> {{$currentVoucher->observations ? $currentVoucher->observations : 'x'}} </p>
             </td>
           </tr>
-
-          <tr>
-            <td colspan="3" class="border-left-0">
-              <p class="mt-1 ml-3 mb-1 mr-0"> Total creditos </p>
-            </td>
-            <td class="border-left-0">
-              <p class="mt-1 ml-3 mb-1 mr-0"> 0 </p>
-            </td>
-          </tr>
-        @endif
       </table>
+
       <br/>
 
       <table>
         <tr>
           <td class="border-left-0">
-            <center><p class="font-10 m-0">SUBCOMISION DE EQUIVALENCIA</p></center>
+            <center><p class="font-10 m-0">SUBCOMISIÓN DE EQUIVALENCIA</p></center>
           </td>
           <td class="border-left-0">
-            <center><p class="font-10 m-0">COMISION DE EQUIVALENCIA</p></center>
+            <center><p class="font-10 m-0">COMISIÓN DE EQUIVALENCIA</p></center>
           </td>
           <td class="border-left-0">
             <center><p class="font-10 m-0">CONSEJO DE FACULTAD</p></center>
@@ -253,7 +261,7 @@
               <tr class="border border-danger">
                 <td class="border-right-0 border-left-0">
                   @if ($footer != [])
-                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer->subComiOne }}</p>
+                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer[0]->subComiOne }}</p>
                   @else
                     <p class="mt-1 ml-3 mb-1 mr-0 text-white" style="text-align: left"> x </p>
                   @endif
@@ -267,7 +275,7 @@
               <tr>
                 <td class="border-right-0 border-left-0">
                   @if ($footer != [])
-                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer->subComiTwo }}</p>
+                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer[0]->subComiTwo }}</p>
                   @else
                     <p class="mt-1 ml-3 mb-1 mr-0 text-white" style="text-align: left"> x </p>
                   @endif
@@ -280,7 +288,7 @@
               <tr>
                 <td class="border-right-0 border-left-0">
                   @if ($footer != [])
-                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer->subComiThree }}</p>
+                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer[0]->subComiThree }}</p>
                   @else
                     <p class="mt-1 ml-3 mb-1 mr-0 text-white" style="text-align: left"> x </p>
                   @endif
@@ -293,8 +301,8 @@
 
               <tr>
                 <td colspan="2" class="border-left-0 border-right-0 border-bottom-0">
-                  @if ($dateSubComi)
-                    <p class="mt-1 ml-3 mb-1 mr-0"> Fecha: {{ substr($dateSubComi, 8, 2) }}/{{ substr($dateSubComi, 5, 2) }}/{{ substr($dateSubComi, 0, 4) }}</p>
+                  @if ($currentVoucher->date_subcomi_eq)
+                    <p class="mt-1 ml-3 mb-1 mr-0"> Fecha: {{ substr($currentVoucher->date_subcomi_eq, 8, 2) }}/{{ substr($currentVoucher->date_subcomi_eq, 5, 2) }}/{{ substr($currentVoucher->date_subcomi_eq, 0, 4) }}</p>
                   @else
                     <p class="mt-1 ml-3 mb-1 mr-0"> Fecha:
                       <span class="mt-1 mb-1 mr-0 text-white"> x </span>
@@ -330,7 +338,7 @@
               <tr class="border border-danger">
                 <td class="border-right-0 border-left-0">
                   @if ($footer != [])
-                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer->comiOne }}</p>
+                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer[0]->comiOne }}</p>
                   @else
                     <p class="mt-1 ml-3 mb-1 mr-0 text-white" style="text-align: left"> x </p>
                   @endif
@@ -343,7 +351,7 @@
               <tr>
                 <td class="border-right-0 border-left-0">
                   @if ($footer != [])
-                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer->comiTwo }}</p>
+                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer[0]->comiTwo }}</p>
                   @else
                     <p class="mt-1 ml-3 mb-1 mr-0 text-white" style="text-align: left"> x </p>
                   @endif
@@ -356,7 +364,7 @@
               <tr>
                 <td class="border-right-0 border-left-0">
                   @if ($footer != [])
-                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer->comiThree }}</p>
+                    <p class="mt-1 ml-3 mb-1 mr-0" style="text-align: left">{{ $footer[0]->comiThree }}</p>
                   @else
                     <p class="mt-1 ml-3 mb-1 mr-0 text-white" style="text-align: left"> x </p>
                   @endif
@@ -369,8 +377,8 @@
 
               <tr>
                 <td colspan="2" class="border-left-0 border-right-0 border-bottom-0">
-                @if($dateComi)
-                  <p class="mt-1 ml-3 mb-1 mr-0">Fecha: {{ substr($dateComi, 8, 2) }}/{{ substr($dateComi, 5, 2) }}/{{ substr($dateComi, 0, 4) }}</p>
+                @if($currentVoucher->date_comi_eq)
+                  <p class="mt-1 ml-3 mb-1 mr-0">Fecha: {{ substr($currentVoucher->date_comi_eq, 8, 2) }}/{{ substr($currentVoucher->date_comi_eq, 5, 2) }}/{{ substr($currentVoucher->date_comi_eq, 0, 4) }}</p>
                 @else
                   <p class="mt-1 ml-3 mb-1 mr-0"> Fecha:
                     <span class="mt-1 mb-1 mr-0 text-white"> x </span>
@@ -396,8 +404,8 @@
               <tr>
                 <td colspan="2" class="border-0 mb-4">
                   <center>
-                    @if ($dateConFac)
-                      <p class="mt-1 ml-3 mb-1 mr-0"> Fecha: {{ substr($dateConFac, 8, 2) }}/{{ substr($dateConFac, 5, 2) }}/{{ substr($dateConFac, 0, 4) }}</p>
+                    @if ($currentVoucher->date_con_fac)
+                      <p class="mt-1 ml-3 mb-1 mr-0"> Fecha: {{ substr($currentVoucher->date_con_fac, 8, 2) }}/{{ substr($currentVoucher->date_con_fac, 5, 2) }}/{{ substr($currentVoucher->date_con_fac, 0, 4) }}</p>
                     @else
                       <p class="mt-1 ml-3 mb-1 mr-0"> Fecha:
                         <span class="mt-1 mb-1 mr-0 text-white"> x </span>
@@ -413,7 +421,7 @@
                 <td colspan="2" class="border-0">
                   <center>
                     @if ($footer != [])
-                      <span class=""><u>{{ $footer->decano }}</u></span>
+                      <span class=""><u>{{ $footer[0]->decano }}</u></span>
                     @else
                       <span class=""><u> </u></span>
                     @endif
@@ -434,8 +442,8 @@
               <tr>
                 <td colspan="2" class="border-0 mb-4">
                   <center>
-                    @if ($dateUniv)
-                      <p class="mt-1 ml-3 mb-1 mr-0"> Fecha: {{ substr($dateUniv, 8, 2) }}/{{ substr($dateUniv, 5, 2) }}/{{ substr($dateUniv, 0, 4) }}</p>
+                    @if ($currentVoucher->date_con_univ)
+                      <p class="mt-1 ml-3 mb-1 mr-0"> Fecha: {{ substr($currentVoucher->date_con_univ, 8, 2) }}/{{ substr($currentVoucher->date_con_univ, 5, 2) }}/{{ substr($currentVoucher->date_con_univ, 0, 4) }}</p>
                     @else
                       <p class="mt-1 ml-3 mb-1 mr-0"> Fecha:
                         <span class="mt-1 mb-1 mr-0 text-white"> x </span>

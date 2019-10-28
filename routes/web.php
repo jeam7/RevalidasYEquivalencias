@@ -21,3 +21,14 @@ Route::get('/home', function () {
 
 Route::get('/admin/register', 'Admin\RegisterController@showRegistrationForm')->name('backpack.auth.register');
 Route::post('/admin/register', 'Admin\RegisterController@register');
+
+Route::get('/admin/registerStep2', 'Admin\RegisterController@showRegistrationFormStep2');
+Route::post('/admin/registerStep2', 'Admin\RegisterController@registerStep2');
+
+Route::get('/admin/successSendRegisterMail', function(){
+  return view('successSendRegisterMail');
+});
+
+Route::get('/admin/successRegisterUser', function(){
+  return view('successRegisterUser');
+});

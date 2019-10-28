@@ -58,6 +58,15 @@
             	allowClear: true,
         	    placeholder: '{{ $filter->placeholder ? $filter->placeholder : ' ' }}',
 							closeOnSelect: false,
+							formatNoMatches: function () {
+									return "No se encontraron resultados";
+							},
+							formatSearching: function() {
+								return "Buscando...";
+							},
+							formatErrorLoading: function () {
+								return 'Buscando....';
+							},
 			    // tags: [],
 			    ajax: {
 			        url: '{{ $filter->values }}',
@@ -65,7 +74,6 @@
 			        type: 'GET',
 			        quietMillis: 50,
 			        data: function (term) {
-									console.log("valor de college: " + college);
 			            return {
 			                term: term,
 											college_id: college

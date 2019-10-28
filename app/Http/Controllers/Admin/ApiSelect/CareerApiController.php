@@ -28,7 +28,6 @@ class CareerApiController extends Controller
       } else {
           $results = $options->paginate(50);
       }
-
       return $options->paginate(50);
   }
 
@@ -88,13 +87,11 @@ class CareerApiController extends Controller
   {
     $term = $request->input('term');
     $school_id = $request->input('school_id');
-
     if ($school_id) {
       $options = Career::where('school_id', '=', $school_id)->where('name', 'like', '%'.$term.'%')->get()->pluck('name', 'id');
     }else {
       $options = Career::where('name', 'like', '%'.$term.'%')->get()->pluck('name', 'id');
     }
-
     return $options;
   }
 }

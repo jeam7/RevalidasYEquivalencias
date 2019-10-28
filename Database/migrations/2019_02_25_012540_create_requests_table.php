@@ -21,7 +21,6 @@ class CreateRequestsTable extends Migration
             $table->foreign('career_origin_id', 'fk_request_careerOrigin')->references('id')->on('careers');
             $table->integer('career_destination_id')->unsigned()->nullable();
             $table->foreign('career_destination_id', 'fk_request_careerDestination')->references('id')->on('careers');
-            $table->enum('origin',[1,2]);
             $table->boolean('others')->nullable();
             $table->string('info_others')->nullable();
             $table->boolean('pensum')->nullable();
@@ -35,6 +34,8 @@ class CreateRequestsTable extends Migration
             $table->boolean('cerification_category_college')->nullable();
             $table->boolean('certification_title_no_confered')->nullable();
             $table->boolean('translation')->nullable();
+            $table->boolean('voucher')->nullable();
+            $table->boolean('disciplinary_sanction')->nullable();
             $table->date('date');
             $table->softDeletes();
             $table->timestamps();

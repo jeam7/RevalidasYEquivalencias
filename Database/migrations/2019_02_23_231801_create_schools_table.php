@@ -79,7 +79,9 @@ class CreateSchoolsTable extends Migration
 
             array('id' =>43, 'name' => 'Escuela Odontologia', 'faculty_id' => 10 , 'college_id' => 1),
 
-            array('id' =>44, 'name' => 'Escuela de Ciencias Veterinarias', 'faculty_id' => 11 , 'college_id' => 1)
+            array('id' =>44, 'name' => 'Escuela de Ciencias Veterinarias', 'faculty_id' => 11 , 'college_id' => 1),
+
+            array('id' =>45, 'name' => 'Escuela Simon', 'faculty_id' => NULL , 'college_id' => 2)
         );
       DB::table('schools')->insert($dataSchool);
     }

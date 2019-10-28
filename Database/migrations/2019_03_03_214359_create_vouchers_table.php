@@ -22,6 +22,8 @@ class CreateVouchersTable extends Migration
             $table->date('date_comi_eq')->nullable();
             $table->date('date_con_fac')->nullable();
             $table->date('date_con_univ')->nullable();
+            $table->integer('ncu')->nullable();
+            $table->date('date_ncu')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

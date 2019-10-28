@@ -77,9 +77,9 @@ class Career extends Model
     //    return $this->school->faculty->college->name;
     // }
     //
-    // public function getCollegeFacultyAttribute($value) {
-    //    return $this->school->faculty->college->name .' - '. $this->name;
-    // }
+    public function getCollegeCareerRequestAttribute($value) {
+       return $this->school->college->name . ' - ' . $this->name;
+    }
     //
     // public function getCareerFacultyCollegeAttribute($value) {
     //   $foreignValue = ($this->school->faculty->college->foreign == 1 ) ? 'Nacional' : 'Extranjera' ;

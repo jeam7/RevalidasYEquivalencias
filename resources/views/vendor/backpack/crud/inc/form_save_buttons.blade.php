@@ -18,8 +18,5 @@
         </ul>
 
     </div>
-    <br>
-    {{ $targetUrl }}
-    <br>
     <a href="{{ $targetUrl }}" class="btn btn-default"><span class="fa fa-ban"></span> &nbsp;{{ trans('backpack::crud.cancel') }}</a>
 </div>

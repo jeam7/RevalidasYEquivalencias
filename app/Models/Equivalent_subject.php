@@ -38,13 +38,10 @@ class Equivalent_subject extends Model
       return $this->belongsTo('App\Models\Voucher');
     }
 
-    public function subject_a(){
+    public function subject(){
       return $this->belongsTo('App\Models\Subject');
     }
 
-    public function subject_e(){
-      return $this->belongsTo('App\Models\Subject');
-    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

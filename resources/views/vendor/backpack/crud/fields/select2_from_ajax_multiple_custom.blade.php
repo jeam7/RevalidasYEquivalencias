@@ -71,6 +71,24 @@
                     multiple: true,
                     placeholder: "{{ $field['placeholder'] }}",
                     minimumInputLength: "{{ $field['minimum_input_length'] }}",
+                    language: {
+                      noResults: function() {
+                        return "No se encontraron resultados";
+                      },
+                      searching: function() {
+                        return "Buscando...";
+                      },
+                      errorLoading: function () {
+                        return 'Buscando....';
+                      },
+                      inputTooShort: function (args) {
+                        var remainingChars = args.minimum - args.input.length;
+
+                        var message = 'Ingrese ' + remainingChars + ' o mas caracteres';
+
+                        return message;
+                      },
+                    },
                     ajax: {
                         url: "{{ $field['data_source'] }}",
                         type: '{{ $field['method'] ?? 'GET' }}',

@@ -46,11 +46,11 @@ class MyRequestRequest extends FormRequest
             $existRequest = ($existRequest) ? $existRequest[0]->id : NULL ;
 
             if ($existRequest != 8 && $existRequest) {
-                $validator->errors()->add('user_id', 'Ya se encuentra una solicitud en proceso con el solicitante y las carreras ingresadas');
+                $validator->errors()->add('user_id', 'Ya se encuentra una Solicitud en proceso con el solicitante y las Carreras ingresadas');
             }
             if ($this->input('career_origin_id') === $this->input('career_destination_id')) {
-              $validator->errors()->add('career_origin_id', 'La carrera - facultad - universidad de procedencia y donde desea cursar deben ser diferentes');
-              $validator->errors()->add('career_destination_id', 'La carrera - facultad - universidad de procedencia y donde desea cursar deben ser diferentes');
+              $validator->errors()->add('career_origin_id', 'Las Carreras de procedencia y destino deben ser diferentes');
+              $validator->errors()->add('career_destination_id', 'Las Carreras de procedencia y destino deben ser diferentes');
             }
         });
     }

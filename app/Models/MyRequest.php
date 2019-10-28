@@ -23,7 +23,8 @@ class MyRequest extends Model
     protected $fillable = [
       'user_id','career_origin_id','career_destination_id', 'origin',
       'others','info_others','pensum','notes','study_programs','title','copy_ci',
-      'ci_passport_copy','notes_legalized','study_program_legalized','cerification_category_college','certification_title_no_confered','translation', 'date'
+      'ci_passport_copy','notes_legalized','study_program_legalized','cerification_category_college','certification_title_no_confered','translation', 'date',
+      'disciplinary_sanction', 'voucher'
       ];
     // protected $hidden = [];
     // protected $dates = [];
@@ -55,6 +56,10 @@ class MyRequest extends Model
       return $this->belongsTo('App\Models\Voucher');
     }
 
+    public function subject()
+    {
+        return $this->belongsToMany('App\Models\Subject','requests_subjects', 'request_id', 'subject_id')->withPivot('created_at', 'updated_at');
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -73,7 +78,7 @@ class MyRequest extends Model
                                 JOIN request_status rs ON (rs.id = rhs.request_status_id)
                                 WHERE request_id = ? ORDER BY rhs.id DESC LIMIT 1',
                                 [$this->id]);
-      return $lastStatus[0]->name;
+      return $lastStatus ? $lastStatus[0]->name : NULL;
     }
 
     public function getDataRequestAttribute($value)

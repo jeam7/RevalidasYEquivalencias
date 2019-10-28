@@ -98,7 +98,7 @@ class RegisterController extends Controller
           'password.required' => 'Por favor, ingrese su contrasena',
           'password.min' => 'Su contrasena tener minimo 6 caractes',
           'password.confirmed' => 'Confirmacion de contrasena incorrecta'
-          // 'confirm_password.same' => 'Confirmacion de contrasena incorrecta'
+          'confirm_password.same' => 'Confirmacion de contrasena incorrecta'
 
         ]
       );

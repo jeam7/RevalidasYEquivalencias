@@ -88,7 +88,8 @@ class CreateCareersTable extends Migration
       (64,'Licenciado en Terapia Ocupacional',42,NULL,'2019-03-04 03:31:09','2019-03-04 03:31:09'),
       (65,'Licenciado en Trabajo Social',15,NULL,'2019-03-04 03:31:20','2019-03-04 03:31:20'),
       (66,'Licenciado en Traducción',24,NULL,'2019-03-04 03:31:33','2019-03-04 03:31:33'),
-      (67,'Licenciado en Traducción e Interpretación',24,NULL,'2019-03-04 03:31:54','2019-03-04 03:31:54')
+      (67,'Licenciado en Traducción e Interpretación',24,NULL,'2019-03-04 03:31:54','2019-03-04 03:31:54'),
+      (68,'Carrera Simon',45,NULL,'2019-03-04 03:31:54','2019-03-04 03:31:54')
       ");
     }
 

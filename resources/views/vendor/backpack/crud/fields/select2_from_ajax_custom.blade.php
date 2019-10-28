@@ -85,7 +85,24 @@
                     multiple: false,
                     placeholder: "{{ $field['placeholder'] }}",
                     minimumInputLength: "{{ $field['minimum_input_length'] }}",
+                    language: {
+                      noResults: function() {
+                        return "No se encontraron resultados";
+                      },
+                      searching: function() {
+                        return "Buscando...";
+                      },
+                      errorLoading: function () {
+                        return 'Buscando....';
+                      },
+                      inputTooShort: function (args) {
+                        var remainingChars = args.minimum - args.input.length;
 
+                        var message = 'Ingrese ' + remainingChars + ' o mas caracteres';
+
+                        return message;
+                      },
+                    },
                     {{-- allow clear --}}
                     {{-- @if ($entity_model::isColumnNullable($field['name'])) --}}
                     allowClear: true,
@@ -116,7 +133,6 @@
                                      more: data.current_page < data.last_page
                                }
                             };
-                            console.log(result);
                             return result;
                         },
                         cache: true

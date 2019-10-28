@@ -33,7 +33,7 @@ class CreateCollegesTable extends Migration
             array(
               'id' => 2,
               'name' => 'Universidad Simon Bolivar',
-              'foreign' => 1,
+              'foreign' => 2,
               'address' => 'Sartaneja',
               'abbreviation' => 'USB'
             )

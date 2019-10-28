@@ -29,6 +29,7 @@ Route::group([
       Route::get('voucher/getEquivalentSubject/{id}', 'VoucherCrudController@getEquivalentSubject');
       Route::post('voucher/deleteEquivalentSubject', 'VoucherCrudController@deleteEquivalentSubject');
       Route::get('voucher/generarPdfComprobante/{id}', 'VoucherCrudController@generarPdfComprobante');
+      Route::post('voucher/createVoucherFromRequest/{id}', 'VoucherCrudController@createVoucherFromRequest');
     });
 
     Route::post('api/faculty', 'ApiSelect\FacultyApiController@index');
@@ -43,4 +44,6 @@ Route::group([
     Route::post('api/careerDestination', 'ApiSelect\CareerApiController@indexFacultyCareerDestination');
 
     Route::get('api/subjectOrigin', 'ApiSelect\SubjectApiController@index');
+    Route::get('api/careerSFilterAjax', 'ApiSelect\SubjectApiController@indexFilterAjax');
+
 });

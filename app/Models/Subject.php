@@ -43,12 +43,18 @@ class Subject extends Model
     // public function equivalent_subject_(){
     //     return $this->hasMany('App\Models\Equivalent_subject');
     // }
+
     public function equivalent_subject_a(){
         return $this->hasMany('App\Models\Equivalent_subject', 'subject_a_id');
     }
 
     public function equivalent_subject_e(){
         return $this->hasMany('App\Models\Equivalent_subject', 'subject_e_id');
+    }
+
+    public function request()
+    {
+        return $this->belongsToMany('App\Models\Request','requests_subjects', 'request_id', 'subject_id')->withPivot('created_at', 'updated_at');
     }
     /*
     |--------------------------------------------------------------------------

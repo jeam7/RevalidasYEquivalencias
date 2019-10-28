@@ -129,7 +129,7 @@ class SubjectCrudController extends CrudController
               'dependencies' => ['college_id', 'faculty_id', 'school_id'],
               'model' => 'App\Models\Career',
               'default' => $currentCareer,
-              'attribute' => 'careers.name',
+              'attribute' => 'name',
               'entity' => 'career'
           ]
         ]);
@@ -252,17 +252,17 @@ class SubjectCrudController extends CrudController
         });
         //
         $this->crud->addFilter([
-            'type' => 'select2',
-            'name' => 'career_id',
-            'label'=> 'Carrera'
-          ],
-          function(){
-            return \App\Models\Career::all()->pluck('name', 'id')->toArray();
-          },
-          function($value) {
-              $this->crud->addClause('where', 'career_id', '=', $value);
-          }
-        );
+          'name' => 'career_id',
+          'type' => 'select2_ajax_career',
+          'label'=> 'Carrera',
+          'placeholder' => 'Seleccione una Carrera'
+        ],
+        url('admin/api/careerFilterAjax'),
+        function($value) {
+          $this->crud->query = $this->crud->query->select('subjects.*')
+                                                ->join('careers as ccs', 'ccs.id', '=', 'subjects.career_id')
+                                                ->where('ccs.id', '=', $value);
+        });
         //
         $this->crud->addFilter([
             'type' => 'text',
@@ -283,19 +283,13 @@ class SubjectCrudController extends CrudController
 
     public function store(StoreRequest $request)
     {
-        // your additional operations before save here
         $redirect_location = parent::storeCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
     }
 
     public function update(UpdateRequest $request)
     {
-        // your additional operations before save here
         $redirect_location = parent::updateCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
     }
 }

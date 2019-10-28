@@ -48,16 +48,25 @@
     <script>
         jQuery(document).ready(function($) {
             // trigger select2 for each untriggered select2 box
-						let filterCareer = $('#filter_career_id');
-						let career = "";
-						filterCollege.on('change', function(event){
-							career = $(this).val();
+						let filterSchool = $('#filter_school_id');
+						let school = "";
+						filterSchool.on('change', function(event){
+							school = $(this).val();
 						});
             $('#filter_{{ $filter->name }}').select2({
 			    		minimumInputLength: 0,
             	allowClear: true,
         	    placeholder: '{{ $filter->placeholder ? $filter->placeholder : ' ' }}',
 							closeOnSelect: false,
+							formatNoMatches: function () {
+									return "No se encontraron resultados";
+							},
+							formatSearching: function() {
+								return "Buscando...";
+							},
+							formatErrorLoading: function () {
+								return 'Buscando....';
+							},
 			    // tags: [],
 			    ajax: {
 			        url: '{{ $filter->values }}',
@@ -65,10 +74,9 @@
 			        type: 'GET',
 			        quietMillis: 50,
 			        data: function (term) {
-									console.log("valor de college: " + career);
 			            return {
 			                term: term,
-											career_id: career
+											school_id: school
 			            };
 			        },
 			        results: function (data) {

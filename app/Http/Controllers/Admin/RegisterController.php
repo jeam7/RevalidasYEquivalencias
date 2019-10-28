@@ -1,16 +1,19 @@
 <?php
-// namespace Backpack\Base\app\Http\Controllers\Auth;
 namespace App\Http\Controllers\Admin;
 use Backpack\Base\app\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Mail;
+use App\Models\User;
+use Illuminate\Support\Facades\Input;
 use Validator;
 
 class RegisterController extends Controller
 {
-    protected $data = []; // the information we send to the view
+    protected $data = [];
 
     /*
     |--------------------------------------------------------------------------
@@ -47,7 +50,7 @@ class RegisterController extends Controller
      *
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validatorStep1(array $data)
     {
         $user_model_fqn = config('backpack.base.user_model_fqn');
         $user = new $user_model_fqn();
@@ -58,50 +61,58 @@ class RegisterController extends Controller
             'ci' => ['required', 'numeric', 'digits_between:6,8', Rule::unique('users')],
             'first_name' => ['required', 'min:2', 'max:50'],
             'last_name' => ['required', 'min:2', 'max:50'],
+            'email' => ['required', 'email', Rule::unique('users')],
+        ],
+        [
+          'ci.required' => 'Por favor, ingrese su cédula',
+          'ci.numeric' => 'Su cédula debe contener solo caracteres numéricos',
+          'ci.digits_between' => 'Su cédula debe tener mínimo 6 digitos',
+          'ci.unique' => 'La cédula ingresada ya se encuentra en uso',
+          //
+          'first_name.required' => 'Por favor, ingrese su nombre',
+          'first_name.min' => 'Su nombre debe tener mínimo 2 caracteres',
+          'first_name.max' => 'Su nombre debe tener máximo 50 caracteres',
+          //
+          'last_name.required' => 'Por favor, ingrese su apellido',
+          'last_name.min' => 'Su apellido debe tener mínimo 2 caracteres',
+          'last_name.max' => 'Su apellido debe tener máximo 50 caracteres',
+          //
+          'email.required' => 'Por favor, ingrese su email',
+          'email.email' => 'Por favor, ingrese un email valido',
+          'email.unique' => 'El email ingresado ya se encuentra en uso',
+        ]
+      );
+    }
+
+    protected function validatorStep2(array $data)
+    {
+        return Validator::make($data, [
             'place_birth' => ['required'],
             'nacionality' => ['required'],
             'birthdate' => ['required', 'date'],
             'gender' => ['required'],
             'address' => ['required'],
             'phone' => ['required', 'numeric'],
-            'email' => ['required', 'email', Rule::unique('users')],
             'password' => ['required', 'min:6', 'confirmed']
         ],
         [
-          'ci.required' => 'Por favor, ingrese su cedula',
-          'ci.numeric' => 'Su cedula debe contener solo caracteres numericos',
-          'ci.digits_between' => 'Su cedula debe tener minimo 6 digitos',
-          'ci.unique' => 'La cedula ingresada ya se encuentra en uso',
-
-          'first_name.required' => 'Por favor, ingrese su nombre',
-          'first_name.min' => 'Su nombre debe tener minimo 2 caracteres',
-          'first_name.max' => 'Su nombre debe tener maximo 50 caracteres',
-
-          'last_name.required' => 'Por favor, ingrese su apellido',
-          'last_name.min' => 'Su apellido debe tener minimo 2 caracteres',
-          'last_name.max' => 'Su apellido debe tener maximo 50 caracteres',
-
           'place_birth.required' => 'Por favor, ingrese su lugar de nacimiento',
-
+          //
           'nacionality.required' => 'Por favor, ingrese su nacionalidad',
-
+          //
           'birthdate.required' => 'Por favor, ingrese su fecha de nacimiento',
-
-          'gender.required' => 'Por favor, ingrese su genero',
-
-          'address.required' => 'Por favor, ingrese su direccion',
-
-          'phone.required' => 'Por favor, ingrese su telefono',
-          'phone.numeric' => 'Su telefono debe contener solo caracteres numericos',
-
-          'email.required' => 'Por favor, ingrese su email',
-          'email.email' => 'Por favor, ingrese un email valido',
-          'email.unique' => 'El email ingresado ya se encuentra en uso',
-
-          'password.required' => 'Por favor, ingrese su contrasena',
-          'password.min' => 'Su contrasena tener minimo 6 caractes',
-          'password.confirmed' => 'Confirmacion de contrasena incorrecta'
-          // 'confirm_password.same' => 'Confirmacion de contrasena incorrecta'
+          //
+          'gender.required' => 'Por favor, ingrese su género',
+          //
+          'address.required' => 'Por favor, ingrese su dirección',
+          //
+          'phone.required' => 'Por favor, ingrese su teléfono',
+          'phone.numeric' => 'Su télefono debe contener solo caracteres numéricos',
+          //
+          'password.required' => 'Por favor, ingrese su contraseña',
+          'password.min' => 'Su contraseña tener mínimo 6 caractes',
+          'password.confirmed' => 'Confirmación de contraseña incorrecta',
+          'confirm_password.same' => 'Confirmación de contraseña incorrecta'
         ]
       );
     }
@@ -117,20 +128,11 @@ class RegisterController extends Controller
     {
         $user_model_fqn = config('backpack.base.user_model_fqn');
         $user = new $user_model_fqn();
-
         return $user->create([
           'ci' => $data['ci'],
           'first_name' => $data['first_name'],
           'last_name' => $data['last_name'],
-          'place_birth' => $data['place_birth'],
-          'nacionality' => $data['nacionality'],
-          'birthdate' => $data['birthdate'],
-          'gender' => $data['gender'],
-          'address' => $data['address'],
-          'phone' => $data['phone'],
-          'email' => $data['email'],
-          'type_user' => 4,
-          'password' => Hash::make($data['password'])
+          'email' => $data['email']
         ]);
     }
 
@@ -165,11 +167,17 @@ class RegisterController extends Controller
             abort(403, trans('backpack::base.registration_closed'));
         }
 
-        $this->validator($request->all())->validate();
+        $this->validatorStep1($request->all())->validate();
 
-        $this->guard()->login($this->create($request->all()));
-
-        return redirect($this->redirectPath());
+        $subject = "Registro de usuario";
+        $for = $request->email;
+        Mail::send('sendEmailRegisterStep2', $request->all(), function($msj) use($subject,$for){
+            $msj->from("jeanmarchena31@gmail.com","RyE");
+            $msj->subject($subject);
+            $msj->to($for);
+        });
+        $this->create($request->all());
+        return redirect('admin/successSendRegisterMail');
     }
 
     /**
@@ -180,5 +188,34 @@ class RegisterController extends Controller
     protected function guard()
     {
         return backpack_auth();
+    }
+
+    public function showRegistrationFormStep2()
+    {
+      $email = Input::get('email');
+      $user = User::where('email', $email)->first();
+      if ($user->password) {
+          abort(404, "El Usuario ya se encuentra registrado.");
+      }else {
+        $this->data['title'] = trans('backpack::base.register');
+        return view('postCorreo', $user);
+      }
+
+    }
+
+    public function registerStep2(Request $request)
+    {
+      $this->validatorStep2($request->all())->validate();
+      $user = User::where('email', $request->email)->first();
+      $user->place_birth = $request->place_birth;
+      $user->nacionality = $request->nacionality;
+      $user->birthdate = $request->birthdate;
+      $user->gender = $request->gender;
+      $user->address = $request->address;
+      $user->phone = $request->phone;
+      $user->password = Hash::make($request->password);
+      $user->type_user = 4;
+      $user->save();
+      return redirect('/admin/successRegisterUser');
     }
 }

@@ -50,7 +50,6 @@
             // trigger select2 for each untriggered select2 box
 						let filterFaculty = $('#filter_faculty_id');
 						let faculty = "";
-						console.log(filterFaculty);
 						filterFaculty.on('change', function(event){
 							faculty = $(this).val();
 						});
@@ -59,6 +58,15 @@
             	allowClear: true,
         	    placeholder: '{{ $filter->placeholder ? $filter->placeholder : ' ' }}',
 							closeOnSelect: false,
+							formatNoMatches: function () {
+									return "No se encontraron resultados";
+							},
+							formatSearching: function() {
+								return "Buscando...";
+							},
+							formatErrorLoading: function () {
+								return 'Buscando....';
+							},
 			    // tags: [],
 			    ajax: {
 			        url: '{{ $filter->values }}',
@@ -66,7 +74,6 @@
 			        type: 'GET',
 			        quietMillis: 50,
 			        data: function (term) {
-									console.log("valor de college: " + faculty);
 			            return {
 			                term: term,
 											faculty_id: faculty

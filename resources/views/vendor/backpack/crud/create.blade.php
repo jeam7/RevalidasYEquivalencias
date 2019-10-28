@@ -16,8 +16,6 @@
 
 @section('content')
 {{-- @if ($crud->hasAccess('list')) --}}
-{{ request()->segment(2) }}
-<br>
 	@php
 		$currentModule = request()->segment(2);
 		switch ($currentModule) {
@@ -64,6 +62,9 @@
 				break;
 			case 'myrequest':
 					$targetUrl = url('/admin/myrequest');
+				break;
+			case 'request':
+					$targetUrl = url('/admin/request');
 				break;
 			default:
 				$targetUrl = "";

@@ -92,17 +92,17 @@ class MyRequestCrudController extends CrudController
           ],
           //
           [
-            // n-n relationship
-            'label' => "End", // Table column heading
-            'type' => "select2_from_ajax_multiple",
-            'name' => 'id', // the column that contains the ID of that connected entity
-            'entity' => 'subject', // the method that defines the relationship in your Model
-            'attribute' => "name", // foreign key attribute that is shown to user
-            'model' => "App\Models\Subject", // foreign key model
-            'data_source' => url("/admin/api/subjectOrigin"), // url to controller search function (with /{id} should return model)
-            'placeholder' => "Select a city", // placeholder for the select
-            'minimum_input_length' => 2, // minimum characters to type before querying results
-            // 'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
+            'label' => "Asignaturas equivalentes",
+            'type' => "select2_from_ajax_multiple_custom",
+            'name' => 'subject',
+            'entity' => 'request',
+            'attribute' => "name",
+            'model' => "App\Models\Subject",
+            'data_source' => url("/admin/api/subjectOrigin"),
+            'placeholder' => "",
+            'minimum_input_length' => 0,
+            'pivot' => true,
+            'dependencies' => ['college_id', 'career_origin_id'],
           ]
         ], 'create');
 
@@ -112,12 +112,12 @@ class MyRequestCrudController extends CrudController
           ['name' => 'created_at', 'label' => 'Fecha', 'type' => 'date'],
           //
           ['name' => 'college_career_origin',
-            'label' => 'Carrera origen',
+            'label' => 'Carrera procedencia',
             'type' => 'text',
             'limit'=>70,
             'searchLogic' => function ($query, $column, $searchTerm) {
                 $query->orWhereHas('career_origin', function ($q) use ($column, $searchTerm) {
-                    $q->where('careers.name', 'like', '%'.$searchTerm.'%');
+                    $q->where('name', 'like', '%'.$searchTerm.'%');
                 });
             }
           ],
@@ -128,7 +128,7 @@ class MyRequestCrudController extends CrudController
             'limit'=>70,
             'searchLogic' => function ($query, $column, $searchTerm) {
                 $query->orWhereHas('career_destination', function ($q) use ($column, $searchTerm) {
-                    $q->where('careers.name', 'like', '%'.$searchTerm.'%');
+                    $q->where('name', 'like', '%'.$searchTerm.'%');
                 });
             }
           ],
@@ -143,7 +143,7 @@ class MyRequestCrudController extends CrudController
     {
         $today = Carbon::now();
         $origin = Career::find($request->request->get('career_origin_id'));
-        $request->request->set('origin', $origin->school->faculty->college->foreign);
+        // $request->request->set('origin', $origin->school->college->foreign);
         $request->request->set('user_id', backpack_user()->id);
         $request->request->set('date', $today);
         $redirect_location = parent::storeCrud($request);

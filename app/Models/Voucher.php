@@ -20,7 +20,7 @@ class Voucher extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     // protected $guarded = ['id'];
-    protected $fillable = ['id', 'request_id', 'observations', 'date_subcomi_eq', 'date_comi_eq', 'date_con_fac', 'date_con_univ'];
+    protected $fillable = ['id', 'request_id', 'observations', 'date_subcomi_eq', 'date_comi_eq', 'date_con_fac', 'date_con_univ', 'ncu', 'date_ncu'];
     // protected $hidden = [];
     protected $dates = ['deleted_at'];
     protected $cascadeDeletes = ['equivalent_subject'];
@@ -52,12 +52,6 @@ class Voucher extends Model
                                   ->join('careers', 'careers.id', '=', 'r.career_destination_id')
                                   ->join('schools', 'schools.id', '=', 'careers.school_id')
                                   ->where('schools.faculty_id', '=', $facultyId);
-      // $query->select('vouchers.id', 'vouchers.request_id', 'vouchers.observations', 'vouchers.date_subcomi_eq', 'vouchers.date_comi_eq', 'vouchers.date_con_fac', 'vouchers.date_con_univ',
-      //                   'vouchers.deleted_at', 'vouchers.created_at', 'vouchers.updated_at')
-      //                   ->join('requests as r', 'r.id', '=', 'vouchers.request_id')
-      //                   ->join('careers', 'careers.id', '=', 'r.career_destination_id')
-      //                   ->join('schools', 'schools.id', '=', 'careers.school_id')
-      //                   ->where('schools.faculty_id', '=', $facultyId);
       return $query;
     }
 
@@ -78,14 +72,12 @@ class Voucher extends Model
 
     public function getCareerOriginTableAttribute($value)
     {
-      return ($this->request->career_origin ? $this->request->career_origin->school->faculty->college->name : '') . ' - '
-      . ($this->request->career_origin ? $this->request->career_origin->name : '');
+        return $this->request->career_origin->school->college->name . ' - ' . $this->request->career_origin->name;
     }
 
     public function getCareerDestinationTableAttribute($value)
     {
-      return ($this->request->career_destination ? $this->request->career_destination->school->faculty->college->name : '') . ' - '
-      . ($this->request->career_destination ? $this->request->career_destination->name : '');
+      return $this->request->career_destination->school->college->name . ' - ' . $this->request->career_destination->name;
     }
 
     /*

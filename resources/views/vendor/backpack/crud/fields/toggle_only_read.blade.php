@@ -2,6 +2,7 @@
 @php
     $optionPointer = 0;
     $optionValue = old($field['name']) ? old($field['name']) : (isset($field['value']) ? $field['value'] : (isset($field['default']) ? $field['default'] : '' ));
+    $colleges = App\Models\College::all();
 @endphp
 
 <div @include('crud::inc.field_wrapper_attributes') >
@@ -56,6 +57,40 @@
     @push('crud_fields_scripts')
     <script>
         jQuery(document).ready(function($){
+
+            let currentCollegeForeing = $('select[name="college_id"]').val();
+            let radioNacional = $('#origin_1');
+            let radioExtranjera = $('#origin_2');
+
+            radioNacional.attr('checked', false);
+            radioExtranjera.attr('checked', false);
+            if (currentCollegeForeing == 1) {
+              radioNacional.attr('checked', true);
+              radioNacional.change();
+            }else{
+              radioExtranjera.attr('checked', true);
+              radioExtranjera.change();
+            }
+
+            let selectedCollegeOrigin = $('select[name="college_id"]');
+            let colleges = @json($colleges);
+
+            let foreignCurrentCollege = "";
+            let currentValue = "";
+
+            selectedCollegeOrigin.on('change', function(ev){
+              currentValue = selectedCollegeOrigin.val();
+              foreignCurrentCollege = colleges.filter(college => college.id == currentValue);
+              radioNacional.attr('checked', false);
+              radioExtranjera.attr('checked', false);
+              if (foreignCurrentCollege[0].foreign == 1) {
+                radioNacional.attr('checked', true);
+                radioNacional.change();
+              }else{
+                radioExtranjera.attr('checked', true);
+                radioExtranjera.change();
+              }
+            });
 
             window.$hiddenFields = window.$hiddenFields || {};
 

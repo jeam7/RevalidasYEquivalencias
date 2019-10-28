@@ -19,6 +19,10 @@
 	<a href="{{ url($crud->route) }}" class="hidden-print"><i class="fa fa-angle-double-left"></i> {{ trans('backpack::crud.back_to_all') }} <span>{{ $crud->entity_name_plural }}</span></a>
 @endif
 
+@php
+	$targetUrl = url($crud->route);
+@endphp
+
 <div class="row m-t-20">
 	<div class="col-md-6" style="margin-left: 30px;">
 		<!-- Default box -->
